@@ -12,7 +12,7 @@
     <select id="search" resultType="com.example.compare.entity.Compare">
         select compare.id,serial_number,order_id,create_time,fee,order_log.status from compare
             left join order_log on compare.order_id=order_log.id
-        where serial_number ='${param1}'
+        where (serial_number ='${param1}' or order_log.status='${param1}');
                                  and (create_time between '${param2}' and '${param3}') limit ${param4},${param5};
     </select>
 

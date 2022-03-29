@@ -154,7 +154,8 @@ public class CompareController {
     }
 
     @PostMapping("/search")
-    @ApiOperation(value = "郑前====》历史记录分页查询,keywords代表流水号,maxPage代表每页显示最大数量，" +
+    @ApiOperation(value = "郑前====》历史记录分页查询,keywords代表流水号或者支付状态（两种，unpaid 未完成，complete 已经完成）," +
+            "maxPage代表每页显示最大数量，" +
             "startPage代表开始页码,startTime和endTime代表要查询的时间段")
     public Result search(@RequestBody Map<String, String> map) {
         //最大显示数量默认为10
