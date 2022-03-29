@@ -96,37 +96,35 @@ public class CompareController {
      * @param id compare记录id
      * @return
      */
-//    @GetMapping("/getStatus")
-//    @ApiOperation("轮训支付状态，id：compare记录表id，返回已支付则成功")
-//    public Result getStatus(Integer id) {
-//        String status = null;
-//        try {
-//            status = redisTemplate.opsForValue().get(id);
-//
-//        } catch (Exception e) {
-//            Compare compare = service.searchOne(id);
-////            System.out.println(compare.toString());
-////            OrderLog order = orderLogService.getById(orderId);
-//            String statusChinese = null;
-//            switch (compare.getStatus()) {
-//                case "overtime":
-//                    statusChinese = "超时";
-//                    break;
-//                case "cancal":
-//                    statusChinese = "取消支付";
-//                    break;
-//                case "complete":
-//                    statusChinese = "完成";
-//                    break;
-//                case "unpaid":
-//                default:
-//                    statusChinese = "未支付";
-//            }
-//            redisTemplate.opsForValue().set(String.valueOf(compare.getOrderId()), statusChinese, 15, TimeUnit.MINUTES);
-//            status = redisTemplate.opsForValue().get(String.valueOf(compare.getOrderId()));
-//        }
-//        return Result.success(status);
-//    }
+    @GetMapping("/getStatus")
+    @ApiOperation("轮训支付状态，id：compare记录表id，返回已支付则成功")
+    public Result getStatus(Integer id) {
+        String status = null;
+        try {
+            status = redisTemplate.opsForValue().get(id);
+
+        } catch (Exception e) {
+            Compare compare = service.searchOne(id);
+            String statusChinese = null;
+            switch (compare.getStatus()) {
+                case "overtime":
+                    statusChinese = "超时";
+                    break;
+                case "cancal":
+                    statusChinese = "取消支付";
+                    break;
+                case "complete":
+                    statusChinese = "完成";
+                    break;
+                case "unpaid":
+                default:
+                    statusChinese = "未支付";
+            }
+            redisTemplate.opsForValue().set(String.valueOf(compare.getOrderId()), statusChinese, 15, TimeUnit.MINUTES);
+            status = redisTemplate.opsForValue().get(String.valueOf(compare.getOrderId()));
+        }
+        return Result.success(status);
+    }
 
     /**
      * 下载zip文件
