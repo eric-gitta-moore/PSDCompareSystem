@@ -41,6 +41,10 @@ public class FileDownloadUtil {
         return path;
     }
 
+//    public static void main(String[] args) throws Exception {
+//        url("123124124124");
+//    }
+
 
     /**
      * @author 徐启峰

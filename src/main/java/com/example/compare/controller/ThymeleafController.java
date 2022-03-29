@@ -1,5 +1,9 @@
 package com.example.compare.controller;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.example.compare.common.utils.AlipayUtil;
+import com.example.compare.common.utils.ChangeToMapUtil;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.service.OrderLogService;
 import io.swagger.annotations.Api;
@@ -9,11 +13,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 @Controller
 @Api(value = "ThymeleafController",tags = "thymeleaf")
 public class ThymeleafController {
     @Autowired
     OrderLogService service;
+
+    @Autowired
+    AlipayUtil alipayUtil;
     /**
      * 跳转到收银台
      * @param outTradeId  订单编号
@@ -31,15 +41,29 @@ public class ThymeleafController {
 
     /**
      *
-     * @param total_amount  商品金额
-     * @param out_trade_no  订单号
      * @param model
+     * @param request
      * @return
+     * @throws AlipayApiException
      */
     @RequestMapping("/succeed")
-    public String succeed(String total_amount,String out_trade_no,Model model){
+    public String succeed(Model model, HttpServletRequest request) throws AlipayApiException {
+
+        String out_trade_no=request.getParameter("out_trade_no");
+        String total_amount=request.getParameter("total_amount");
+        String msg=null;
+        //进行同步验签
+        Map<String,String> paramsMap= ChangeToMapUtil.convertRequestParamsToMap(request);
+        boolean signVerified = AlipaySignature.rsaCheckV1(paramsMap, alipayUtil.getPublicKey() ,paramsMap.get("charset"), paramsMap.get("sign_type")); //调用SDK验证签名
+        if (signVerified){//验签成功
+            msg="支付成功";
+        }else {
+            msg="支付失败";
+        }
         model.addAttribute("total_amount",total_amount);
         model.addAttribute("out_trade_no",out_trade_no);
+        model.addAttribute("msg",msg);
         return "succeed";
     }
+
 }
