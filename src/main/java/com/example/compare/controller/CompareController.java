@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.compare.common.utils.FileDownloadUtil;
 import com.example.compare.common.utils.QRCodeUtil;
 import com.example.compare.common.utils.Result;
-
 import com.example.compare.entity.Compare;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.service.CompareService;
@@ -12,16 +11,12 @@ import com.example.compare.service.OrderLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -187,6 +182,23 @@ public class CompareController {
         Integer orderId = service.bySerialNumber(serialNumber).getOrderId();
         service.allDelete(orderId);
         return Result.success("成功");
+    }
 
+    /**
+     * 获取对比记录分页数据
+     *
+     * @param current 当前页码
+     * @param size    一页最大显示条数
+     * @return {@link Result}
+     */
+    @ApiOperation("左呈祥===>获取对比记录分页数据 current：当前页码  size：一页最大显示条数")
+    @GetMapping("/{current}/{size}")
+    public Result getComparePage(@PathVariable("current") Integer current, @PathVariable("size") Integer size) {
+        try {
+            return Result.success(compareService.page(new Page<>(current, size)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail(500, "服务器繁忙，请稍后再试", "");
+        }
     }
 }
