@@ -7,6 +7,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.example.compare.common.utils.AlipayUtil;
 import com.example.compare.common.utils.ChangeToMapUtil;
 import com.example.compare.common.utils.QRCodeUtil;
+import com.example.compare.common.utils.Result;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.service.CompareService;
 import com.example.compare.service.OrderLogService;
@@ -77,6 +78,17 @@ public class OrderLogController {
         //填入redis
         redisTemplate.opsForValue().set(id,"未支付",15, TimeUnit.MINUTES);
         return "pay";
+    }
+
+
+    private HashMap<String,Object> checkOrderStatus(String id)
+    {
+        //查单
+        return null;
+    }
+
+    public Result check(String id) {
+        return null;
     }
 
 

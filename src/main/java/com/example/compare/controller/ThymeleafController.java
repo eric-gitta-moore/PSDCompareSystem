@@ -40,6 +40,7 @@ public class ThymeleafController {
     public String succeed(String total_amount,String out_trade_no,Model model){
         model.addAttribute("total_amount",total_amount);
         model.addAttribute("out_trade_no",out_trade_no);
+        //查单
         return "succeed";
     }
 }

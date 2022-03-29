@@ -57,6 +57,11 @@ public class CompareServiceImpl extends ServiceImpl<CompareMapper,Compare> imple
     }
 
     @Override
+    public Compare searchOne(Integer compareId) {
+        return mapper.searchOne(compareId);
+    }
+
+    @Override
     public int allDelete(int orderId) {
         return mapper.allDelete(orderId);
     }
