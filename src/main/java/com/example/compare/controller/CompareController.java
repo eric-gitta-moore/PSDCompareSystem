@@ -1,6 +1,7 @@
 package com.example.compare.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.compare.common.utils.AlipayUtil;
 import com.example.compare.common.utils.FileDownloadUtil;
 import com.example.compare.common.utils.QRCodeUtil;
 import com.example.compare.common.utils.Result;
@@ -45,6 +46,9 @@ public class CompareController {
 
     @Resource
     private CompareService compareService;
+
+    @Autowired
+    AlipayUtil alipayUtil;
 
     @ApiOperation("李超====>工作码获取接口，通过该接口可以获取工作码用于调用图片上传对比接口，此接口不需要任何参数")
     @GetMapping("/getWorkCode")
