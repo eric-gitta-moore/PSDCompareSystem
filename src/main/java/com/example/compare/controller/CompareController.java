@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/compare")
@@ -103,7 +104,32 @@ public class CompareController {
     @GetMapping("/getStatus")
     @ApiOperation("刘锦堂===>轮训支付状态，id：compare记录表id，返回空则超时，已支付则成功")
     public Result getStatus(Integer id) {
-        String status = redisTemplate.opsForValue().get(id);
+        String status = null;
+        try {
+            status = redisTemplate.opsForValue().get(id);
+
+        } catch (Exception e) {
+            Compare compare = service.searchOne(id);
+//            System.out.println(compare.toString());
+//            OrderLog order = orderLogService.getById(orderId);
+            String statusChinese = null;
+            switch (compare.getStatus()) {
+                case "overtime":
+                    statusChinese = "超时";
+                    break;
+                case "cancal":
+                    statusChinese = "取消支付";
+                    break;
+                case "complete":
+                    statusChinese = "完成";
+                    break;
+                case "unpaid":
+                default:
+                    statusChinese = "未支付";
+            }
+            redisTemplate.opsForValue().set(String.valueOf(compare.getOrderId()), statusChinese, 15, TimeUnit.MINUTES);
+            status = redisTemplate.opsForValue().get(String.valueOf(compare.getOrderId()));
+        }
         return Result.success(status);
     }
 
