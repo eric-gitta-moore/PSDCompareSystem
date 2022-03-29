@@ -85,7 +85,7 @@ public class AlipayUtil {
         }
         if(response.isSuccess()){
             //redis，nosugar
-            redisTemplate.opsForValue().set(service.getCompareIdByOrderId(orderLog.getId().toString()),"未支付",15, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(service.getCompareIdByOrderId(orderLog.getOutTradeId().toString()),"未支付",15, TimeUnit.SECONDS);
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
