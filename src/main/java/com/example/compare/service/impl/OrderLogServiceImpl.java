@@ -71,6 +71,8 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper,OrderLog> im
                 orderLog.setStatus("complete");
                 return mapper.updateById(orderLog) > 0;
             }
+        } else if (orderLog.getStatus().equals("complete")) {
+            return true;
         }
         return false;
     }
