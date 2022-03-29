@@ -92,8 +92,10 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper,OrderLog> im
         return false;
     }
 
-
-
+    @Override
+    public String getCompareIdByOrderId(String id) {
+        return mapper.getCompareIdByOrderId(id);
+    }
 
     @Override
     public Integer saveOrderLog(OrderLog orderLog) {

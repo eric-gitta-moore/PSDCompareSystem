@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -61,11 +60,6 @@ public class Compare {
      */
     @TableField("create_time")
     private LocalDateTime createTime;
-
-    /**
-     * 对比费用
-     */
-    private Integer fee;
 
     /**
      * 图片路径

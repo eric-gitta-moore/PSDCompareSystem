@@ -7,6 +7,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.example.compare.common.utils.AlipayUtil;
 import com.example.compare.common.utils.ChangeToMapUtil;
 import com.example.compare.common.utils.QRCodeUtil;
+import com.example.compare.common.utils.Result;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.service.CompareService;
 import com.example.compare.service.OrderLogService;
@@ -80,6 +81,17 @@ public class OrderLogController {
     }
 
 
+    private HashMap<String,Object> checkOrderStatus(String id)
+    {
+        //查单
+        return null;
+    }
+
+    public Result check(String id) {
+        return null;
+    }
+
+
 
     /**
      * 获取支付宝返回的订单信息
@@ -116,6 +128,8 @@ public class OrderLogController {
 
 
                 if( service.updateOrderStatus(out_trade_no) && service2.updateCompareStatus(out_trade_no.getId())){
+                    //修改redis中的数据
+                    redisTemplate.opsForValue().set(service.getCompareIdByOrderId(out_trade_no.getOutTradeId()),"已支付",10,TimeUnit.MINUTES);
                     response.getWriter().print("success");
                 }else {
                     response.getWriter().print("fail");

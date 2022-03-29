@@ -7,13 +7,17 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.example.compare.entity.OrderLog;
+import com.example.compare.service.OrderLogService;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -37,7 +41,11 @@ public class AlipayUtil {
      *
      *  AlipayClient alipayClient = new DefaultAlipayClient(url,appid,privateKey,"json","UTf-8",publicKey,"RSA2");
      */
+    @Autowired
+    StringRedisTemplate redisTemplate;
 
+    @Autowired
+    OrderLogService service;
 
     public String pay(OrderLog orderLog){
 
@@ -76,6 +84,8 @@ public class AlipayUtil {
             e.printStackTrace();
         }
         if(response.isSuccess()){
+            //redis，nosugar
+            redisTemplate.opsForValue().set(service.getCompareIdByOrderId(orderLog.getOutTradeId().toString()),"未支付",15, TimeUnit.SECONDS);
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");

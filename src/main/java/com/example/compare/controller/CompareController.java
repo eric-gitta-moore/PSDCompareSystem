@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.compare.common.utils.FileDownloadUtil;
 import com.example.compare.common.utils.QRCodeUtil;
 import com.example.compare.common.utils.Result;
-
 import com.example.compare.entity.Compare;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.service.CompareService;
@@ -12,16 +11,12 @@ import com.example.compare.service.OrderLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -33,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/compare")
@@ -101,9 +97,32 @@ public class CompareController {
      * @return
      */
     @GetMapping("/getStatus")
-    @ApiOperation("刘锦堂===>轮训支付状态，id：compare记录表id")
+    @ApiOperation("轮训支付状态，id：compare记录表id，返回已支付则成功")
     public Result getStatus(Integer id) {
-        String status = redisTemplate.opsForValue().get(id);
+        String status = null;
+        try {
+            status = redisTemplate.opsForValue().get(id);
+
+        } catch (Exception e) {
+            Compare compare = service.searchOne(id);
+            String statusChinese = null;
+            switch (compare.getStatus()) {
+                case "overtime":
+                    statusChinese = "超时";
+                    break;
+                case "cancal":
+                    statusChinese = "取消支付";
+                    break;
+                case "complete":
+                    statusChinese = "完成";
+                    break;
+                case "unpaid":
+                default:
+                    statusChinese = "未支付";
+            }
+            redisTemplate.opsForValue().set(String.valueOf(compare.getOrderId()), statusChinese, 15, TimeUnit.MINUTES);
+            status = redisTemplate.opsForValue().get(String.valueOf(compare.getOrderId()));
+        }
         return Result.success(status);
     }
 
@@ -133,7 +152,8 @@ public class CompareController {
     }
 
     @PostMapping("/search")
-    @ApiOperation(value = "郑前====》历史记录分页查询,keywords代表流水号,maxPage代表每页显示最大数量，" +
+    @ApiOperation(value = "郑前====》历史记录分页查询,keywords代表流水号或者支付状态（两种，unpaid 未完成，complete 已经完成）," +
+            "maxPage代表每页显示最大数量，" +
             "startPage代表开始页码,startTime和endTime代表要查询的时间段")
     public Result search(@RequestBody Map<String, String> map) {
         //最大显示数量默认为10
@@ -161,7 +181,24 @@ public class CompareController {
         Integer orderId = service.bySerialNumber(serialNumber).getOrderId();
         service.allDelete(orderId);
         return Result.success("成功");
+    }
 
+    /**
+     * 获取对比记录分页数据
+     *
+     * @param current 当前页码
+     * @param size    一页最大显示条数
+     * @return {@link Result}
+     */
+    @ApiOperation("左呈祥===>获取对比记录分页数据 current：当前页码  size：一页最大显示条数")
+    @GetMapping("/{current}/{size}")
+    public Result getComparePage(@PathVariable("current") Integer current, @PathVariable("size") Integer size) {
+        try {
+            return Result.success(compareService.page(new Page<>(current, size)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail(500, "服务器繁忙，请稍后再试", "");
+        }
     }
 
     @ApiOperation(value = "徐启峰====》获取对比文件的结果压缩包并解压上传到七牛云，最后返回一个url路径给用户")

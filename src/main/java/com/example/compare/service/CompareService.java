@@ -32,6 +32,13 @@ public interface CompareService extends IService<Compare> {
      */
     List<Compare> search(String keywords, String startTime, String endTime, int index, int maxPage);
 
+
+    /**
+     * 查询单条记录
+     * @param compareId
+     * @return
+     */
+    Compare searchOne(Integer compareId);
     /**
      * 多表删除
      *

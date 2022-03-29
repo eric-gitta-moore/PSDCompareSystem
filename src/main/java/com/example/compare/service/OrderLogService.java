@@ -55,5 +55,5 @@ public interface OrderLogService extends IService<OrderLog>{
     public boolean updateOrderStatus(OrderLog orderLog);
 
 
-
+    String getCompareIdByOrderId(String id);
 }

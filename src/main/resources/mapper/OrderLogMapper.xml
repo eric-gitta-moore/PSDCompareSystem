@@ -3,7 +3,7 @@
 <mapper namespace="com.example.compare.mapper.OrderLogMapper">
 
     <select id="getCompareIdByOrderId" resultType="java.lang.String">
-        select * from order_log o
+        select c.id from order_log o
         left join compare c
         on c.order_id = o.id
         where o.out_trade_id = #{id}
