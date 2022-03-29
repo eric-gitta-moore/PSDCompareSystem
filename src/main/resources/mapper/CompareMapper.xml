@@ -16,6 +16,21 @@
                                  and (create_time between '${param2}' and '${param3}') limit ${param4},${param5};
     </select>
 
+    <select id="searchOne" resultType="com.example.compare.entity.Compare">
+    SELECT
+    c.id,
+    c.serial_number,
+    c.order_id,
+    c.create_time,
+    o.fee,
+    o.STATUS
+    FROM
+    compare AS c
+    LEFT JOIN order_log AS o ON c.order_id = o.id
+    WHERE
+    c.id = ${compareId};
+    </select>
+
     <delete id="allDelete">
         delete order_log,compare from compare
           left join order_log on compare.order_id=order_log.id
