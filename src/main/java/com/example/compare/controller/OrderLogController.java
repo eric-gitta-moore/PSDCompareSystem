@@ -82,17 +82,13 @@ public class OrderLogController {
     }
 
 
-    private HashMap<String,Object> checkOrderStatus(String id)
-    {
-        //查单
-        return null;
+
+    @ApiOperation("查询订单交易状态，WAIT_BUYER_PAY（交易创建，等待买家付款）、TRADE_CLOSED（未付款交易超时关闭，或支付完成后全额退款）、TRADE_SUCCESS（交易支付成功）、TRADE_FINISHED（交易结束，不可退款）")
+    @GetMapping("/checkOrderStatus")
+    public void checkOrderStatus(String outTradeNo,HttpServletResponse response) throws IOException {
+        boolean status = service.checkOrderAndUpdateDatabase(outTradeNo);
+        response.getWriter().print(status?"success":"fail");
     }
-
-    public Result check(String id) {
-        return null;
-    }
-
-
 
     /**
      * 获取支付宝返回的订单信息

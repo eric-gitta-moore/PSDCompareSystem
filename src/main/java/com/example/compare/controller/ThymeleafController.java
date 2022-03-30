@@ -6,6 +6,7 @@ import com.example.compare.common.utils.AlipayUtil;
 import com.example.compare.common.utils.ChangeToMapUtil;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.service.OrderLogService;
+import com.example.compare.service.impl.OrderLogServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class ThymeleafController {
 
     @Autowired
     AlipayUtil alipayUtil;
+
+    @Autowired
+    OrderLogServiceImpl orderLogService;
+
     /**
      * 跳转到收银台
      * @param outTradeId  订单编号
@@ -49,20 +54,26 @@ public class ThymeleafController {
     @RequestMapping("/succeed")
     public String succeed(Model model, HttpServletRequest request) throws AlipayApiException {
 
-        String out_trade_no=request.getParameter("out_trade_no");
-        String total_amount=request.getParameter("total_amount");
-        String msg=null;
+        String out_trade_no = request.getParameter("out_trade_no");
+        String total_amount = request.getParameter("total_amount");
+        String msg = null;
         //进行同步验签
-        Map<String,String> paramsMap= ChangeToMapUtil.convertRequestParamsToMap(request);
-        boolean signVerified = AlipaySignature.rsaCheckV1(paramsMap, alipayUtil.getPublicKey() ,paramsMap.get("charset"), paramsMap.get("sign_type")); //调用SDK验证签名
-        if (signVerified){//验签成功
-            msg="支付成功";
-        }else {
-            msg="支付失败";
+        Map<String, String> paramsMap = ChangeToMapUtil.convertRequestParamsToMap(request);
+        boolean signVerified = AlipaySignature.rsaCheckV1(paramsMap, alipayUtil.getPublicKey(), paramsMap.get("charset"), paramsMap.get("sign_type")); //调用SDK验证签名
+        if (signVerified) {//验签成功
+
+            if (!service.checkOrderAndUpdateDatabase(out_trade_no)) {
+                msg = "支付失败";
+            } else {
+                msg = "支付成功";
+            }
+        } else {
+            msg = "支付失败";
+            //这里给出错误页面。如果验签失败绝对是非法入侵
         }
-        model.addAttribute("total_amount",total_amount);
-        model.addAttribute("out_trade_no",out_trade_no);
-        model.addAttribute("msg",msg);
+        model.addAttribute("total_amount", total_amount);
+        model.addAttribute("out_trade_no", out_trade_no);
+        model.addAttribute("msg", msg);
         return "succeed";
     }
 

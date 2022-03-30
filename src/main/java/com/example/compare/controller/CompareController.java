@@ -2,6 +2,7 @@ package com.example.compare.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.compare.common.utils.AlipayUtil;
 import com.example.compare.common.utils.FileDownloadUtil;
 import com.example.compare.common.utils.QRCodeUtil;
 import com.example.compare.common.utils.Result;
@@ -46,6 +47,9 @@ public class CompareController {
 
     @Resource
     private CompareService compareService;
+
+    @Autowired
+    AlipayUtil alipayUtil;
 
     @ApiOperation("李超====>工作码获取接口，通过该接口可以获取工作码用于调用图片上传对比接口，此接口不需要任何参数")
     @GetMapping("/getWorkCode")
@@ -173,7 +177,22 @@ public class CompareController {
             maxPage = Integer.parseInt(mPage);
         }
         List<Compare> search = service.search(keywords, startTime, endTime, ((startPage - 1) * maxPage), maxPage);
-        return Result.success(search);
+        String totalRows = service.getTotalRows();
+        class ret {
+            public final List<?> data;
+            public final String total;
+            public final String currenPage;
+            public final String pageSize;
+
+
+            public ret(List<?> data, String total, String currenPage, String pageSize) {
+                this.data = data;
+                this.total = total;
+                this.currenPage = currenPage;
+                this.pageSize = pageSize;
+            }
+        }
+        return Result.success(new ret(search, totalRows, String.valueOf(startPage),String.valueOf(maxPage)));
     }
 
     @DeleteMapping("/delete")
