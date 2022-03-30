@@ -17,18 +17,22 @@
     </select>
 
     <select id="searchOne" resultType="com.example.compare.entity.Compare">
-    SELECT
-    c.id,
-    c.serial_number,
-    c.order_id,
-    c.create_time,
-    o.fee,
-    o.STATUS
-    FROM
-    compare AS c
-    LEFT JOIN order_log AS o ON c.order_id = o.id
-    WHERE
-    c.id = ${compareId};
+        SELECT
+            c.id,
+            c.serial_number,
+            c.order_id,
+            c.create_time,
+            o.fee,
+            o.STATUS,
+            c.work_code,
+            c.file_code_1,
+            c.file_code_2,
+            o.title
+        FROM
+            compare AS c
+                LEFT JOIN order_log AS o ON c.order_id = o.id
+        WHERE
+        c.id = ${compareId};
     </select>
 
     <delete id="allDelete">

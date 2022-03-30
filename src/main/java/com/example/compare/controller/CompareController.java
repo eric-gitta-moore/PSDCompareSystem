@@ -77,6 +77,17 @@ public class CompareController {
         }
     }
 
+    @ApiOperation("由compare ID获取两个文件码")
+    @GetMapping("/getFileCodes")
+    public Result getFileCodes(Integer id) {
+        try {
+            return Result.success(200, "获取成功", service.findOneAndGenerateFileCode(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail(400, "获取失败，请重试！", null);
+        }
+    }
+
     /**
      * 获取跳转支付界面的二维码
      *

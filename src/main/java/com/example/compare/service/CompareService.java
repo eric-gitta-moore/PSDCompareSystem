@@ -80,4 +80,11 @@ public interface CompareService extends IService<Compare> {
      * @return
      */
     String getTotalRows();
+
+    /**
+     * 生成两个文件码
+     * @param id Compare ID
+     * @return Compare
+     */
+    Compare findOneAndGenerateFileCode(Integer id);
 }

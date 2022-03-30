@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -91,5 +93,28 @@ public class CompareServiceImpl extends ServiceImpl<CompareMapper,Compare> imple
     @Override
     public String getTotalRows() {
         return mapper.getTotalRows();
+    }
+
+    /**
+     * 生成两个文件码
+     *
+     * @param id Compare ID
+     * @return Compare || null
+     */
+    @Override
+    public Compare findOneAndGenerateFileCode(Integer id) {
+//        Compare compare = this.searchOne(id);
+//        compare.setFileCode1(UUID.randomUUID().toString());
+//        compare.setFileCode2(UUID.randomUUID().toString());
+        int result = mapper.update(null,
+                new UpdateWrapper<Compare>()
+                        .eq("id", id)
+                        .set("file_code_1", UUID.randomUUID().toString())
+                        .set("file_code_2", UUID.randomUUID().toString())
+        );
+        if (result > 0) {
+            return this.searchOne(id);
+        }
+        return null;
     }
 }

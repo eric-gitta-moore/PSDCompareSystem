@@ -69,13 +69,27 @@ public class Compare {
     private String path;
 
     /**
+     * 文件码1
+     */
+    @TableField("file_code_1")
+    private String fileCode1;
+
+    /**
+     * 文件码2
+     */
+    @TableField("file_code_2")
+    private String fileCode2;
+
+    /**
      * 对比费用，来自于订单表
      */
+    @TableField(exist = false)
     private BigDecimal fee;
 
     /**
      * 对比任务名
      */
+    @TableField(exist = false)
     private String title;
 
 }
