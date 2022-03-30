@@ -72,4 +72,10 @@ public interface CompareService extends IService<Compare> {
      * @return
      */
     Compare bySerialNumber(String serialNumber);
+
+    /**
+     * 获取记录总数
+     * @return
+     */
+    String getTotalRows();
 }

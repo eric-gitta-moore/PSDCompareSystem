@@ -73,4 +73,9 @@ public class Compare {
      */
     private BigDecimal fee;
 
+    /**
+     * 对比任务名
+     */
+    private String title;
+
 }

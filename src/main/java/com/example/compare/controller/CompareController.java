@@ -176,7 +176,22 @@ public class CompareController {
             maxPage = Integer.parseInt(mPage);
         }
         List<Compare> search = service.search(keywords, startTime, endTime, ((startPage - 1) * maxPage), maxPage);
-        return Result.success(search);
+        String totalRows = service.getTotalRows();
+        class ret {
+            public final List<?> data;
+            public final String total;
+            public final String currenPage;
+            public final String pageSize;
+
+
+            public ret(List<?> data, String total, String currenPage, String pageSize) {
+                this.data = data;
+                this.total = total;
+                this.currenPage = currenPage;
+                this.pageSize = pageSize;
+            }
+        }
+        return Result.success(new ret(search, totalRows, String.valueOf(startPage),String.valueOf(maxPage)));
     }
 
     @DeleteMapping("/delete")

@@ -13,11 +13,17 @@ public interface CompareMapper extends BaseMapper<Compare> {
 
     int allDelete(int orderId);
 
-    List<Compare> search(String keywords, String startTime, String endTime, int index, int maxPage);
+    List<Compare> search(@Param("keywords") String keywords,
+                         @Param("startTime") String startTime,
+                         @Param("endTime") String endTime,
+                         @Param("index") int index,
+                         @Param("maxPage") int maxPage);
 
-    Compare searchOne(@Param("compareId")Integer compareId);
+    Compare searchOne(@Param("compareId") Integer compareId);
 
     Compare bySerialNumber(String serialNumber);
 
     List<Compare> allSelect();
+
+    String getTotalRows();
 }

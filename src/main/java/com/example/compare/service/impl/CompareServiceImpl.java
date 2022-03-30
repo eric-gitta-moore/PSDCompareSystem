@@ -80,4 +80,14 @@ public class CompareServiceImpl extends ServiceImpl<CompareMapper,Compare> imple
     public Compare bySerialNumber(String serialNumber) {
         return mapper.bySerialNumber(serialNumber);
     }
+
+    /**
+     * 获取记录总数
+     *
+     * @return
+     */
+    @Override
+    public String getTotalRows() {
+        return mapper.getTotalRows();
+    }
 }

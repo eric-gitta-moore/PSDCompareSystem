@@ -10,10 +10,29 @@
     </select>
 
     <select id="search" resultType="com.example.compare.entity.Compare">
-        select compare.id,serial_number,order_id,create_time,fee,order_log.status from compare
-            left join order_log on compare.order_id=order_log.id
-        where (serial_number ='${param1}' or order_log.status='${param1}');
-                                 and (create_time between '${param2}' and '${param3}') limit ${param4},${param5};
+        SELECT
+            compare.id,
+            serial_number,
+            order_id,
+            create_time,
+            fee,
+            order_log.STATUS,
+            order_log.title
+        FROM
+            compare
+                LEFT JOIN order_log ON compare.order_id = order_log.id
+        WHERE
+            (
+            1=1
+            <if test="keywords!=''">
+            or serial_number like '%${keywords}%' OR order_log.STATUS like '%${keywords}%'
+            </if>
+            )
+        <if test="startTime!='' and endTime!=''">
+        AND ( create_time BETWEEN '${startTime}' AND '${endTime}' )
+        </if>
+        LIMIT ${index},
+        ${maxPage};
     </select>
 
     <select id="searchOne" resultType="com.example.compare.entity.Compare">
@@ -48,5 +67,9 @@
         left join order_log o
         on c.order_id = o.id
         where c.id = #{id}
+    </select>
+
+    <select id="getTotalRows" resultType="string">
+        select count(*) from order_log
     </select>
 </mapper>
