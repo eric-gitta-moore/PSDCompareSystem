@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -70,6 +71,6 @@ public class Compare {
     /**
      * 对比费用，来自于订单表
      */
-    private String fee;
+    private BigDecimal fee;
 
 }
