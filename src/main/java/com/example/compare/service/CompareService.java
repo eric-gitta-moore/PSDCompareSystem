@@ -1,8 +1,10 @@
 package com.example.compare.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.compare.entity.Compare;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public interface CompareService extends IService<Compare> {
      *
      * @return
      */
-    List<Compare> search(String keywords, String startTime, String endTime, int index, int maxPage);
+    Page<Compare> search(@Param("Page") Page<Compare> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
 
     /**

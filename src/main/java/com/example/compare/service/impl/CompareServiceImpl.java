@@ -1,10 +1,12 @@
 package com.example.compare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.compare.entity.Compare;
 import com.example.compare.mapper.CompareMapper;
 import com.example.compare.service.CompareService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -52,8 +54,8 @@ public class CompareServiceImpl extends ServiceImpl<CompareMapper,Compare> imple
     }
 
     @Override
-    public List<Compare> search(String keywords, String startTime, String endTime, int index, int maxPage) {
-        return mapper.search(keywords,startTime,endTime,index,maxPage);
+    public Page<Compare> search(@Param("Page") Page<Compare> Page,@Param("keyWords") String keyWords,@Param("startTime") String startTime,@Param("endTime") String endTime) {
+        return mapper.search(Page,keyWords,startTime,endTime);
     }
 
     @Override

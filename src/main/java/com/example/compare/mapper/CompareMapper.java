@@ -1,6 +1,7 @@
 package com.example.compare.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.compare.entity.Compare;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,11 +14,7 @@ public interface CompareMapper extends BaseMapper<Compare> {
 
     int allDelete(int orderId);
 
-    List<Compare> search(@Param("keywords") String keywords,
-                         @Param("startTime") String startTime,
-                         @Param("endTime") String endTime,
-                         @Param("index") int index,
-                         @Param("maxPage") int maxPage);
+    Page<Compare> search(@Param("Page") Page<Compare> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
     Compare searchOne(@Param("compareId") Integer compareId);
 

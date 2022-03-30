@@ -167,7 +167,7 @@ public class CompareController {
         int startPage = 1;
         String mPage = map.get("maxPage");
         String sPage = map.get("startPage");
-        String keywords = map.get("keyWords");
+        String keyWords = map.get("keyWords");
         String startTime = map.get("startTime");
         String endTime = map.get("endTime");
         if (sPage != null) {
@@ -176,23 +176,8 @@ public class CompareController {
         if (mPage != null) {
             maxPage = Integer.parseInt(mPage);
         }
-        List<Compare> search = service.search(keywords, startTime, endTime, ((startPage - 1) * maxPage), maxPage);
-        String totalRows = service.getTotalRows();
-        class ret {
-            public final List<?> data;
-            public final String total;
-            public final String currenPage;
-            public final String pageSize;
-
-
-            public ret(List<?> data, String total, String currenPage, String pageSize) {
-                this.data = data;
-                this.total = total;
-                this.currenPage = currenPage;
-                this.pageSize = pageSize;
-            }
-        }
-        return Result.success(new ret(search, totalRows, String.valueOf(startPage),String.valueOf(maxPage)));
+        Page<Compare> Page = new Page(startPage,maxPage);
+        return Result.success(compareService.search(Page, keyWords, startTime, endTime));
     }
 
     @DeleteMapping("/delete")
