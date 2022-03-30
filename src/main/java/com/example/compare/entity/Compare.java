@@ -67,4 +67,9 @@ public class Compare {
     @TableField("path")
     private String path;
 
+    /**
+     * 对比费用，来自于订单表
+     */
+    private String fee;
+
 }
