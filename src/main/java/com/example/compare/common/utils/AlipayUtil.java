@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayOpenPublicTemplateMessageIndustryModifyRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.service.OrderLogService;
@@ -47,9 +50,52 @@ public class AlipayUtil {
     @Autowired
     OrderLogService service;
 
-    public String pay(OrderLog orderLog){
+    /**
+     * 查单
+     *
+     * @param outTradeNo 商户订单号
+     * @return AlipayTradeQueryResponse
+     */
+    public AlipayTradeQueryResponse queryTrade(String outTradeNo) {
+        try {
+            AlipayClient alipayClient = new DefaultAlipayClient(url, appid, privateKey, "json", "UTf-8", publicKey, "RSA2");
+            AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+            JSONObject bizContent = new JSONObject();
+            bizContent.put("out_trade_no", outTradeNo);
+            //bizContent.put("trade_no", "2014112611001004680073956707");
+            request.setBizContent(bizContent.toString());
+            AlipayTradeQueryResponse response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                System.out.println("调用成功");
+                System.out.println(response.getBody());
+                return response;
+            } else {
+                return null;
+            }
+        } catch (AlipayApiException e) {
+            System.out.println(e.getErrMsg());
+        }
+        return null;
+    }
 
-        AlipayClient alipayClient = new DefaultAlipayClient(url,appid,privateKey,"json","UTf-8",publicKey,"RSA2");
+    /**
+     * 查单
+     * @param outTradeNo 商户订单号
+     * @return 交易状态 WAIT_BUYER_PAY（交易创建，等待买家付款）、TRADE_CLOSED（未付款交易超时关闭，或支付完成后全额退款）、TRADE_SUCCESS（交易支付成功）、TRADE_FINISHED（交易结束，不可退款）
+     */
+    public String queryTradeStatus(String outTradeNo) {
+        AlipayTradeQueryResponse response = this.queryTrade(outTradeNo);
+        if (response != null) {
+            System.out.println(response.getTradeStatus());
+            return response.getTradeStatus();
+        } else {
+            return null;
+        }
+    }
+
+    public String pay(OrderLog orderLog) {
+
+        AlipayClient alipayClient = new DefaultAlipayClient(url, appid, privateKey, "json", "UTf-8", publicKey, "RSA2");
 
 
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
@@ -69,7 +115,7 @@ public class AlipayUtil {
         //销售产品码
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
         //设置绝对超时时间:15分钟
-        bizContent.put("timeout_express","15m");
+        bizContent.put("timeout_express", "15m");
 //        bizContent.put("time_expire", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date().getTime() + 15*60*1000));
 
         request.setBizContent(bizContent.toString());
@@ -83,16 +129,15 @@ public class AlipayUtil {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             //redis，nosugar
-            redisTemplate.opsForValue().set(service.getCompareIdByOrderId(orderLog.getOutTradeId().toString()),"未支付",15, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(service.getCompareIdByOrderId(orderLog.getOutTradeId().toString()), "未支付", 15, TimeUnit.SECONDS);
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
         }
         return form;
     }
-
 
 
 }

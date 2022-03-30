@@ -40,7 +40,12 @@ public interface OrderLogService extends IService<OrderLog>{
      */
     public Integer saveOrderLog(OrderLog orderLog);
 
-
+    /**
+     * 查询订单支付状态并且更新数据库
+     * @param outTradeNo
+     * @return
+     */
+    boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
     /**
      *      查询订单信息
