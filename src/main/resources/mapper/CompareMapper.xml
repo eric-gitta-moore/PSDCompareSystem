@@ -25,7 +25,7 @@
             (
             1=1
             <if test="keywords!=''">
-            or serial_number like '%${keywords}%' OR order_log.STATUS like '%${keywords}%'
+            and( serial_number like '%${keywords}%' OR order_log.STATUS like '%${keywords}%')
             </if>
             )
         <if test="startTime!='' and endTime!=''">
