@@ -210,7 +210,7 @@ public class CompareController {
 /*
             String url = FileDownloadUtil.url("123124124214");
 */
-            String url = FileDownloadUtil.url("123124124124");
+            String url = FileDownloadUtil.url(compare.getWorkCode());
             compare.setPath(url);
             boolean b = compareService.updateById(compare);
             if(b)
