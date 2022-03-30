@@ -14,23 +14,29 @@ public class FileDownloadUtil {
      */
     private static String path = "http://139.9.203.100:9721/cadpare/download?workcode=";
     /**
-     * 下载的压缩包路劲
+     * 下载的压缩包路径
      */
-    private static String dir = "D:/tmp/";
+    /*private static String dir = "D:/tmp/";*/
+    private static String dir = "D:\\tmp\\";
 
     /**
      * 解压后文件所在位置
      */
-    private static String desDirectory="D:/tmp";
-
+    /*private static String desDirectory="D:/tmp";*/
+    private static String desDirectory="D:\\tmp";
     /**
      * 上传七牛云，生成url
      * @param workcode
      * @return
      * @throws Exception
      */
+/*
+    D:\tmp\bf265aba-bed4-408d-9f6d-4795dbed07af.zip
+*/
+
     public static String url(String workcode) throws Exception {
         String zip = getZip(workcode);
+        FileInputStream inputStream_ = new FileInputStream(zip);
         String unzip = unzip(zip);
         FileInputStream inputStream = new FileInputStream(unzip);
         byte[] bytes = readInputStream(inputStream);
@@ -66,6 +72,7 @@ public class FileDownloadUtil {
         // 遍历每一个文件
         ZipEntry zipEntry = zipInputStream.getNextEntry();
         String unzipFilePath=null;
+
         //修改：刘锦堂，只去一张图片
         if (zipEntry != null) {
             if (zipEntry.isDirectory()) { // 文件夹

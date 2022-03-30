@@ -3,21 +3,15 @@ package com.example.compare.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.example.compare.common.utils.AlipayUtil;
-import com.example.compare.common.utils.Result;
-import com.example.compare.entity.Compare;
 import com.example.compare.entity.OrderLog;
 import com.example.compare.mapper.OrderLogMapper;
 import com.example.compare.service.OrderLogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -59,8 +53,29 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper,OrderLog> im
         return form;
     }
 
-
-
+    /**
+     * 查询订单支付状态并且更新数据库
+     *
+     * @param outTradeNo
+     * @return
+     */
+    @Override
+    public boolean checkOrderAndUpdateDatabase(String outTradeNo) {
+        //判断数据库里面的支付状态
+        OrderLog orderLog = this.getOrderLog(outTradeNo);
+        if (orderLog.getStatus().equals("unpaid")) {
+            //查单
+            String status = alipayUtil.queryTradeStatus(outTradeNo);
+            if (status.equals("TRADE_SUCCESS")) {
+                //支付宝那边支付成功
+                orderLog.setStatus("complete");
+                return mapper.updateById(orderLog) > 0;
+            }
+        } else if (orderLog.getStatus().equals("complete")) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 查询订单数据
