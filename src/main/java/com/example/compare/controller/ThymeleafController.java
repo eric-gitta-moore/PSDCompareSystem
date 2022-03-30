@@ -30,7 +30,7 @@ public class ThymeleafController {
      * @param model
      * @return
      */
-    @ApiOperation(value = "跳转登入界面， outTradeId: 订单编号")
+    @ApiOperation(value = "跳转收银台界面， outTradeId: 订单编号")
     @RequestMapping("/index")
     public String index(String outTradeId,Model model){
         OrderLog orderLog = service.getOrderLog(outTradeId);

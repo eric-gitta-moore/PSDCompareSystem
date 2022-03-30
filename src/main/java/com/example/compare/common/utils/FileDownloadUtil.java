@@ -17,13 +17,13 @@ public class FileDownloadUtil {
      * 下载的压缩包路径
      */
     /*private static String dir = "D:/tmp/";*/
-    private static String dir = "D:\\tmp\\";
+    private static String dir = "/tmp/template";
 
     /**
      * 解压后文件所在位置
      */
     /*private static String desDirectory="D:/tmp";*/
-    private static String desDirectory="D:\\tmp";
+    private static String desDirectory="/tmp/template";
     /**
      * 上传七牛云，生成url
      * @param workcode
