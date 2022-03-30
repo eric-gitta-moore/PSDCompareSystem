@@ -1,5 +1,6 @@
 package com.example.compare.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.compare.common.utils.AlipayUtil;
 import com.example.compare.common.utils.FileDownloadUtil;
@@ -88,7 +89,7 @@ public class CompareController {
     @GetMapping("/getQRCode")
     public void getQRCode(Integer id, Integer size, HttpServletResponse response) throws IOException {
         String outTradeId = service.getOrderIdById(id);
-        String url = "http://localhost:8081/" + "index?outTradeId=" + outTradeId;
+        String url = "http://buchitang.top:8081/" + "index?outTradeId=" + outTradeId;
         BufferedImage qr = QRCodeUtil.getBufferedImage(url, size);
         ImageIO.write(qr, "jpg", response.getOutputStream());
 //        return Result.success()
@@ -209,11 +210,11 @@ public class CompareController {
      * @param size    一页最大显示条数
      * @return {@link Result}
      */
-    @ApiOperation("左呈祥===>获取对比记录分页数据 current：当前页码  size：一页最大显示条数")
+    @ApiOperation("左呈祥===>获取对比记录分页数据 current：当前页码  size：一页最大显示条数,返回已支付的记录")
     @GetMapping("/{current}/{size}")
     public Result getComparePage(@PathVariable("current") Integer current, @PathVariable("size") Integer size) {
         try {
-            return Result.success(compareService.page(new Page<>(current, size)));
+            return Result.success(compareService.page(new Page<>(current, size),new QueryWrapper<Compare>().ne("status","未支付")));
         } catch (Exception e) {
             e.printStackTrace();
             return Result.fail(500, "服务器繁忙，请稍后再试", "");
@@ -224,6 +225,9 @@ public class CompareController {
     @GetMapping("/contrast/{id}")
     public Result download(@PathVariable Integer id) throws Exception {
         Compare compare = compareService.getById(id);
+        if (compare.getStatus().equals("未支付")){
+            return Result.fail("该订单未付款");
+        }
         String path = compare.getPath();
         if(path==null){
 /*

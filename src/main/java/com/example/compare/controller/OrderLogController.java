@@ -12,6 +12,7 @@ import com.example.compare.entity.OrderLog;
 import com.example.compare.service.CompareService;
 import com.example.compare.service.OrderLogService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
