@@ -167,11 +167,11 @@ public class CompareController {
             "maxPage代表每页显示最大数量，" +
             "startPage代表开始页码,startTime和endTime代表要查询的时间段")
     public Result search(@RequestBody Map<String, String> map) {
-        //最大显示数量默认为10
+        //最大显示数量默认是10
         int maxPage = 10;
-        //起始页码默认为1
+        //起始页码默认为是1
         int startPage = 1;
-      String mPage = map.get("maxPage");
+        String mPage = map.get("maxPage");
         String sPage = map.get("startPage");
         String keyWords = map.get("keyWords");
         String startTime = map.get("startTime");
