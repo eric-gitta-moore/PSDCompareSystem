@@ -12,13 +12,14 @@
     <select id="search" resultType="com.example.compare.entity.Compare">
         select  compare.id,serial_number,order_id,create_time,fee,order_log.status from compare
                 left join order_log on compare.order_id=order_log.id
-        where 1=1
+        where
               <if test="keyWords!=null and keyWords!=''">
-                  serial_number ='${param2}' or order_log.status='${param2}'and
+                  serial_number ='${param2}' or order_log.status='${param2}' and
               </if>
               <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
-                    (create_time between '${param3}' and '${param4}')
+                   (create_time between '${param3}' and '${param4}')
               </if>
+              1=1
     </select>
 
     <select id="searchOne" resultType="com.example.compare.entity.Compare">
