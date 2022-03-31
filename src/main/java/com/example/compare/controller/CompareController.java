@@ -205,7 +205,8 @@ public class CompareController {
     @GetMapping("/{current}/{size}")
     public Result getComparePage(@PathVariable("current") Integer current, @PathVariable("size") Integer size) {
         try {
-            return Result.success(compareService.page(new Page<>(current, size),new QueryWrapper<Compare>().ne("status","未支付")));
+            return Result.success(compareService.page(new Page<>(current, size),
+                    new QueryWrapper<Compare>().ne("status","未支付").orderByDesc("id")));
         } catch (Exception e) {
             e.printStackTrace();
             return Result.fail(500, "服务器繁忙，请稍后再试", "");

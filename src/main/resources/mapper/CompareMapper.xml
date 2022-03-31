@@ -20,6 +20,7 @@
                    (create_time between '${param3}' and '${param4}') and
               </if>
               1=1
+        order by id desc
     </select>
 
     <select id="searchOne" resultType="com.example.compare.entity.Compare">
