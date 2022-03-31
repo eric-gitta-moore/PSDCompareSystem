@@ -161,14 +161,9 @@ public class CompareController {
     }
 
 
-    @ApiOperation(value = "郑前====》显示所有数据信息")
-    @PostMapping("/compareInformation")
-    public Result compareLogAccount() {
-        return Result.success(service.allSelect());
-    }
-
     @PostMapping("/search")
-    @ApiOperation(value = "郑前====》历史记录分页查询,keywords代表流水号或者支付状态（两种，unpaid 未完成，complete 已经完成）," +
+    @ApiOperation(value = "郑前====》历史记录分页查询,keywords代表流水号或者支付状态,为空是显示全部，" +
+            "（支付状态有两种，unpaid 未完成，complete 已经完成）," +
             "maxPage代表每页显示最大数量，" +
             "startPage代表开始页码,startTime和endTime代表要查询的时间段")
     public Result search(@RequestBody Map<String, String> map) {
@@ -176,7 +171,7 @@ public class CompareController {
         int maxPage = 10;
         //起始页码默认为1
         int startPage = 1;
-        String mPage = map.get("maxPage");
+      String mPage = map.get("maxPage");
         String sPage = map.get("startPage");
         String keyWords = map.get("keyWords");
         String startTime = map.get("startTime");
