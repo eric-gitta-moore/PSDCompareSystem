@@ -14,11 +14,10 @@
                 left join order_log on compare.order_id=order_log.id
         where
               <if test="keyWords!=null and keyWords!=''">
-
                   serial_number  like concat('%','${param2}','%') or order_log.status like concat('%','${param2}','%') and
               </if>
               <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
-                   (create_time between '${param3}' and '${param4}')
+                   (create_time between '${param3}' and '${param4}') and
               </if>
               1=1
     </select>
