@@ -56,14 +56,14 @@ public class OrderLogController {
     CompareService service2;
     /**
      * 获取跳转支付界面的二维码
-     * @param url 跳转的url
      * @param size 二维码大小
      * @param response
      * @throws IOException
      */
-    @ApiOperation("刘锦堂===>获取跳转支付界面的二维码，url： 跳转的url，size： 二维码大小，默认值250")
-    @GetMapping("/getQRCode")
-    public void getQRCode(String url, Integer size, HttpServletResponse response) throws IOException {
+    @ApiOperation("刘锦堂===>获取跳转支付界面的二维码，id：compare表id，size： 二维码大小，默认值250")
+    @GetMapping("/order-log")
+    public void getQRCode(Integer id, Integer size, HttpServletResponse response) throws IOException {
+        String url = "http://114.55.0.204:8081/index?outTradeId"+service2.getOrderIdById(id);
         BufferedImage qr = QRCodeUtil.getBufferedImage(url, size);
         ImageIO.write(qr,"jpg",response.getOutputStream());
 //        return Result.success()

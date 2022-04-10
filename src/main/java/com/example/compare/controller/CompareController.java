@@ -145,14 +145,15 @@ public class CompareController {
     /**
      * 下载zip文件
      *
-     * @param workcode
      * @param response
      * @throws IOException
      */
     @GetMapping("/download")
-    @ApiOperation("刘锦堂===>下载压缩包文件，id：对比的id，workcode：workcode")
-    public void download(Integer id, String workcode, HttpServletResponse response) throws IOException {
-        String status = service.select(id).getStatus();
+    @ApiOperation("刘锦堂===>下载压缩包文件，id：对比的id")
+    public void download(Integer id,  HttpServletResponse response) throws IOException {
+        Compare compare = service.select(id);
+        String status = compare.getStatus();
+        String workcode = compare.getWorkCode();
         if (status.equals("未支付")) {
             response.getOutputStream().write("no pay".getBytes(StandardCharsets.UTF_8));
             return;
@@ -228,10 +229,12 @@ public class CompareController {
             String url = FileDownloadUtil.url(compare.getWorkCode());
             compare.setPath(url);
             boolean b = compareService.updateById(compare);
-            if(b)
-                return Result.success(200,"保存url成功",url);
-            else
-                return Result.fail(400,"保存url失败",null);
+            if(b) {
+                return Result.success(200, "保存url成功", url);
+            }
+            else {
+                return Result.fail(400, "保存url失败", null);
+            }
         }
         return Result.success(200,"url已存在无须保存直接返回给",path);
     }
