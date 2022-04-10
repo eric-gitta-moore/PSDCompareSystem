@@ -2,66 +2,6 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.compare.mapper.CompareMapper">
+<mapper namespace="com.example.newcompare.mapper.CompareMapper">
 
-
-    <select id="bySerialNumber" resultType="com.example.compare.entity.Compare">
-        select *from compare where serial_number ='${param1}'
-    </select>
-
-    <select id="search" resultType="com.example.compare.entity.Compare">
-        select  compare.id,serial_number,order_id,create_time,fee,order_log.status from compare
-                left join order_log on compare.order_id=order_log.id
-        where
-              <if test="keyWords!=null and keyWords!=''">
-                  serial_number  like concat('%','${param2}','%') or order_log.status like concat('%','${param2}','%') and
-              </if>
-              <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
-                   (create_time between '${param3}' and '${param4}') and
-              </if>
-              1=1
-        order by id desc
-    </select>
-
-    <select id="searchOne" resultType="com.example.compare.entity.Compare">
-        SELECT
-            c.id,
-            c.serial_number,
-            c.order_id,
-            c.create_time,
-            o.fee,
-            o.STATUS,
-            c.work_code,
-            c.file_code_1,
-            c.file_code_2,
-            o.title
-        FROM
-            compare AS c
-                LEFT JOIN order_log AS o ON c.order_id = o.id
-        WHERE
-        c.id = ${compareId};
-    </select>
-
-    <delete id="allDelete">
-        delete order_log,compare from compare
-          left join order_log on compare.order_id=order_log.id
-          where compare.order_id='${param1}';
-    </delete>
-
-
-    <select id="allSelect" resultType="com.example.compare.entity.Compare">
-        select compare.id,serial_number,order_id,create_time,order_log.status,fee from compare
-                left join order_log on compare.order_id=order_log.id;
-    </select>
-
-    <select id="getOrderIdByid" resultType="java.lang.String">
-        select o.out_trade_id from compare c
-        left join order_log o
-        on c.order_id = o.id
-        where c.id = #{id}
-    </select>
-
-    <select id="getTotalRows" resultType="string">
-        select count(*) from order_log
-    </select>
 </mapper>
