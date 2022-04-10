@@ -62,10 +62,6 @@ public class OrderLog implements Serializable {
      */
     private LocalDateTime createTime;
 
-    /**
-     * compare自增id
-     */
-    private Integer compareId;
 
     /**
      * 对比之后的文件的位置
@@ -74,5 +70,15 @@ public class OrderLog implements Serializable {
 
     @TableLogic//逻辑删除字段  1删除  0未删除
     private Integer deleted;
+
+    /**
+     * 第一张文件的id
+     */
+    private Integer firstId;
+
+    /**
+     * 第二张文件的id
+     */
+    private Integer secondId;
 
 }
