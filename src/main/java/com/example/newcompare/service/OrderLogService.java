@@ -12,5 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-04-10
  */
 public interface OrderLogService extends IService<OrderLog> {
+    OrderLog getOrderLog(String outTradeId);
 
+    boolean checkOrderAndUpdateDatabase(String outTradeNo);
 }
