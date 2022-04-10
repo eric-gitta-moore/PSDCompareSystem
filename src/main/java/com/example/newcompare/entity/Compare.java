@@ -3,6 +3,8 @@ package com.example.newcompare.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -33,5 +35,7 @@ public class Compare implements Serializable {
      */
     private String workCode;
 
+    @TableLogic//逻辑删除字段  1删除  0未删除
+    private Integer deleted;
 
 }
