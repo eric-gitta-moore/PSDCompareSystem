@@ -15,10 +15,8 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@Component
+
 public class FileDownloadUtil {
-    @Autowired
-    OrderLogService service;
     /**
      * http请求路径
      */
@@ -44,15 +42,20 @@ public class FileDownloadUtil {
     D:\tmp\bf265aba-bed4-408d-9f6d-4795dbed07af.zip
 */
 
-    public String url(String workcode,Integer id) throws Exception {
+    /**
+     * 返回【0】文件路径，【1】文件大小
+     * @param workcode
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public String[] url(String workcode,Integer id) throws Exception {
         String zip = getZip(workcode);
         FileInputStream inputStream_ = new FileInputStream(zip);
         String unzip = unzip(zip);
         //计算文件大小
         String size = FileUtil.fileSize(unzip);
-        OrderLog log = service.getById(id);
-        log.setSize(size);
-        service.updateById(log);
+
 
         FileInputStream inputStream = new FileInputStream(unzip);
         byte[] bytes = readInputStream(inputStream);
@@ -60,7 +63,7 @@ public class FileDownloadUtil {
         inputStream.close();
         new File(unzip).delete();
         new File(zip).delete();
-        return path;
+        return new String[]{path,size};
     }
 
 //    public static void main(String[] args) throws Exception {
