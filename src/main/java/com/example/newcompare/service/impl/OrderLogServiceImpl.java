@@ -1,6 +1,7 @@
 package com.example.newcompare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.AlipayUtil;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.mapper.OrderLogMapper;
@@ -60,5 +61,14 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Page<OrderLog> getHistory(Page<OrderLog> Page, String keyWords, String startTime, String endTime) {
+        return mapper.getHistory(Page,keyWords,startTime,endTime);
+    }
+    @Override
+    public int allDelete(String[] serialNumbers) {
+        return mapper.allDelete(serialNumbers);
     }
 }

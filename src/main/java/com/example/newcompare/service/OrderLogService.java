@@ -1,5 +1,6 @@
 package com.example.newcompare.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.entity.OrderLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,11 +13,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-04-10
  */
 public interface OrderLogService extends IService<OrderLog> {
+
     OrderLog getOrderLog(String outTradeId);
-
-    boolean checkOrderAndUpdateDatabase(String outTradeNo);
-
 
     String useAlipayUtils(OrderLog orderLog);
 
+    boolean checkOrderAndUpdateDatabase(String outTradeNo);
+
+    Page<OrderLog> getHistory(Page<OrderLog> Page, String keyWords, String startTime, String endTime);
+
+    int allDelete(String[] serialNumbers);
 }
