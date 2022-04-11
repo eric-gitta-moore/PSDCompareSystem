@@ -88,6 +88,11 @@ public class OrderLog implements Serializable {
      */
     private String size;
 
+    /**
+     * 图片分辨率
+     */
+    private String resolution;
+
     @TableField(exist = false)
     private List<File> files;
 

@@ -7,7 +7,9 @@ import com.example.newcompare.service.OrderLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -43,7 +45,7 @@ public class FileDownloadUtil {
 */
 
     /**
-     * 返回【0】文件路径，【1】文件大小
+     * 返回【0】文件路径，【1】文件大小,【3】文件分辨率
      * @param workcode
      * @param id
      * @return
@@ -55,7 +57,7 @@ public class FileDownloadUtil {
         String unzip = unzip(zip);
         //计算文件大小
         String size = FileUtil.fileSize(unzip);
-
+        BufferedImage image = ImageIO.read(new File(unzip));
 
         FileInputStream inputStream = new FileInputStream(unzip);
         byte[] bytes = readInputStream(inputStream);
@@ -63,7 +65,7 @@ public class FileDownloadUtil {
         inputStream.close();
         new File(unzip).delete();
         new File(zip).delete();
-        return new String[]{path,size};
+        return new String[]{path,size,image.getWidth()+"*"+image.getHeight()};
     }
 
 //    public static void main(String[] args) throws Exception {
