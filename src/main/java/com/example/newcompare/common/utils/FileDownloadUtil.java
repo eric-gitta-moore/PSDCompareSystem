@@ -1,12 +1,22 @@
 package com.example.newcompare.common.utils;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
+import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.service.OrderLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 
 public class FileDownloadUtil {
     /**
@@ -34,17 +44,28 @@ public class FileDownloadUtil {
     D:\tmp\bf265aba-bed4-408d-9f6d-4795dbed07af.zip
 */
 
-    public static String url(String workcode) throws Exception {
+    /**
+     * 返回【0】文件路径，【1】文件大小,【3】文件分辨率
+     * @param workcode
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public String[] url(String workcode,Integer id) throws Exception {
         String zip = getZip(workcode);
         FileInputStream inputStream_ = new FileInputStream(zip);
         String unzip = unzip(zip);
+        //计算文件大小
+        String size = FileUtil.fileSize(unzip);
+        BufferedImage image = ImageIO.read(new File(unzip));
+
         FileInputStream inputStream = new FileInputStream(unzip);
         byte[] bytes = readInputStream(inputStream);
         String path = QiniuCloudUtil.put64image(bytes, UUID.randomUUID() + ".png");
         inputStream.close();
         new File(unzip).delete();
         new File(zip).delete();
-        return path;
+        return new String[]{path,size,image.getWidth()+"*"+image.getHeight()};
     }
 
 //    public static void main(String[] args) throws Exception {

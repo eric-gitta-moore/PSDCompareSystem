@@ -4,6 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.example.newcompare.common.utils.AlipayUtil;
 import com.example.newcompare.common.utils.ChangeToMapUtil;
+import com.example.newcompare.entity.File;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.OrderLogService;
 import com.example.newcompare.service.impl.OrderLogServiceImpl;
