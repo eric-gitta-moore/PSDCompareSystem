@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-@Controller("/thymeleaf")
+@Controller
+@RequestMapping("/thymeleaf")
 @Api(value = "ThymeleafController",tags = "thymeleaf")
 public class ThymeleafController {
     @Autowired
@@ -31,14 +32,15 @@ public class ThymeleafController {
 
     /**
      * 跳转到收银台
-     * @param outTradeId  订单编号
+     * @param id  订单编号
      * @param model
      * @return
      */
     @ApiOperation(value = "跳转收银台界面， outTradeId: 订单编号")
     @RequestMapping("/index")
-    public String index(String outTradeId,Model model){
-        OrderLog orderLog = service.getById(outTradeId);
+    public String index(String id,Model model){
+        System.out.println(123);
+        OrderLog orderLog = service.getById(id);
         model.addAttribute("total_amount",orderLog.getFee());
         model.addAttribute("out_trade_no",orderLog.getOutTradeId());
         return "index";

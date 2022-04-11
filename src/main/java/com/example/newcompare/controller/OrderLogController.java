@@ -5,7 +5,9 @@ import com.example.newcompare.common.utils.QRCodeUtil;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.OrderLogService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -28,7 +30,8 @@ import java.util.List;
  * @author nosgua
  * @since 2022-04-10
  */
-@RestController
+@Api(value = "order-log")
+@Controller
 @RequestMapping("/order-log")
 public class OrderLogController {
     @Resource
@@ -40,9 +43,9 @@ public class OrderLogController {
      * @throws IOException
      */
     @ApiOperation("刘锦堂===>获取跳转支付界面的二维码，id：compare表id，size： 二维码大小，默认值250")
-    @GetMapping("/order-log")
+    @GetMapping("/getQRCode")
     public void getQRCode(Integer id, Integer size, HttpServletResponse response) throws IOException {
-        String url = "http://114.55.0.204:8081/thymeleaf/index?outTradeId="+service.getById(id).getOutTradeId();
+        String url = "http://114.55.0.204:8081/thymeleaf/index?id="+id;
         BufferedImage qr = QRCodeUtil.getBufferedImage(url, size);
         ImageIO.write(qr,"jpg",response.getOutputStream());
 //        return Result.success()
