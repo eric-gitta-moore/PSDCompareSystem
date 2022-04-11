@@ -2,9 +2,11 @@ package com.example.newcompare.entity;
 
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
@@ -80,5 +82,8 @@ public class OrderLog implements Serializable {
      * 第二张文件的id
      */
     private Integer secondId;
+
+    @TableField(exist = false)
+    private List<File> files;
 
 }

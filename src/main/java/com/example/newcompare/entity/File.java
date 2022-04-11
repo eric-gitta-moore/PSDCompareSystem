@@ -43,4 +43,9 @@ public class File implements Serializable {
     @TableLogic//逻辑删除字段  1删除  0未删除
     private Integer deleted;
 
+    /**
+     * 文件名
+     */
+    private String name;
+
 }
