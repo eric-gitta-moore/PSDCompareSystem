@@ -15,13 +15,14 @@
         1=1
     </select>
 
-    <delete id="allDelete">
-        delete order_log,file from order_log
-        left join file on (order_log.first_id=file.id OR order_log.second_id=file.id)
+    <update id="allDelete">
+        update order_log
+        left join file on (order_log.first_id=file.id or order_log.second_id=file.id)
+        set order_log.deleted = 1,file.deleted =1
         where
         <foreach collection="serialNumbers" item="serialNumber" separator="or">
             serial_Number = #{serialNumber}
         </foreach>
-    </delete>
+    </update>
 
 </mapper>
