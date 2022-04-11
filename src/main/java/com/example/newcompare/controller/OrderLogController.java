@@ -6,9 +6,7 @@ import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +19,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
