@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -28,6 +29,11 @@ public class TaskGroup {
      * 任务组名
      */
     private String name;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 
     /**
      *
