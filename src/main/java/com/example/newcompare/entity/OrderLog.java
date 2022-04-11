@@ -83,6 +83,11 @@ public class OrderLog implements Serializable {
      */
     private Integer secondId;
 
+    /**
+     * 文件大小
+     */
+    private String size;
+
     @TableField(exist = false)
     private List<File> files;
 

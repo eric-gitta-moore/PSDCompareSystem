@@ -1,5 +1,12 @@
 package com.example.newcompare.common.utils;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
+import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.service.OrderLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -8,7 +15,10 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Component
 public class FileDownloadUtil {
+    @Autowired
+    OrderLogService service;
     /**
      * http请求路径
      */
@@ -34,10 +44,16 @@ public class FileDownloadUtil {
     D:\tmp\bf265aba-bed4-408d-9f6d-4795dbed07af.zip
 */
 
-    public static String url(String workcode) throws Exception {
+    public String url(String workcode,Integer id) throws Exception {
         String zip = getZip(workcode);
         FileInputStream inputStream_ = new FileInputStream(zip);
         String unzip = unzip(zip);
+        //计算文件大小
+        String size = FileUtil.fileSize(unzip);
+        OrderLog log = service.getById(id);
+        log.setSize(size);
+        service.updateById(log);
+
         FileInputStream inputStream = new FileInputStream(unzip);
         byte[] bytes = readInputStream(inputStream);
         String path = QiniuCloudUtil.put64image(bytes, UUID.randomUUID() + ".png");

@@ -3,6 +3,7 @@ package com.example.newcompare.common.utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -80,25 +81,19 @@ public class FileUtil {
     }
 
     /**
-     * 根据路径删除文件
-     *
-     * @param url
+     * 计算文件的大小
+     * @param path
      * @return
+     * @throws IOException
      */
-    public static boolean deleteFile(String url) {
-        File file = new File(catalogue + url);
-        if (file.exists()) {
-            file.delete();
-            return true;
-        } else {
-            return false;
+    public static String fileSize(String path) throws IOException {
+        final File file = new File(path);
+        final FileReader reader = new FileReader(file);
+        int n=0;
+        while (reader.read()!=-1){
+            n++;
         }
-    }
-
-    public static void deleteFile(String[] urls) {
-        for (String url : urls) {
-            deleteFile(url);
-        }
+        return String.format("%.2f",n*1.0/1000/1000);
     }
 
 }
