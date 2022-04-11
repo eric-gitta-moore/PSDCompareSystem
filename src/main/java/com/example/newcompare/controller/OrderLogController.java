@@ -6,7 +6,9 @@ import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -47,4 +50,20 @@ public class OrderLogController {
         ImageIO.write(qr,"jpg",response.getOutputStream());
 //        return Result.success()
     }
+
+
+    @ApiOperation("朱涵===>发起请求支付")
+    @GetMapping("/topay/{id}")
+    public String topay(@PathVariable String id, Model model) {
+        OrderLog orderLog = service.getOrderLog(id);
+        String form = service.AlipayUtils(orderLog);
+        model.addAttribute("form",form);
+        //填入redis
+        redisTemplate.opsForValue().set(id,"未支付",15, TimeUnit.MINUTES);
+        return "pay";
+    }
+
+
+
+
 }
