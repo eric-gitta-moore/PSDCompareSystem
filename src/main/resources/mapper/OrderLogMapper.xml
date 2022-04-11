@@ -2,5 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newcompare.mapper.OrderLogMapper">
 
+    <select id="getHistory" resultType="com.example.newcompare.entity.OrderLog">
+        select  *from order_log
+        left join file on (order_log.first_id=file.id OR order_log.second_id=file.id)
+        where
+        <if test="keyWords!=null and keyWords!=''">
+            serial_number  like concat('%','${param2}','%') or order_log.status like concat('%','${param2}','%') and
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            (create_time between '${param3}' and '${param4}') and
+        </if>
+        1=1
+    </select>
+
+    <update id="allDelete">
+        update order_log
+        left join file on (order_log.first_id=file.id or order_log.second_id=file.id)
+        set order_log.deleted = 1,file.deleted =1
+        where
+        <foreach collection="serialNumbers" item="serialNumber" separator="or">
+            serial_Number = #{serialNumber}
+        </foreach>
+    </update>
 
 </mapper>
