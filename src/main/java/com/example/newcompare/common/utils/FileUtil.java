@@ -93,6 +93,7 @@ public class FileUtil {
         while (reader.read()!=-1){
             n++;
         }
+        reader.close();
         return String.format("%.2f",n*1.0/1000/1000);
     }
 
