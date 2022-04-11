@@ -48,4 +48,14 @@ public class File implements Serializable {
      */
     private String name;
 
+    /**
+     * 图片分辨率
+     */
+    private String resolution;
+
+    /**
+     * 任务组id
+     */
+    private Integer taskId;
+
 }

@@ -35,7 +35,7 @@ public class OrderLog implements Serializable {
     private Integer id;
 
     /**
-     * 支付状态('unpaid':未支付,'overtime':超时,'cancal':取消支付,'complete':完成)
+     * 支付状态('unpaid':未支付,'create':创建,'cancal':取消支付,'complete':完成)
      */
     private String status;
 
@@ -50,7 +50,7 @@ public class OrderLog implements Serializable {
     private String outTradeId;
 
     /**
-     * 订单名称
+     * 对比组名称
      */
     private String title;
 
@@ -92,6 +92,11 @@ public class OrderLog implements Serializable {
      * 图片分辨率
      */
     private String resolution;
+
+    /**
+     * 任务组id
+     */
+    private Integer taskId;
 
     @TableField(exist = false)
     private List<File> files;
