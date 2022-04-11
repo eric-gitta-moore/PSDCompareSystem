@@ -15,4 +15,8 @@ public interface OrderLogService extends IService<OrderLog> {
     OrderLog getOrderLog(String outTradeId);
 
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
+
+
+    String useAlipayUtils(OrderLog orderLog);
+
 }

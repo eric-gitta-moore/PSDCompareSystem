@@ -6,7 +6,11 @@ import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -33,6 +38,10 @@ import java.util.List;
 public class OrderLogController {
     @Resource
     OrderLogService service;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
     /**
      * 获取跳转支付界面的二维码
      * @param size 二维码大小
@@ -53,7 +62,7 @@ public class OrderLogController {
     @GetMapping("/topay/{id}")
     public String topay(@PathVariable String id, Model model) {
         OrderLog orderLog = service.getOrderLog(id);
-        String form = service.AlipayUtils(orderLog);
+        String form = service.useAlipayUtils(orderLog);
         model.addAttribute("form",form);
         //填入redis
         redisTemplate.opsForValue().set(id,"未支付",15, TimeUnit.MINUTES);

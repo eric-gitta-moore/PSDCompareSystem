@@ -32,6 +32,12 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     }
 
 
+    @Override
+    public String useAlipayUtils(OrderLog orderLog) {
+        String form = alipayUtil.pay(orderLog);
+        return form;
+    }
+
     /**
      * 查询订单支付状态并且更新数据库
      *
