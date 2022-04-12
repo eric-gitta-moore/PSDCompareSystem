@@ -4,5 +4,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newcompare.mapper.TaskGroupMapper">
 
+    <resultMap id="groupMap" type="com.example.newcompare.entity.TaskGroup">
+        <id column="id" property="id"></id>
+        <result column="work_code" property="workCode"></result>
+        <result column="name" property="name"></result>
+        <result column="create_time" property="createTime"></result>
+        <collection property="orders" ofType="com.example.newcompare.entity.OrderLog">
+             <id column="order_id" property="id"></id>
+             <result column="status" property="status"></result>
+             <result column="fee" property="fee"></result>
+             <result column="out_trade_id" property="outTradeId"></result>
+             <result column="title" property="title"></result>
+             <result column="serial_number" property="serialNumber"></result>
+             <result column="create_time" property="createTime"></result>
+             <result column="url" property="url"></result>
+             <result column="first_id" property="firstId"></result>
+             <result column="second_id" property="secondId"></result>
+             <result column="size" property="size"></result>
+             <result column="resolution" property="resolution"></result>
+          <collection property="files" ofType="com.example.newcompare.entity.File">
+            <id column="id" property="id"></id>
+            <result column="filecode" property="filecode"></result>
+            <result column="name" property="name"></result>
+          </collection>
+        </collection>
+    </resultMap>
+
+
+    <select id="getHistory" resultMap="groupMap">
+        select  *from order_log
+        left join task_group on task_group.id=order_log.task_id
+        left join file on (order_log.first_id=file.id or order_log.second_id=file.id)
+        where
+        <if test="keyWords!=null and keyWords!=''">
+            serial_number  like concat('%','${param2}','%') or order_log.status like concat('%','${param2}','%') and
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            (create_time between '${param3}' and '${param4}') and
+        </if>
+        1=1
+    </select>
+
 
 </mapper>
