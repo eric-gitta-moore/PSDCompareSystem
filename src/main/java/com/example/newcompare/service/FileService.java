@@ -21,4 +21,5 @@ public interface FileService extends IService<File> {
      */
     ArrayList<File> queryById(Integer groupId);
 
+    String getUrlById(Integer id);
 }

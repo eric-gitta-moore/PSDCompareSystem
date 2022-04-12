@@ -20,4 +20,8 @@
     </select>
 
 
+    <select id="getUrlById" resultType="string">
+        select url from order_log where deleted = 0 and id = #{id}
+    </select>
+
 </mapper>

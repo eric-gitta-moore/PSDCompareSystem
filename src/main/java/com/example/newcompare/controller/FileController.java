@@ -5,12 +5,12 @@ import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.File;
 import com.example.newcompare.service.FileService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,5 +38,21 @@ public class FileController {
         return Result.success(fileMessages);
     }
 
+    @ApiOperation("左呈祥===>获取对比之后的的文件的url        id : order_log的id")
+    @GetMapping("/getUrl/{id}")
+    public Result getUrlById(@PathVariable("id") Integer id){
+        String url = fileService.getUrlById(id);
+        Map<String,Object> map=new HashMap<>();
+        if(url==null){
+            map.put("url","");
+            return Result.fail(404,"此id不存在或已被删除",map);
+        }else if("".equals(url)){
+            map.put("url","");
+            return Result.success(200,"此id暂无url",map);
+        }else {
+            map.put("url",url);
+            return Result.success(200,"获取url成功",map);
+        }
+    }
 
 }
