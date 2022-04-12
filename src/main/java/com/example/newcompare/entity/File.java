@@ -3,6 +3,7 @@ package com.example.newcompare.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
@@ -57,5 +58,15 @@ public class File implements Serializable {
      * 任务组id
      */
     private Integer taskId;
+
+    /**
+     * 文件大小
+     */
+    private String size;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 
 }
