@@ -14,8 +14,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/taskGroup")
 public class TaskGroupController {
+
     @Autowired
     TaskGroupService service;
+
     @PostMapping("/create")
     public Result create(String name){
         TaskGroup taskGroup = new TaskGroup();

@@ -5,9 +5,10 @@ import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.entity.WorkCode;
 import com.example.newcompare.mapper.TaskGroupMapper;
 import com.example.newcompare.service.TaskGroupService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
+@Service
 public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup> implements TaskGroupService {
     @Resource
     TaskGroupMapper mapper;

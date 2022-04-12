@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  * @author nosgua
  * @since 2022-04-10
  */
-@Api(value = "order-log")
+@Api(tags = "Order-log")
 @Controller
 @RequestMapping("/order-log")
 public class OrderLogController {
