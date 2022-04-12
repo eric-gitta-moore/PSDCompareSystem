@@ -8,7 +8,10 @@ import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -35,6 +39,9 @@ import java.util.Map;
 public class OrderLogController {
     @Resource
     OrderLogService service;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
     /**
      * 获取跳转支付界面的二维码
      * @param size 二维码大小
@@ -80,5 +87,16 @@ public class OrderLogController {
     public Result delete(@RequestParam("serialNumbers") String[] serialNumbers){
         service.allDelete(serialNumbers);
         return Result.success("成功");
+    }
+
+    @ApiOperation("朱涵===>发起请求支付")
+    @GetMapping("/topay/{id}")
+    public String topay(@PathVariable String id, Model model) {
+        OrderLog orderLog = service.getOrderLog(id);
+        String form = service.useAlipayUtils(orderLog);
+        model.addAttribute("form",form);
+        //填入redis
+        redisTemplate.opsForValue().set(id,"未支付",15, TimeUnit.MINUTES);
+        return "pay";
     }
 }
