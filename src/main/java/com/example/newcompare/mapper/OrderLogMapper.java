@@ -19,6 +19,5 @@ public interface OrderLogMapper extends BaseMapper<OrderLog> {
 
     int allDelete(@Param("serialNumbers") String[] serialNumbers);
 
-    Page<OrderLog> getHistory(@Param("Page") Page<OrderLog> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
 }

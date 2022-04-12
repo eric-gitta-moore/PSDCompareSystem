@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.QRCodeUtil;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.entity.WorkCode;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 @Api(tags = "Order-log")
 @Controller
 @RequestMapping("/order-log")
+@ResponseBody
 public class OrderLogController {
     @Resource
     OrderLogService service;
@@ -55,31 +57,6 @@ public class OrderLogController {
         BufferedImage qr = QRCodeUtil.getBufferedImage(url, size);
         ImageIO.write(qr,"jpg",response.getOutputStream());
 //        return Result.success()
-    }
-
-    @PostMapping("/search")
-    @ApiOperation(value = "历史记录分页查询,keywords: 流水号或者支付状态" +
-            "（支付状态: unpaid 未完成，complete 已经完成）," +
-            "maxPage: 每页显示最大数量，" +
-            "startPage: 开始页码,startTime和endTime: 要查询的时间段")
-    public Result search(@RequestBody Map<String, String> map) {
-        //最大显示数量默认是10
-        int maxPage = 10;
-        //起始页码默认为是1
-        int startPage = 1;
-        String mPage = map.get("maxPage");
-        String sPage = map.get("startPage");
-        String keyWords = map.get("keyWords");
-        String startTime = map.get("startTime");
-        String endTime = map.get("endTime");
-        if (sPage != null) {
-            startPage = Integer.parseInt(sPage);
-        }
-        if (mPage != null) {
-            maxPage = Integer.parseInt(mPage);
-        }
-        Page<OrderLog> Page = new Page(startPage,maxPage);
-        return Result.success(service.getHistory(Page, keyWords, startTime, endTime));
     }
 
     @DeleteMapping("/delete")

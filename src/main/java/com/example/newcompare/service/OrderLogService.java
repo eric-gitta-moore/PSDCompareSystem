@@ -20,7 +20,6 @@ public interface OrderLogService extends IService<OrderLog> {
 
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
-    Page<OrderLog> getHistory(Page<OrderLog> Page, String keyWords, String startTime, String endTime);
 
     int allDelete(String[] serialNumbers);
 }
