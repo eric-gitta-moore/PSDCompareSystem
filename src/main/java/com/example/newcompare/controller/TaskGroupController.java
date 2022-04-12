@@ -5,5 +5,5 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/taskGroup")
-public class WorkGroupController {
+public class TaskGroupController {
 }

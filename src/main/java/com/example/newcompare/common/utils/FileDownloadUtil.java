@@ -45,7 +45,7 @@ public class FileDownloadUtil {
 */
 
     /**
-     * 返回【0】文件路径，【1】文件大小,【3】文件分辨率
+     * 返回【0】文件路径，【1】文件大小,【2】文件分辨率
      * @param workcode
      * @param id
      * @return
