@@ -1,9 +1,6 @@
 package com.example.newcompare.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,6 +34,9 @@ public class TaskGroup {
      * 创建时间
      */
     private LocalDateTime createTime;
+
+    @TableLogic//逻辑删除字段  1删除  0未删除
+    private Integer deleted;
 
     /**
      *
