@@ -3,12 +3,17 @@ package com.example.newcompare.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.AlipayUtil;
+import com.example.newcompare.entity.File;
 import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.mapper.OrderLogMapper;
+import com.example.newcompare.mapper.TaskGroupMapper;
 import com.example.newcompare.service.OrderLogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +30,12 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
 
     @Autowired
     OrderLogMapper mapper;
+
+    @Autowired
+    private TaskGroupMapper taskGroupMapper;
+
+    @Autowired
+    private OrderLogMapper orderLogMapper;
 
     @Override
     public OrderLog getOrderLog(String outTradeId) {
@@ -66,5 +77,34 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     @Override
     public int allDelete(String[] Ids) {
         return mapper.allDelete(Ids);
+    }
+
+    @Override
+    public int delete(String[] serialNumbers) {
+        return 0;
+    }
+
+    @Override
+    public Boolean insertOrderLog(OrderLog orderLog) {
+        return mapper.insert(orderLog) > 0;
+    }
+
+    @Override
+    public OrderLog selectById(Integer orderId) {
+        OrderLog orderLog = mapper.selectById(orderId);
+        return orderLog;
+    }
+
+    @Override
+    public String getWorkCodeByTaskId(Integer taskId) {
+        TaskGroup taskGroup = taskGroupMapper.selectById(taskId);
+        String workCode = taskGroup.getWorkCode();
+        return workCode;
+    }
+
+    @Override
+    public List<File> getFilecodeByTaskId(Integer taskId) {
+        List<File> files = orderLogMapper.getFilecodeByTaskId(taskId);
+        return files;
     }
 }

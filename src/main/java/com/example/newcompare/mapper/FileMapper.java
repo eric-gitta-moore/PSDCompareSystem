@@ -18,6 +18,7 @@ import java.util.ArrayList;
 @Mapper
 public interface FileMapper extends BaseMapper<File> {
 
+
     ArrayList<File> queryFiles(@Param("groupId") Integer groupId);
 
     String getUrlById(Integer id);

@@ -17,6 +17,7 @@ public class TaskGroup {
     /**
      * id
      */
+
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
