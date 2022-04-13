@@ -81,21 +81,22 @@ public class OrderLogController {
         return "pay";
     }
 
+    @ApiOperation("徐启峰====>修改订单的状态")
     @PutMapping("/comparequery")
     public Result comparequery(String workCode) throws Exception {
 
         int responseCode = CompareQueryUtil.querycomparestatus(workCode);
         OrderLog orderLog = service.getByWorkCode(workCode);
         if(orderLog.getDeleted()==1)
-            return Result.fail(400,"订单不存在,无法修改对比状态！",null);
+            return Result.fail(400,"订单不存在,无法修改订单状态！",null);
         if(responseCode==400){
             //修改对比状态为失败
             orderLog.setStatus("fail");
             boolean b = service.updateById(orderLog);
             if (b)
-                return Result.fail(400,"文件对比失败！成功修改对比状态为失败",null);
+                return Result.fail(400,"文件对比失败！成功修改订单状态为失败",null);
             else
-                return Result.fail(400,"文件对比失败！未成功修改对比状态为失败",null);
+                return Result.fail(400,"文件对比失败！未成功修改订单状态为失败",null);
         }
         //修改对比状态为成功
         orderLog.setStatus("complete");
