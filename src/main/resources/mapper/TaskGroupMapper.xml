@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newcompare.mapper.TaskGroupMapper">
+
     <resultMap id="groupMap" type="com.example.newcompare.entity.TaskGroup">
         <id column="groupId" property="id"></id>
         <result column="work_code" property="workCode"></result>
@@ -19,9 +20,9 @@
             <result column="url" property="url"></result>
             <result column="first_id" property="firstId"></result>
             <result column="second_id" property="secondId"></result>
-            <result column=" orderSize" property="size"></result>
+            <result column="orderSize" property="size"></result>
             <result column="orderTask_id" property="taskId"></result>
-            <result column="orderR" property="resolution"></result>
+            <result column="orderResolution" property="resolution"></result>
             <collection property="files" ofType="com.example.newcompare.entity.File">
                 <id column="fileId" property="id"></id>
                 <result column="filecode" property="filecode"></result>
@@ -29,7 +30,7 @@
                 <result column="fileResolution" property="resolution"></result>
                 <result column="fileSize" property="size"></result>
                 <result column="fileTask_id" property="taskId"></result>
-                <result column=" fileCreate_time" property="createTime"></result>
+                <result column="fileCreate_time" property="createTime"></result>
             </collection>
         </collection>
     </resultMap>
