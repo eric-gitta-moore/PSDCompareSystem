@@ -33,16 +33,18 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
 
     @Override
     public Page<TaskGroup> getGroups(Page<TaskGroup> Page, String keyWords, String startTime, String endTime) {
-        return mapper.getGroups(Page,keyWords,startTime,endTime);
+        return mapper.getGroups(Page, keyWords, startTime, endTime);
     }
 
     @Override
     public Page<TaskGroup> getGroupById(Page<TaskGroup> Page, String groupId) {
-        return mapper.getGroup(Page,groupId);
+        return mapper.getGroup(Page, groupId);
     }
+
     @Override
     public TaskGroup selectById(Integer taskId) {
         return taskGroupMapper.selectById(taskId);
 
 
+    }
 }

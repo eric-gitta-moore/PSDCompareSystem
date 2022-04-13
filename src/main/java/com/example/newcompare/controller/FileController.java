@@ -147,8 +147,6 @@ public class FileController {
 
     }
 
-    @Autowired
-    FileService fileService;
 
     /**
      * 获取一个或者多个文件的信息
