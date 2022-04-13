@@ -1,13 +1,16 @@
 package com.example.newcompare.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -21,6 +24,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class File implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,16 +41,24 @@ public class File implements Serializable {
      */
     private String filecode;
 
-    /**
-     * orderId
-     */
-    private Integer orderId;
+
 
     @TableLogic//逻辑删除字段  1删除  0未删除
     private Integer deleted;
 
+    /*public File(String filecode, Integer deleted, String name,  Integer taskId,String resolution, String size, LocalDateTime createTime) {
+        this.filecode = filecode;
+        this.deleted = deleted;
+        this.name = name;
+        this.resolution = resolution;
+        this.taskId = taskId;
+        this.size = size;
+        this.createTime = createTime;
+    }*/
+
     /**
      * 文件名
+
      */
     private String name;
 
@@ -69,4 +82,9 @@ public class File implements Serializable {
      */
     private LocalDateTime createTime;
 
+    /**
+     * OrderId
+     */
+    @TableField(exist = false)
+    private Integer orderId;
 }

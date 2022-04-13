@@ -7,8 +7,6 @@ import com.example.newcompare.entity.TaskGroup;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 @Mapper
 public interface TaskGroupMapper extends BaseMapper<TaskGroup> {
 

@@ -18,7 +18,7 @@
             <result column="title" property="title"></result>
             <result column="serial_number" property="serialNumber"></result>
             <result column="orderCreate_time" property="createTime"></result>
-            <result column="url" property="url"></result>
+<!--            <result column="url" property="url"></result>-->
             <result column="first_id" property="firstId"></result>
             <result column="second_id" property="secondId"></result>
             <result column="orderSize" property="size"></result>
@@ -50,6 +50,7 @@
             d.`serial_number` like concat('%','${param2}','%') or a.`name` like concat('%','${param2}','%') or d.`orderId` like concat('%','${param2}','%') and
         </if>
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+
             (a.`create_time` between '${param3}' and '${param4}') and
         </if>
         d.`orderDeleted`=0 and 1=1

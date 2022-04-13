@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
- * 服务实现类
+ *  服务实现类
  * </p>
  *
  * @author nosgua
@@ -28,6 +29,25 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 
     @Autowired
     private OrderLogMapper orderLogMapper;
+
+    @Override
+    public Integer insertFile(File file) {
+        fileMapper.insert(file);
+        Integer id = file.getId();
+        return id;
+    }
+
+    @Override
+    public String seleceFileById(Integer fileId) {
+        File file = fileMapper.selectById(fileId);
+        String filecode = file.getFilecode();
+        return filecode;
+    }
+
+
+
+
+
 
     @Override
     public ArrayList<File> queryById(Integer groupId) {

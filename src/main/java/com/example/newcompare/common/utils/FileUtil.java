@@ -1,6 +1,7 @@
 package com.example.newcompare.common.utils;
 
 import com.example.newcompare.entity.FileInformation;
+import lombok.val;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,12 @@ public class FileUtil {
         return catalogue;
     }
 
+    static {
+        File file = new File(storePath);
+        if(!file.exists()){
+            file.mkdirs();
+        }
+    }
     /**
      * 存放图片，返回图片地址
      * @param route
@@ -90,6 +97,7 @@ public class FileUtil {
      * @throws IOException
      */
     public static String fileSize(String path) throws IOException {
+
         final File file = new File(path);
         final FileReader reader = new FileReader(file);
         int n=0;
