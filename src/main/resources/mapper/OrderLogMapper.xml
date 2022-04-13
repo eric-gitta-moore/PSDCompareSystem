@@ -10,4 +10,10 @@
         </foreach>
     </update>
 
+    <select id="getFilecodeByTaskId" resultType="com.example.newcompare.entity.OrderLog">
+        SELECT *
+        FROM file LEFT JOIN order_log
+        ON file.task_id = order_log.task_id
+        WHERE file.task_id = #{taskId}
+    </select>
 </mapper>

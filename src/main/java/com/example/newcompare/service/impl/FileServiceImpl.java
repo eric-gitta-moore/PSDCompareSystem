@@ -27,6 +27,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     @Autowired
     private FileMapper fileMapper;
 
+    @Autowired
+    private OrderLogMapper orderLogMapper;
 
     @Override
     public Integer insertFile(File file) {
@@ -43,11 +45,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     }
 
 
-    @Autowired
-    private FileMapper fileMapper;
 
-    @Autowired
-    private OrderLogMapper orderLogMapper;
+
+
 
     @Override
     public ArrayList<File> queryById(Integer groupId) {
