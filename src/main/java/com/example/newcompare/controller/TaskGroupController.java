@@ -33,11 +33,11 @@ public class TaskGroupController {
         return Result.success("插入成功");
     }
 
-    @PostMapping("/getHistory")
-    @ApiOperation(value = "获取历史记录,keywords: 任务组名字或者id" +
+    @PostMapping("/getGroups")
+    @ApiOperation(value = "获取历史记录,keywords: 任务组名字或者订单流水号" +
             "maxPage: 每页显示最大数量，" +
             "startPage: 开始页码,startTime和endTime: 要查询的时间段")
-    public Result getHistory(@RequestBody Map<String, String> map) {
+    public Result getGroups(@RequestBody Map<String, String> map) {
         //最大显示数量默认是10
         int maxPage = 10;
         //起始页码默认为是1
@@ -54,6 +54,17 @@ public class TaskGroupController {
             maxPage = Integer.parseInt(mPage);
         }
         Page<TaskGroup> Page = new Page(startPage,maxPage);
-        return Result.success(service.getHistory(Page, keyWords, startTime, endTime));
+        return Result.success(service.getGroups(Page, keyWords, startTime, endTime));
+    }
+
+    @PostMapping("/getGroupById")
+    @ApiOperation(value = "获取单个任务组")
+    public Result getGroupById(@RequestParam("groupId") String groupId) {
+        //最大显示数量默认是10
+        int maxPage = 10;
+        //起始页码默认为是1
+        int startPage = 1;
+        Page<TaskGroup> Page = new Page(startPage,maxPage);
+        return Result.success(service.getGroupById(Page,groupId));
     }
 }

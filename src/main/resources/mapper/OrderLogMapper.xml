@@ -3,12 +3,10 @@
 <mapper namespace="com.example.newcompare.mapper.OrderLogMapper">
 
     <update id="allDelete">
-        update order_log
-        left join file on (order_log.first_id=file.id or order_log.second_id=file.id)
-        set order_log.deleted = 1,file.deleted =1
+        update order_log set order_log.deleted = 1
         where
-        <foreach collection="serialNumbers" item="serialNumber" separator="or">
-            serial_Number = #{serialNumber}
+        <foreach collection="Ids" item="id" separator="or">
+            id = #{id}
         </foreach>
     </update>
 

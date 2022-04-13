@@ -12,6 +12,7 @@ import java.util.List;
 @Mapper
 public interface TaskGroupMapper extends BaseMapper<TaskGroup> {
 
-    Page<TaskGroup> getHistory(@Param("Page") Page<TaskGroup> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
+    Page<TaskGroup> getGroups(@Param("Page") Page<TaskGroup> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
+    Page<TaskGroup> getGroup(@Param("Page") Page<TaskGroup> Page, @Param("groupId") String groupId);
 }

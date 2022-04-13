@@ -16,14 +16,19 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
 
     @Resource
     TaskGroupMapper mapper;
+
     @Override
     public Integer create(TaskGroup taskGroup) {
         return mapper.insert(taskGroup);
     }
-
+    
+    @Override
+    public Page<TaskGroup> getGroups(Page<TaskGroup> Page, String keyWords, String startTime, String endTime) {
+        return mapper.getGroups(Page,keyWords,startTime,endTime);
+    }
 
     @Override
-    public Page<TaskGroup> getHistory(Page<TaskGroup> Page, String keyWords, String startTime, String endTime) {
-        return mapper.getHistory(Page,keyWords,startTime,endTime);
+    public Page<TaskGroup> getGroupById(Page<TaskGroup> Page, String groupId) {
+        return mapper.getGroup(Page,groupId);
     }
 }

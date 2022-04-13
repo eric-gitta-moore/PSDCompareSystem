@@ -21,5 +21,5 @@ public interface OrderLogService extends IService<OrderLog> {
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
 
-    int allDelete(String[] serialNumbers);
+    int allDelete(String[] Ids);
 }
