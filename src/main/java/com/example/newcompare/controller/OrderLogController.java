@@ -60,7 +60,7 @@ public class OrderLogController {
     }
 
     @DeleteMapping("/delete")
-    @ApiOperation(value = "批量删除，Ids: string数组的订单Id")
+    @ApiOperation(value = "郑前===》批量删除，Ids: string数组的订单Id")
     public Result delete(@RequestParam("Ids") String[] Ids){
         service.allDelete(Ids);
         return Result.success("成功");

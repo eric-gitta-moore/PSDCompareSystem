@@ -34,7 +34,7 @@ public class TaskGroupController {
     }
 
     @PostMapping("/getGroups")
-    @ApiOperation(value = "获取历史记录,keywords: 任务组名字或者订单流水号" +
+    @ApiOperation(value = "郑前===》获取历史记录,keywords: 任务组名字or订单流水号or订单id" +
             "maxPage: 每页显示最大数量，" +
             "startPage: 开始页码,startTime和endTime: 要查询的时间段")
     public Result getGroups(@RequestBody Map<String, String> map) {
@@ -58,7 +58,7 @@ public class TaskGroupController {
     }
 
     @PostMapping("/getGroupById")
-    @ApiOperation(value = "获取单个任务组")
+    @ApiOperation(value = "郑前===》获取单个任务组")
     public Result getGroupById(@RequestParam("groupId") String groupId) {
         //最大显示数量默认是10
         int maxPage = 10;

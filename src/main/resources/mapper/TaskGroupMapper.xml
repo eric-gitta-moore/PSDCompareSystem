@@ -12,6 +12,7 @@
         <collection property="orders" ofType="com.example.newcompare.entity.OrderLog">
             <id column="orderId" property="id"></id>
             <result column="status" property="status"></result>
+            <result column="orderDeleted" property="deleted"></result>
             <result column="fee" property="fee"></result>
             <result column="out_trade_id" property="outTradeId"></result>
             <result column="title" property="title"></result>
@@ -38,31 +39,31 @@
 
     <select id="getGroups" resultMap="groupMap">
         select  a.`id` groupId,a.`work_code`,a.`name`,a.`create_time` groupCreate_time,d.`orderCreate_time`,d.`fee`,d.`first_id`,d.`orderId`,d.`out_trade_id`,d.`orderResolution`,d.`second_id`,d.`serial_number`,d.`orderSize`,d.`status`,
-        d.`orderTask_id`,d.`title`,d.`url`,d.`fileCreate_time`,d.`filecode`,d.`fileId`,d.`name`,d.`fileResolution`,d.`fileSize`,d.`fileTask_id`
+        d.`orderTask_id`,d.`title`,d.`url`,d.`fileCreate_time`,d.`filecode`,d.`fileId`,d.`name`,d.`fileResolution`,d.`fileSize`,d.`fileTask_id`,d.`orderDeleted`
         from task_group a
         left join (select b.`create_time` orderCreate_time,b.`fee`,b.`first_id`,b.`id` orderId,b.`out_trade_id`,b.`resolution` orderResolution,b.`second_id`,b.`serial_number`,b.`size` orderSize,b.`status`,
-        b.`task_id` orderTask_id,b.`title`,b.`url`,c.`create_time` fileCreate_time,c.`filecode`,c.`id` fileId,c.`name`,c.`resolution` fileResolution,c.`size` fileSize,c.`task_id` fileTask_id
+        b.`task_id` orderTask_id,b.`deleted` orderDeleted,b.`title`,b.`url`,c.`create_time` fileCreate_time,c.`filecode`,c.`id` fileId,c.`name`,c.`resolution` fileResolution,c.`size` fileSize,c.`task_id` fileTask_id
         from order_log b left join file c on (b.first_id=c.id or b.second_id=c.id)) as d
         ON a.`id`=d.`orderTask_id`
         where
         <if test="keyWords!=null and keyWords!=''">
-            d.`serial_number` like concat('%','${param2}','%') or a.`id` like concat('%','${param2}','%') and
+            d.`serial_number` like concat('%','${param2}','%') or a.`name` like concat('%','${param2}','%') or d.`orderId` like concat('%','${param2}','%') and
         </if>
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
             (a.`create_time` between '${param3}' and '${param4}') and
         </if>
-        1=1
+        d.`orderDeleted`=0 and 1=1
     </select>
 
     <select id="getGroup" resultMap="groupMap">
         SELECT  a.`id` groupId,a.`work_code`,a.`name`,a.`create_time` groupCreate_time,d.`orderCreate_time`,d.`fee`,d.`first_id`,d.`orderId`,d.`out_trade_id`,d.`orderResolution`,d.`second_id`,d.`serial_number`,d.`orderSize`,d.`status`,
-                d.`orderTask_id`,d.`title`,d.`url`,d.`fileCreate_time`,d.`filecode`,d.`fileId`,d.`name`,d.`fileResolution`,d.`fileSize`,d.`fileTask_id`
+                d.`orderTask_id`,d.`title`,d.`url`,d.`fileCreate_time`,d.`filecode`,d.`fileId`,d.`name`,d.`fileResolution`,d.`fileSize`,d.`fileTask_id`,d.`orderDeleted`
         FROM task_group a
-                 LEFT JOIN (SELECT b.`create_time` orderCreate_time,b.`fee`,b.`first_id`,b.`id` orderId,b.`out_trade_id`,b.`resolution` orderResolution,b.`second_id`,b.`serial_number`,b.`size` orderSize,b.`status`,
+                 LEFT JOIN (SELECT b.`create_time` orderCreate_time,b.`fee`,b.`first_id`,b.`id` orderId,b.`out_trade_id`,b.`resolution` orderResolution,b.`second_id`,b.`serial_number`,b.`size` orderSize,b.`status`,b.`deleted` orderDeleted,
                                    b.`task_id` orderTask_id,b.`title`,b.`url`,c.`create_time` fileCreate_time,c.`filecode`,c.`id` fileId,c.`name`,c.`resolution` fileResolution,c.`size` fileSize,c.`task_id` fileTask_id
                             FROM order_log b LEFT JOIN FILE c ON (b.first_id=c.id OR b.second_id=c.id)) AS d
                            ON a.`id`=d.`orderTask_id`
-        WHERE a.`id`=#{groupId}
+        WHERE a.`id`=#{groupId} and d.`orderDeleted`=0
     </select>
 
 
