@@ -7,10 +7,7 @@ import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.service.TaskGroupService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -24,12 +21,12 @@ public class TaskGroupController {
     TaskGroupService service;
 
     @PostMapping("/create")
-    public Result create(String name){
-        TaskGroup taskGroup = new TaskGroup();
-        taskGroup.setName(name);
-        taskGroup.setCreateTime(LocalDateTime.now());
-        taskGroup.setWorkCode(UUID.randomUUID().toString());
-        Integer i = service.create(taskGroup);
+    @ApiOperation("创建新的group")
+    public Result create(@RequestBody TaskGroup group){
+        group.setName(group.getName());
+        group.setWorkCode(UUID.randomUUID().toString());
+        group.setCreateTime(LocalDateTime.now());
+        Integer i = service.create(group);
         if(i==0){
             return Result.fail("插入失败");
         }
