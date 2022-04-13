@@ -67,4 +67,9 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     public int allDelete(String[] Ids) {
         return mapper.allDelete(Ids);
     }
+
+    @Override
+    public OrderLog getByWorkCode(String workCode) {
+        return mapper.getByWorkCode(workCode);
+    }
 }

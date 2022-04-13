@@ -19,5 +19,5 @@ public interface OrderLogMapper extends BaseMapper<OrderLog> {
 
     int allDelete(@Param("Ids") String[] Ids);
 
-
+    OrderLog getByWorkCode(@Param("workCode") String workCode);
 }

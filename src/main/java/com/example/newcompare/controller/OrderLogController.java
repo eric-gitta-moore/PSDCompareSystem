@@ -2,10 +2,13 @@ package com.example.newcompare.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.newcompare.common.utils.CompareQueryUtil;
+import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.QRCodeUtil;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.WorkCode;
+import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +45,7 @@ public class OrderLogController {
     @Resource
     OrderLogService service;
 
+
     @Autowired
     StringRedisTemplate redisTemplate;
     /**
@@ -75,5 +79,36 @@ public class OrderLogController {
         //填入redis
         redisTemplate.opsForValue().set(id,"未支付",15, TimeUnit.MINUTES);
         return "pay";
+    }
+
+    @PutMapping("/comparequery")
+    public Result comparequery(String workCode) throws Exception {
+
+        int responseCode = CompareQueryUtil.querycomparestatus(workCode);
+        OrderLog orderLog = service.getByWorkCode(workCode);
+        if(orderLog.getDeleted()==1)
+            return Result.fail(400,"订单不存在,无法修改对比状态！",null);
+        if(responseCode==400){
+            //修改对比状态为失败
+            orderLog.setStatus("fail");
+            boolean b = service.updateById(orderLog);
+            if (b)
+                return Result.fail(400,"文件对比失败！成功修改对比状态为失败",null);
+            else
+                return Result.fail(400,"文件对比失败！未成功修改对比状态为失败",null);
+        }
+        //修改对比状态为成功
+        orderLog.setStatus("complete");
+        //向公司服务器发送请求获取文件的大小，分辨率，路径并保存。
+        Integer id = orderLog.getId();
+        String[] url = FileDownloadUtil.url(workCode, id);
+        orderLog.setUrl(url[0]);
+        orderLog.setSize(url[1]);
+        orderLog.setResolution(url[2]);
+        boolean b = service.updateById(orderLog);
+        if (b)
+            return Result.success(200,"对比成功,url保存成功！",null);
+        else
+            return Result.fail(400,"对比成功，但保存url失败！",null);
     }
 }

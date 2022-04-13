@@ -10,4 +10,7 @@
         </foreach>
     </update>
 
+    <select id="getByWorkCode" resultType="com.example.newcompare.entity.OrderLog">
+        SELECT * FROM order_log WHERE task_id = (SELECT task_group.id FROM task_group WHERE work_code = #{workCode})
+    </select>
 </mapper>
