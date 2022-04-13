@@ -2,4 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newcompare.mapper.FileMapper">
 
+    <select id="queryFiles" resultType="com.example.newcompare.entity.File">
+        SELECT
+            F.`name`,
+            F.size,
+            F.resolution,
+            F.id,
+            F.create_time,
+            F.task_id,
+            F.filecode
+        FROM
+            file AS F
+                LEFT JOIN task_group AS T ON F.task_id = T.id
+        WHERE
+            F.task_id = #{groupId}
+          AND deleted = 0;
+    </select>
+
+
+    <select id="getUrlById" resultType="string">
+        select url from order_log where deleted = 0 and id = #{id}
+    </select>
+
 </mapper>

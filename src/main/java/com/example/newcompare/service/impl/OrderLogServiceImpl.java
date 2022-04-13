@@ -64,11 +64,7 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     }
 
     @Override
-    public Page<OrderLog> getHistory(Page<OrderLog> Page, String keyWords, String startTime, String endTime) {
-        return mapper.getHistory(Page,keyWords,startTime,endTime);
-    }
-    @Override
-    public int allDelete(String[] serialNumbers) {
-        return mapper.allDelete(serialNumbers);
+    public int allDelete(String[] Ids) {
+        return mapper.allDelete(Ids);
     }
 }

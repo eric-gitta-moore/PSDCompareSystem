@@ -17,8 +17,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface OrderLogMapper extends BaseMapper<OrderLog> {
 
-    int allDelete(@Param("serialNumbers") String[] serialNumbers);
+    int allDelete(@Param("Ids") String[] Ids);
 
-    Page<OrderLog> getHistory(@Param("Page") Page<OrderLog> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
 }
