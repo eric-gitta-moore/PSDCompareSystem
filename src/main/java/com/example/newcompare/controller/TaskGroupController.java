@@ -1,5 +1,6 @@
 package com.example.newcompare.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,12 +25,12 @@ public class TaskGroupController {
 
     @PostMapping("/create")
     @ApiOperation("创建新的group")
-    public Result create(@RequestBody TaskGroup group){
+    public Result create(@RequestBody TaskGroup group) {
         group.setName(group.getName());
         group.setWorkCode(UUID.randomUUID().toString());
         group.setCreateTime(LocalDateTime.now());
         Integer i = service.create(group);
-        if(i==0){
+        if (i == 0) {
             return Result.fail("插入失败");
         }
         return Result.success("插入成功");
@@ -53,7 +56,7 @@ public class TaskGroupController {
         if (mPage != null) {
             maxPage = Integer.parseInt(mPage);
         }
-        Page<TaskGroup> Page = new Page(startPage,maxPage);
+        Page<TaskGroup> Page = new Page(startPage, maxPage);
         return Result.success(service.getGroups(Page, keyWords, startTime, endTime));
     }
 
@@ -64,7 +67,13 @@ public class TaskGroupController {
         int maxPage = 10;
         //起始页码默认为是1
         int startPage = 1;
-        Page<TaskGroup> Page = new Page(startPage,maxPage);
-        return Result.success(service.getGroupById(Page,groupId));
+        Page<TaskGroup> Page = new Page(startPage, maxPage);
+        return Result.success(service.getGroupById(Page, groupId));
+    }
+
+    @ApiOperation("左呈祥===》批量删除group")
+    @DeleteMapping("/delete")
+    public Result deleteGroups(@RequestBody ArrayList<Integer> groupIds) {
+        return service.remove(new LambdaQueryWrapper<TaskGroup>().in(TaskGroup::getId,groupIds)) ? Result.success(200,"删除成功","") : Result.fail(404,"删除失败","");
     }
 }
