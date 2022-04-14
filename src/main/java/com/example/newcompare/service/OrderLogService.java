@@ -23,4 +23,9 @@ public interface OrderLogService extends IService<OrderLog> {
     Page<OrderLog> getHistory(Page<OrderLog> Page, String keyWords, String startTime, String endTime);
 
     int allDelete(String[] serialNumbers);
+
+
+    OrderLog getDiffInformation(String out_trade_no);
+
+    boolean updateStatus(OrderLog out_trade_no);
 }
