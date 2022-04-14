@@ -67,7 +67,7 @@ public class TaskGroupController {
         int maxPage = 10;
         //起始页码默认为是1
         int startPage = 1;
-        Page<TaskGroup> Page = new Page(startPage, maxPage);
+        Page<OrderLog> Page = new Page(startPage, maxPage);
         return Result.success(service.getGroupById(Page, groupId));
     }
 

@@ -1,6 +1,7 @@
 package com.example.newcompare.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.mapper.TaskGroupMapper;
 import com.example.newcompare.service.TaskGroupService;
@@ -37,7 +38,7 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
     }
 
     @Override
-    public Page<TaskGroup> getGroupById(Page<TaskGroup> Page, String groupId) {
+    public Page<OrderLog> getGroupById(Page<OrderLog> Page, String groupId) {
         return mapper.getGroup(Page, groupId);
     }
 

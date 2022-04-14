@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface OrderLogMapper extends BaseMapper<OrderLog> {
 
-    int allDelete(@Param("Ids") String[] Ids);
+    int orderDelete(@Param("Ids") String[] Ids);
 
     OrderLog getByWorkCode(@Param("workCode") String workCode);
 }

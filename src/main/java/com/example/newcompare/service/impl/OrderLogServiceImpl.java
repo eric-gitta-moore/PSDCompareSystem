@@ -64,8 +64,8 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     }
 
     @Override
-    public int allDelete(String[] Ids) {
-        return mapper.allDelete(Ids);
+    public int orderDelete(String[] Ids) {
+        return mapper.orderDelete(Ids);
     }
 
     @Override

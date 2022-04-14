@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newcompare.mapper.OrderLogMapper">
 
-    <update id="allDelete">
+    <update id="orderDelete">
         update order_log set order_log.deleted = 1
         where
         <foreach collection="Ids" item="id" separator="or">

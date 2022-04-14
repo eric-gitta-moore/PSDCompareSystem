@@ -2,6 +2,7 @@ package com.example.newcompare.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -16,6 +17,6 @@ public interface TaskGroupService extends IService<TaskGroup> {
 
     Page<TaskGroup> getGroups(Page<TaskGroup> Page, String keyWords, String startTime, String endTime);
 
-    Page<TaskGroup> getGroupById(Page<TaskGroup> page, String groupId);
+    Page<OrderLog> getGroupById(Page<OrderLog> page, String groupId);
 
 }

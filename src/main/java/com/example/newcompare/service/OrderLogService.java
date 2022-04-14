@@ -22,7 +22,7 @@ public interface OrderLogService extends IService<OrderLog> {
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
 
-    int allDelete(String[] Ids);
+    int orderDelete(String[] Ids);
 
     OrderLog getByWorkCode(@Param("workCode") String workCode);
 }

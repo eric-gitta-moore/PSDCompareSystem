@@ -1,6 +1,7 @@
 package com.example.newcompare.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.CompareQueryUtil;
 import com.example.newcompare.common.utils.FileDownloadUtil;
@@ -66,7 +67,7 @@ public class OrderLogController {
     @DeleteMapping("/delete")
     @ApiOperation(value = "郑前===》批量删除，Ids: string数组的订单Id")
     public Result delete(@RequestParam("Ids") String[] Ids){
-        service.allDelete(Ids);
+        service.orderDelete(Ids);
         return Result.success("成功");
     }
 
