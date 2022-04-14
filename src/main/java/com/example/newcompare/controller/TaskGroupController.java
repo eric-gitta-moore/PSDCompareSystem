@@ -6,6 +6,7 @@ import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.service.TaskGroupService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
+@Api(value = "taskGroup")
 @RequestMapping("/taskGroup")
 public class TaskGroupController {
 
@@ -24,7 +26,7 @@ public class TaskGroupController {
     TaskGroupService service;
 
     @PostMapping("/create")
-    @ApiOperation("创建新的group")
+    @ApiOperation("刘锦堂===》创建新的group")
     public Result create(@RequestBody TaskGroup group) {
         group.setName(group.getName());
         group.setWorkCode(UUID.randomUUID().toString());
@@ -60,9 +62,9 @@ public class TaskGroupController {
         return Result.success(service.getGroups(Page, keyWords, startTime, endTime));
     }
 
-    @PostMapping("/getGroupById")
+    @GetMapping("/getGroupById")
     @ApiOperation(value = "郑前===》获取单个任务组")
-    public Result getGroupById(@RequestParam("groupId") String groupId) {
+    public Result getGroupById(String groupId) {
         //最大显示数量默认是10
         int maxPage = 10;
         //起始页码默认为是1

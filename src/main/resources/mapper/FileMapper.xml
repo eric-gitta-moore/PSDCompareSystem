@@ -16,7 +16,7 @@
                 LEFT JOIN task_group AS T ON F.task_id = T.id
         WHERE
             F.task_id = #{groupId}
-          AND deleted = 0;
+          AND F.deleted = 0;
     </select>
 
 
