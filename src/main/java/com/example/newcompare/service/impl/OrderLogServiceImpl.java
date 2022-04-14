@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,7 +71,7 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
         List<OrderLog> orderLogs=null;
         //防止Ids为空时造成异常
         if(Ids.length>0) {
-            orderLogs = mapper.selectByIds(Ids);
+            orderLogs = mapper.selectBatchIds(Arrays.asList(Ids));
         }
         //当Ids对应的订单处于删除状态，则不执行SQL语句，反之执行
         if(orderLogs!=null&&orderLogs.size()>0)
