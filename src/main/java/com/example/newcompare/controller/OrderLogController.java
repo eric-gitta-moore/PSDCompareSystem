@@ -103,7 +103,7 @@ public class OrderLogController {
 
         int responseCode = CompareQueryUtil.querycomparestatus(workCode);
         OrderLog orderLog = service.getByWorkCode(workCode);
-        if(orderLog.getDeleted()==1)
+        if(orderLog==null||orderLog.getDeleted()==1)
             return Result.fail(400,"订单不存在,无法修改订单状态！",null);
         if(responseCode==400){
             //修改对比状态为失败
