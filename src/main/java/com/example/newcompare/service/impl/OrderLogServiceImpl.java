@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 支付订单表 服务实现类
@@ -65,7 +67,16 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
 
     @Override
     public int orderDelete(String[] Ids) {
-        return mapper.orderDelete(Ids);
+        List<OrderLog> orderLogs=null;
+        //防止Ids为空时造成异常
+        if(Ids.length>0) {
+            orderLogs = mapper.selectByIds(Ids);
+        }
+        //当Ids对应的订单处于删除状态，则不执行SQL语句，反之执行
+        if(orderLogs!=null&&orderLogs.size()>0)
+            return mapper.orderDelete(orderLogs);
+        else
+            return 0;
     }
 
     @Override
