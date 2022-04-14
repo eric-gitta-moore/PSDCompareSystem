@@ -90,9 +90,8 @@ public class OrderLogController {
     }
 
     @ApiOperation("徐启峰====>修改订单的状态")
-    @PutMapping("/comparequery")
-    public Result comparequery(String workCode) throws Exception {
-
+    @PutMapping("/changeState")
+    public Result changeState(String workCode) throws Exception {
         int responseCode = CompareQueryUtil.querycomparestatus(workCode);
         OrderLog orderLog = service.getByWorkCode(workCode);
         if (orderLog == null || orderLog.getDeleted() == 1)

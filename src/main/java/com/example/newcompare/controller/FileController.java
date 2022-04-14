@@ -195,55 +195,52 @@ public class FileController {
     }
 
 
-
-
     /**
-     *
      * @return 文件
      */
     @ApiOperation("肖恒宇====>多文件下载")
-     @GetMapping("/download")
+    @GetMapping("/download")
     public void fileDownload(Integer[] id, HttpServletResponse response) throws Exception {
 
-         List<OrderLog> allSendId = fileService.getAllSendId(id);
+        List<OrderLog> allSendId = fileService.getAllSendId(id);
 
-          boolean iu= fileService.backZip(allSendId);
-       //  response.setContentType("application/octet-stream");
+        boolean iu = fileService.backZip(allSendId);
+        //  response.setContentType("application/octet-stream");
 
-         if(iu==true){
+        if (iu == true) {
             //读，写
-             FileInputStream in=null;
+            FileInputStream in = null;
 
-             ServletOutputStream out = null;
-            try{
-                in=new FileInputStream("src/main/resources/img.zip");
+            ServletOutputStream out = null;
+            try {
+                in = new FileInputStream("src/main/resources/img.zip");
                 out = response.getOutputStream();
                 int len = 0;
                 byte[] buffer = new byte[1024];
                 while ((len = in.read(buffer)) != -1) {
                     out.write(buffer, 0, len);
                 }
-            }catch (Exception o){
+            } catch (Exception o) {
                 o.printStackTrace();
-            }finally {
+            } finally {
 
-               in.close();
-               out.close();
+                in.close();
+                out.close();
 
             }
 
             //* return Result.success();*//*
 
-         }
+        }
 
 
-          ZipUntils.deleteDir("src/main/resources/img");
-         ZipUntils.dalete1("src/main/resources/img.zip");
+        ZipUntils.deleteDir("src/main/resources/img");
+        ZipUntils.dalete1("src/main/resources/img.zip");
 
 
 
-         /*  return Result.fail("下载失败");*/
-     }
+        /*  return Result.fail("下载失败");*/
+    }
 
 
 }
