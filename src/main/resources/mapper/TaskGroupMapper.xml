@@ -5,49 +5,55 @@
 <mapper namespace="com.example.newcompare.mapper.TaskGroupMapper">
 
     <resultMap id="groupMap" type="com.example.newcompare.entity.TaskGroup">
-        <id column="groupId" property="id"></id>
-        <result column="work_code" property="workCode"></result>
-        <result column="name" property="name"></result>
-        <result column="groupCreate_time" property="createTime"></result>
+        <id column="groupId" property="id"/>
+        <result column="work_code" property="workCode"/>
+        <result column="name" property="name"/>
+        <result column="groupCreate_time" property="createTime"/>
         <collection property="orders" ofType="com.example.newcompare.entity.OrderLog">
-            <id column="orderId" property="id"></id>
-            <result column="status" property="status"></result>
-            <result column="orderDeleted" property="deleted"></result>
-            <result column="fee" property="fee"></result>
-            <result column="out_trade_id" property="outTradeId"></result>
-            <result column="title" property="title"></result>
-            <result column="serial_number" property="serialNumber"></result>
-            <result column="orderCreate_time" property="createTime"></result>
-<!--            <result column="url" property="url"></result>-->
-            <result column="first_id" property="firstId"></result>
-            <result column="second_id" property="secondId"></result>
-            <result column="orderSize" property="size"></result>
-            <result column="orderTask_id" property="taskId"></result>
-            <result column="orderResolution" property="resolution"></result>
+            <id column="orderId" property="id"/>
+            <result column="status" property="status"/>
+            <result column="orderDeleted" property="deleted"/>
+            <result column="fee" property="fee"/>
+            <result column="out_trade_id" property="outTradeId"/>
+            <result column="title" property="title"/>
+            <result column="serial_number" property="serialNumber"/>
+            <result column="orderCreate_time" property="createTime"/>
+            <!--            <result column="url" property="url"></result>-->
+            <result column="first_id" property="firstId"/>
+            <result column="second_id" property="secondId"/>
+            <result column="orderSize" property="size"/>
+            <result column="orderTask_id" property="taskId"/>
+            <result column="orderResolution" property="resolution"/>
             <collection property="files" ofType="com.example.newcompare.entity.File">
-                <id column="fileId" property="id"></id>
-                <result column="filecode" property="filecode"></result>
-                <result column="name" property="name"></result>
-                <result column="fileResolution" property="resolution"></result>
-                <result column="fileSize" property="size"></result>
-                <result column="fileTask_id" property="taskId"></result>
-                <result column="fileCreate_time" property="createTime"></result>
+                <id column="fileId" property="id"/>
+                <result column="filecode" property="filecode"/>
+                <result column="name" property="name"/>
+                <result column="fileResolution" property="resolution"/>
+                <result column="fileSize" property="size"/>
+                <result column="fileTask_id" property="taskId"/>
+                <result column="fileCreate_time" property="createTime"/>
             </collection>
         </collection>
     </resultMap>
 
 
     <select id="getGroups" resultMap="groupMap">
-        select  a.`id` groupId,a.`work_code`,a.`name`,a.`create_time` groupCreate_time,d.`orderCreate_time`,d.`fee`,d.`first_id`,d.`orderId`,d.`out_trade_id`,d.`orderResolution`,d.`second_id`,d.`serial_number`,d.`orderSize`,d.`status`,
+        select a.`id` groupId,a.`work_code`,a.`name`,a.`create_time`
+        groupCreate_time,d.`orderCreate_time`,d.`fee`,d.`first_id`,d.`orderId`,d.`out_trade_id`,d.`orderResolution`,d.`second_id`,d.`serial_number`,d.`orderSize`,d.`status`,
         d.`orderTask_id`,d.`title`,d.`url`,d.`fileCreate_time`,d.`filecode`,d.`fileId`,d.`name`,d.`fileResolution`,d.`fileSize`,d.`fileTask_id`,d.`orderDeleted`
         from task_group a
-        left join (select b.`create_time` orderCreate_time,b.`fee`,b.`first_id`,b.`id` orderId,b.`out_trade_id`,b.`resolution` orderResolution,b.`second_id`,b.`serial_number`,b.`size` orderSize,b.`status`,
-        b.`task_id` orderTask_id,b.`deleted` orderDeleted,b.`title`,b.`url`,c.`create_time` fileCreate_time,c.`filecode`,c.`id` fileId,c.`name`,c.`resolution` fileResolution,c.`size` fileSize,c.`task_id` fileTask_id
+        left join (select b.`create_time` orderCreate_time,b.`fee`,b.`first_id`,b.`id`
+        orderId,b.`out_trade_id`,b.`resolution` orderResolution,b.`second_id`,b.`serial_number`,b.`size`
+        orderSize,b.`status`,
+        b.`task_id` orderTask_id,b.`deleted` orderDeleted,b.`title`,b.`url`,c.`create_time`
+        fileCreate_time,c.`filecode`,c.`id` fileId,c.`name`,c.`resolution` fileResolution,c.`size` fileSize,c.`task_id`
+        fileTask_id
         from order_log b left join file c on (b.first_id=c.id or b.second_id=c.id)) as d
         ON a.`id`=d.`orderTask_id`
         where
         <if test="keyWords!=null and keyWords!=''">
-            d.`serial_number` like concat('%','${param2}','%') or a.`name` like concat('%','${param2}','%') or d.`orderId` like concat('%','${param2}','%') and
+            d.`serial_number` like concat('%','${param2}','%') or a.`name` like concat('%','${param2}','%') or
+            d.`orderId` like concat('%','${param2}','%') and
         </if>
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
 
@@ -58,16 +64,65 @@
     </select>
 
     <select id="getGroup" resultMap="groupMap">
-        SELECT  a.`id` groupId,a.`work_code`,a.`name`,a.`create_time` groupCreate_time,d.`orderCreate_time`,d.`fee`,d.`first_id`,d.`orderId`,d.`out_trade_id`,d.`orderResolution`,d.`second_id`,d.`serial_number`,d.`orderSize`,d.`status`,
-                d.`orderTask_id`,d.`title`,d.`url`,d.`fileCreate_time`,d.`filecode`,d.`fileId`,d.`name`,d.`fileResolution`,d.`fileSize`,d.`fileTask_id`,d.`orderDeleted`
+        SELECT a.`id`          groupId,
+               a.`work_code`,
+               a.`name`,
+               a.`create_time` groupCreate_time,
+               d.`orderCreate_time`,
+               d.`fee`,
+               d.`first_id`,
+               d.`orderId`,
+               d.`out_trade_id`,
+               d.`orderResolution`,
+               d.`second_id`,
+               d.`serial_number`,
+               d.`orderSize`,
+               d.`status`,
+               d.`orderTask_id`,
+               d.`title`,
+               d.`url`,
+               d.`fileCreate_time`,
+               d.`filecode`,
+               d.`fileId`,
+               d.`name`,
+               d.`fileResolution`,
+               d.`fileSize`,
+               d.`fileTask_id`,
+               d.`orderDeleted`
         FROM task_group a
-                 LEFT JOIN (SELECT b.`create_time` orderCreate_time,b.`fee`,b.`first_id`,b.`id` orderId,b.`out_trade_id`,b.`resolution` orderResolution,b.`second_id`,b.`serial_number`,b.`size` orderSize,b.`status`,b.`deleted` orderDeleted,
-                                   b.`task_id` orderTask_id,b.`title`,b.`url`,c.`create_time` fileCreate_time,c.`filecode`,c.`id` fileId,c.`name`,c.`resolution` fileResolution,c.`size` fileSize,c.`task_id` fileTask_id
-                            FROM order_log b LEFT JOIN FILE c ON (b.first_id=c.id OR b.second_id=c.id)) AS d
-                           ON a.`id`=d.`orderTask_id`
-        WHERE a.`id`=#{groupId} and d.`orderDeleted`=0
+                 LEFT JOIN (SELECT b.`create_time` orderCreate_time,
+                                   b.`fee`,
+                                   b.`first_id`,
+                                   b.`id`          orderId,
+                                   b.`out_trade_id`,
+                                   b.`resolution`  orderResolution,
+                                   b.`second_id`,
+                                   b.`serial_number`,
+                                   b.`size`        orderSize,
+                                   b.`status`,
+                                   b.`deleted`     orderDeleted,
+                                   b.`task_id`     orderTask_id,
+                                   b.`title`,
+                                   b.`url`,
+                                   c.`create_time` fileCreate_time,
+                                   c.`filecode`,
+                                   c.`id`          fileId,
+                                   c.`name`,
+                                   c.`resolution`  fileResolution,
+                                   c.`size`        fileSize,
+                                   c.`task_id`     fileTask_id
+                            FROM order_log b
+                                     LEFT JOIN FILE c ON (b.first_id = c.id OR b.second_id = c.id)) AS d
+                           ON a.`id` = d.`orderTask_id`
+        WHERE a.`id` = #{groupId}
+          and d.`orderDeleted` = 0
         ORDER BY d.`orderCreate_time` ASC
     </select>
 
+    <select id="getWorkCodeById" resultType="string">
+        select work_code
+        from task_group
+        where id = #{id}
+    </select>
 
 </mapper>

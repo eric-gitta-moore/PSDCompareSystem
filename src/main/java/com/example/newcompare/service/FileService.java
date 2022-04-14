@@ -1,16 +1,14 @@
 package com.example.newcompare.service;
 
-import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.File;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.util.List;
-
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author nosgua
@@ -23,19 +21,23 @@ public interface FileService extends IService<File> {
      */
     ArrayList<File> queryById(Integer groupId);
 
-    String getUrlById(Integer id);
-    /**\
+    Map<String, Object> getUrlById(Integer id);
+
+    /**
+     * \
      * 保存数据进file表
+     *
      * @param file
      * @return
      */
-    public Integer insertFile(File file);
+    Integer insertFile(File file);
 
     /**
      * \根据fileID查询file表中的数据
+     *
      * @param fileId
      * @return
      */
-    public String seleceFileById(Integer fileId);
+    String seleceFileById(Integer fileId);
 
 }

@@ -1,6 +1,5 @@
 package com.example.newcompare.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.entity.OrderLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
@@ -21,8 +20,9 @@ public interface OrderLogService extends IService<OrderLog> {
 
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
-
     int orderDelete(String[] Ids);
 
     OrderLog getByWorkCode(@Param("workCode") String workCode);
+
+    void insertOrderLog(OrderLog orderLog);
 }

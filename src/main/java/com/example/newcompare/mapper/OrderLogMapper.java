@@ -1,6 +1,5 @@
 package com.example.newcompare.mapper;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.entity.OrderLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;

@@ -4,14 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.newcompare.entity.TaskGroup;
-import org.springframework.stereotype.Service;
 
 public interface TaskGroupService extends IService<TaskGroup> {
 
-    public TaskGroup selectById(Integer taskId);
+    TaskGroup selectById(Integer taskId);
 
     Integer create(TaskGroup taskGroup);
 
@@ -19,4 +15,5 @@ public interface TaskGroupService extends IService<TaskGroup> {
 
     Page<OrderLog> getGroupById(Page<OrderLog> page, String groupId);
 
+    String getWorkCodeByTaskId(Integer id);
 }

@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author nosgua
@@ -44,11 +44,6 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         return filecode;
     }
 
-
-
-
-
-
     @Override
     public ArrayList<File> queryById(Integer groupId) {
         ArrayList<File> fileMesseges = fileMapper.queryFiles(groupId);
@@ -56,15 +51,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     }
 
     @Override
-    public String getUrlById(Integer id) {
+    public Map<String, Object> getUrlById(Integer id) {
         LambdaQueryWrapper<OrderLog> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(id!=null,OrderLog::getId,id);
-        Integer count = orderLogMapper.selectCount(queryWrapper);
-        String url = fileMapper.getUrlById(id);
-        if(count>0){
-            return url!=null?url:"";
-        }else {
-            return null;
-        }
+        queryWrapper.eq(id != null, OrderLog::getId, id);
+        return fileMapper.getUrlById(id);
     }
 }

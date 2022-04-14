@@ -7,16 +7,7 @@ import com.example.newcompare.mapper.TaskGroupMapper;
 import com.example.newcompare.service.TaskGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.newcompare.entity.WorkCode;
-import com.example.newcompare.mapper.TaskGroupMapper;
-import com.example.newcompare.service.TaskGroupService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-
-
-
 
 @Service
 public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup> implements TaskGroupService {
@@ -24,8 +15,8 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
     @Autowired
     private TaskGroupMapper taskGroupMapper;
 
-    @Resource
-    TaskGroupMapper mapper;
+    @Autowired
+    private TaskGroupMapper mapper;
 
     @Override
     public Integer create(TaskGroup taskGroup) {
@@ -43,9 +34,12 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
     }
 
     @Override
+    public String getWorkCodeByTaskId(Integer id) {
+        return mapper.getWorkCodeById(id);
+    }
+
+    @Override
     public TaskGroup selectById(Integer taskId) {
         return taskGroupMapper.selectById(taskId);
-
-
     }
 }

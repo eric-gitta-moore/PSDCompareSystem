@@ -6,10 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author nosgua
@@ -17,10 +18,7 @@ import java.util.ArrayList;
  */
 @Mapper
 public interface FileMapper extends BaseMapper<File> {
-
-
     ArrayList<File> queryFiles(@Param("groupId") Integer groupId);
 
-    String getUrlById(Integer id);
-
+    Map<String, Object> getUrlById(Integer id);
 }
