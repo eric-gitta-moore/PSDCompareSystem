@@ -1,14 +1,19 @@
 package com.example.newcompare.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.newcompare.common.utils.CompareQueryUtil;
+import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.AlipayUtil;
 import com.example.newcompare.common.utils.ChangeToMapUtil;
 import com.example.newcompare.common.utils.QRCodeUtil;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.entity.WorkCode;
+import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,9 +44,10 @@ import java.util.concurrent.TimeUnit;
  * @author nosgua
  * @since 2022-04-10
  */
-@Api(value = "order-log")
+@Api(tags = "Order-log")
 @Controller
 @RequestMapping("/order-log")
+@ResponseBody
 public class OrderLogController {
 
     @Autowired
@@ -50,6 +56,7 @@ public class OrderLogController {
 
     @Resource
     OrderLogService service;
+
 
     @Autowired
     StringRedisTemplate redisTemplate;
@@ -68,36 +75,15 @@ public class OrderLogController {
 //        return Result.success()
     }
 
-    @PostMapping("/search")
-    @ApiOperation(value = "历史记录分页查询,keywords: 流水号或者支付状态" +
-            "（支付状态: unpaid 未完成，complete 已经完成）," +
-            "maxPage: 每页显示最大数量，" +
-            "startPage: 开始页码,startTime和endTime: 要查询的时间段")
-    public Result search(@RequestBody Map<String, String> map) {
-        //最大显示数量默认是10
-        int maxPage = 10;
-        //起始页码默认为是1
-        int startPage = 1;
-        String mPage = map.get("maxPage");
-        String sPage = map.get("startPage");
-        String keyWords = map.get("keyWords");
-        String startTime = map.get("startTime");
-        String endTime = map.get("endTime");
-        if (sPage != null) {
-            startPage = Integer.parseInt(sPage);
-        }
-        if (mPage != null) {
-            maxPage = Integer.parseInt(mPage);
-        }
-        Page<OrderLog> Page = new Page(startPage,maxPage);
-        return Result.success(service.getHistory(Page, keyWords, startTime, endTime));
-    }
-
     @DeleteMapping("/delete")
-    @ApiOperation(value = "批量删除，serialNumbers: string数组的流水号")
-    public Result delete(@RequestParam("serialNumbers") String[] serialNumbers){
-        service.allDelete(serialNumbers);
-        return Result.success("成功");
+    @ApiOperation(value = "郑前===》批量删除，Ids: string数组的订单Id")
+    public Result delete(@RequestParam("Ids") String[] Ids){
+        int i = service.orderDelete(Ids);
+        //根据i的值避免重复操作返回错误信息
+        if(i>0)
+            return Result.success("成功");
+        else
+            return Result.fail("失败");
     }
 
     @ApiOperation("朱涵===>发起请求支付")
@@ -109,6 +95,38 @@ public class OrderLogController {
         //填入redis
         redisTemplate.opsForValue().set(id,"未支付",15, TimeUnit.MINUTES);
         return "pay";
+    }
+
+    @ApiOperation("徐启峰====>修改订单的状态")
+    @PutMapping("/comparequery")
+    public Result comparequery(String workCode) throws Exception {
+
+        int responseCode = CompareQueryUtil.querycomparestatus(workCode);
+        OrderLog orderLog = service.getByWorkCode(workCode);
+        if(orderLog.getDeleted()==1)
+            return Result.fail(400,"订单不存在,无法修改订单状态！",null);
+        if(responseCode==400){
+            //修改对比状态为失败
+            orderLog.setStatus("fail");
+            boolean b = service.updateById(orderLog);
+            if (b)
+                return Result.fail(400,"文件对比失败！成功修改订单状态为失败",null);
+            else
+                return Result.fail(400,"文件对比失败！未成功修改订单状态为失败",null);
+        }
+        //修改对比状态为成功
+        orderLog.setStatus("complete");
+        //向公司服务器发送请求获取文件的大小，分辨率，路径并保存。
+        Integer id = orderLog.getId();
+        String[] url = FileDownloadUtil.url(workCode, id);
+        orderLog.setUrl(url[0]);
+        orderLog.setSize(url[1]);
+        orderLog.setResolution(url[2]);
+        boolean b = service.updateById(orderLog);
+        if (b)
+            return Result.success(200,"对比成功,url保存成功！",null);
+        else
+            return Result.fail(400,"对比成功，但保存url失败！",null);
     }
 
 

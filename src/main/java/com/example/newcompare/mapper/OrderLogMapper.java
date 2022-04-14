@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * <p>
  * 支付订单表 Mapper 接口
@@ -18,8 +20,9 @@ import org.springframework.stereotype.Component;
 @Mapper
 public interface OrderLogMapper extends BaseMapper<OrderLog> {
 
-    int allDelete(@Param("serialNumbers") String[] serialNumbers);
+    int orderDelete(@Param("orderLogs") List<OrderLog> orderLogs);
 
-    Page<OrderLog> getHistory(@Param("Page") Page<OrderLog> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
+    OrderLog getByWorkCode(@Param("workCode") String workCode);
 
+    List<OrderLog> selectByIds(@Param("Ids") String[] Ids);
 }

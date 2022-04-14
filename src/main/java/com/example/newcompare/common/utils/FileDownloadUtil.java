@@ -28,12 +28,13 @@ public class FileDownloadUtil {
      */
     /*private static String dir = "D:/tmp/";*/
     private static String dir = "/tmp/template";
-
+//    private static String dir = "D:\\tmp\\";
     /**
      * 解压后文件所在位置
      */
     /*private static String desDirectory="D:/tmp";*/
     private static String desDirectory="/tmp/template";
+//    private static String desDirectory="D:\\tmp";
     /**
      * 上传七牛云，生成url
      * @param workcode
@@ -45,13 +46,13 @@ public class FileDownloadUtil {
 */
 
     /**
-     * 返回【0】文件路径，【1】文件大小,【3】文件分辨率
+     * 返回【0】文件路径，【1】文件大小,【2】文件分辨率
      * @param workcode
      * @param id
      * @return
      * @throws Exception
      */
-    public String[] url(String workcode,Integer id) throws Exception {
+    public static String[] url(String workcode,Integer id) throws Exception {
         String zip = getZip(workcode);
         FileInputStream inputStream_ = new FileInputStream(zip);
         String unzip = unzip(zip);

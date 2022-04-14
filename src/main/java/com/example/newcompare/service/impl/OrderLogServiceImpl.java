@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import java.util.List;
+
 
 import javax.annotation.Resource;
 
@@ -70,12 +72,22 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     }
 
     @Override
-    public Page<OrderLog> getHistory(Page<OrderLog> Page, String keyWords, String startTime, String endTime) {
-        return mapper.getHistory(Page,keyWords,startTime,endTime);
+    public int orderDelete(String[] Ids) {
+        List<OrderLog> orderLogs=null;
+        //防止Ids为空时造成异常
+        if(Ids.length>0) {
+            orderLogs = mapper.selectByIds(Ids);
+        }
+        //当Ids对应的订单处于删除状态，则不执行SQL语句，反之执行
+        if(orderLogs!=null&&orderLogs.size()>0)
+            return mapper.orderDelete(orderLogs);
+        else
+            return 0;
     }
+
     @Override
-    public int allDelete(String[] serialNumbers) {
-        return mapper.allDelete(serialNumbers);
+    public OrderLog getByWorkCode(String workCode) {
+        return mapper.getByWorkCode(workCode);
     }
 
 
