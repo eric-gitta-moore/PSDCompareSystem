@@ -58,8 +58,9 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
                 orderLog.setStatus("complete");
                 return mapper.updateById(orderLog) > 0;
             }
-        } else
+        } else {
             return orderLog.getStatus().equals("complete");
+        }
         return false;
     }
 
@@ -71,10 +72,12 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
             orderLogs = mapper.selectBatchIds(Arrays.asList(Ids));
         }
         //当Ids对应的订单处于删除状态，则不执行SQL语句，反之执行
-        if (orderLogs != null && orderLogs.size() > 0)
+        if(orderLogs!=null&&orderLogs.size()>0) {
             return mapper.orderDelete(orderLogs);
-        else
+        }
+        else {
             return 0;
+        }
     }
 
     @Override
@@ -84,12 +87,7 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
 
     @Override
     public void insertOrderLog(OrderLog orderLog) {
-        mapper.insert(orderLog);
-    }
 
-    @Override
-    public int allDelete(String[] serialNumbers) {
-        return 0;
     }
 
 
