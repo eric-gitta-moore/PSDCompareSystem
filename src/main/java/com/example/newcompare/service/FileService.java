@@ -2,6 +2,11 @@ package com.example.newcompare.service;
 
 import com.example.newcompare.entity.File;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newcompare.entity.OrderLog;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -39,5 +44,10 @@ public interface FileService extends IService<File> {
      * @return
      */
     String seleceFileById(Integer fileId);
+
+    List<OrderLog> getAllSendId(Integer[] id);
+
+
+    boolean backZip(List<OrderLog> list) throws Exception;
 
 }

@@ -1,6 +1,7 @@
 package com.example.newcompare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.newcompare.common.utils.AlipayUtil;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.mapper.OrderLogMapper;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,15 +31,13 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
 
     @Override
     public OrderLog getOrderLog(String outTradeId) {
-        OrderLog orderLog = mapper.selectOne(new QueryWrapper<OrderLog>().eq("out_trade_id", outTradeId));
-        return orderLog;
+        return mapper.selectOne(new QueryWrapper<OrderLog>().eq("out_trade_id", outTradeId));
     }
 
 
     @Override
     public String useAlipayUtils(OrderLog orderLog) {
-        String form = alipayUtil.pay(orderLog);
-        return form;
+        return alipayUtil.pay(orderLog);
     }
 
     /**
@@ -68,7 +68,7 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
         List<OrderLog> orderLogs = null;
         //防止Ids为空时造成异常
         if (Ids.length > 0) {
-            orderLogs = mapper.selectByIds(Ids);
+            orderLogs = mapper.selectBatchIds(Arrays.asList(Ids));
         }
         //当Ids对应的订单处于删除状态，则不执行SQL语句，反之执行
         if (orderLogs != null && orderLogs.size() > 0)
@@ -85,5 +85,39 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     @Override
     public void insertOrderLog(OrderLog orderLog) {
         mapper.insert(orderLog);
+    }
+
+    @Override
+    public int allDelete(String[] serialNumbers) {
+        return 0;
+    }
+
+
+    /**
+     * 获取对比订单信息
+     */
+    @Override
+    public OrderLog getDiffInformation(String id) {
+        /*LambdaQueryWrapper<OrderLog> wrapper = new LambdaQueryWrapper<>();*/
+        QueryWrapper<OrderLog> queryWrapper = new QueryWrapper<>();
+        /*QueryWrapper<OrderLog> w1=new QueryWrapper<>();*/
+        queryWrapper.eq("out_trade_id", id);
+        OrderLog orderLog = mapper.selectOne(queryWrapper);
+        System.out.println(orderLog);
+        return orderLog;
+    }
+
+
+    /**
+     * 修改订单支付状态
+     */
+
+    @Override
+    public boolean updateStatus(OrderLog orderLog) {
+        LambdaUpdateWrapper<OrderLog> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(OrderLog::getOutTradeId, orderLog.getOutTradeId());
+        wrapper.set(OrderLog::getStatus, "finish");
+        int update = mapper.update(orderLog, wrapper);
+        return update == 1;
     }
 }

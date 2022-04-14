@@ -25,4 +25,10 @@ public interface OrderLogService extends IService<OrderLog> {
     OrderLog getByWorkCode(@Param("workCode") String workCode);
 
     void insertOrderLog(OrderLog orderLog);
+
+    int allDelete(String[] serialNumbers);
+
+    OrderLog getDiffInformation(String out_trade_no);
+
+    boolean updateStatus(OrderLog out_trade_no);
 }
