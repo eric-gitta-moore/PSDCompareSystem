@@ -93,7 +93,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <form id="payment-form" th:action="${'/order-log/topay/'}+${out_trade_no}" method="get">
+            <form id="payment-form" th:action="${'/order-log/topay/'}+${id}" method="get">
                 <input type="hidden" name="paytype" value="wechat"/>
                 <div class="panel panel-default">
                     <div class="panel-heading">

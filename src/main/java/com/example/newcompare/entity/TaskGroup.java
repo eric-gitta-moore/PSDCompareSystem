@@ -21,10 +21,7 @@ public class TaskGroup {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    /**
-     * 工作码
-     */
-    private String workCode;
+
 
     /**
      * 任务组名

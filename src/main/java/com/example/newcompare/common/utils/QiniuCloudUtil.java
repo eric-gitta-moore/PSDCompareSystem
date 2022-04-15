@@ -19,7 +19,7 @@ public class QiniuCloudUtil {
     private static final String SECRET_KEY = "9eGzVLp9aOcXYsk_YHbN4RQ4inYkxMSezzIJbYMp";
 
     // 要上传的空间								（刚刚新建空间的名称）
-    private static final String bucketname = "nosugar-2test";
+    private static final String bucketname = "nosugar-buchitang";
 
     // 密钥
     private static final Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
@@ -27,7 +27,7 @@ public class QiniuCloudUtil {
 
     private static final Integer expireSeconds = 3600;
 	//新建空间时，七牛云分配出的域名 （自己可在万网购买域名解析后，绑定到加速域名）
-    private static final String DOMAIN = "http://r91jzctnn.hn-bkt.clouddn.com/";
+    private static final String DOMAIN = "qiniu.buchitang.top/";
 
     public static String getUpToken() {
         return auth.uploadToken(bucketname, null, expireSeconds, new StringMap().put("insertOnly", 1));

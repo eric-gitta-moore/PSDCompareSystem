@@ -103,7 +103,7 @@ public class AlipayUtil {
 
 
         //	商户网站唯一订单号
-        bizContent.put("out_trade_no", orderLog.getOutTradeId());
+//        bizContent.put("out_trade_no", orderLog.getOutTradeId());
         //	订单总金额。
         bizContent.put("total_amount", orderLog.getFee());
         //订单标题

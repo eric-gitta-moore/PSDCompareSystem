@@ -113,7 +113,7 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     @Override
     public boolean updateStatus(OrderLog orderLog) {
         LambdaUpdateWrapper<OrderLog> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(OrderLog::getOutTradeId, orderLog.getOutTradeId());
+//        wrapper.eq(OrderLog::getOutTradeId, orderLog.getOutTradeId());
         wrapper.set(OrderLog::getStatus, "finish");
         int update = mapper.update(orderLog, wrapper);
         return update == 1;

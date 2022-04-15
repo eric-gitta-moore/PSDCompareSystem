@@ -29,7 +29,6 @@ public class TaskGroupController {
     @ApiOperation("刘锦堂===》创建新的group")
     public Result create(@RequestBody TaskGroup group) {
         group.setName(group.getName());
-        group.setWorkCode(UUID.randomUUID().toString());
         group.setCreateTime(LocalDateTime.now());
         Integer i = service.create(group);
         if (i == 0) {

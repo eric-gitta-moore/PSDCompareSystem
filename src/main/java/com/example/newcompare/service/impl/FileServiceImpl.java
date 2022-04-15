@@ -44,8 +44,6 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     @Autowired
     private FileMapper fileMapper;
 
-    @Autowired
-    private OrderLogMapper orderLogMapper;
 
     @Override
     public Integer insertFile(File file) {
@@ -95,8 +93,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
      */
     @Override
     public boolean backZip(List<OrderLog> list) throws Exception {
-
-
+        //不要放在项目里，设置一个绝对路径常量
         java.io.File file=new java.io.File("src/main/resources/img");//?
         file.mkdirs();
 

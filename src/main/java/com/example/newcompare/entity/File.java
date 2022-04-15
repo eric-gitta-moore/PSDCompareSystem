@@ -46,15 +46,7 @@ public class File implements Serializable {
     @TableLogic//逻辑删除字段  1删除  0未删除
     private Integer deleted;
 
-    /*public File(String filecode, Integer deleted, String name,  Integer taskId,String resolution, String size, LocalDateTime createTime) {
-        this.filecode = filecode;
-        this.deleted = deleted;
-        this.name = name;
-        this.resolution = resolution;
-        this.taskId = taskId;
-        this.size = size;
-        this.createTime = createTime;
-    }*/
+
 
     /**
      * 文件名
@@ -62,10 +54,7 @@ public class File implements Serializable {
      */
     private String name;
 
-    /**
-     * 图片分辨率
-     */
-    private String resolution;
+
 
     /**
      * 任务组id

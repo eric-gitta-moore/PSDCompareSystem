@@ -6,7 +6,9 @@ import com.example.newcompare.common.utils.AlipayUtil;
 import com.example.newcompare.common.utils.ChangeToMapUtil;
 import com.example.newcompare.entity.File;
 import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.entity.Recharge;
 import com.example.newcompare.service.OrderLogService;
+import com.example.newcompare.service.RechargeService;
 import com.example.newcompare.service.impl.OrderLogServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/thymeleaf")
@@ -31,6 +34,9 @@ public class ThymeleafController {
     @Autowired
     OrderLogServiceImpl orderLogService;
 
+    @Autowired
+    RechargeService rechargeService;
+
     /**
      * 跳转到收银台
      * @param id  订单编号
@@ -40,10 +46,10 @@ public class ThymeleafController {
     @ApiOperation(value = "跳转收银台界面， outTradeId: 订单编号")
     @RequestMapping("/index")
     public String index(String id,Model model){
-        System.out.println(123);
-        OrderLog orderLog = service.getById(id);
-        model.addAttribute("total_amount",orderLog.getFee());
-        model.addAttribute("out_trade_no",orderLog.getOutTradeId());
+        Recharge recharge = rechargeService.getById(id);
+        model.addAttribute("total_amount",recharge.getFee());
+        model.addAttribute("out_trade_no", recharge.getOutTradeNo());
+        model.addAttribute("id", id);
         return "index";
     }
 

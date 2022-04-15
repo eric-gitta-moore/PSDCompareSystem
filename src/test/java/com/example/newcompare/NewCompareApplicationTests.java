@@ -1,10 +1,18 @@
 package com.example.newcompare;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.interfaces.Compare;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.example.newcompare.entity.CompanyResult;
+import com.qiniu.util.Json;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Set;
 
 @SpringBootTest
 class NewCompareApplicationTests {
@@ -20,5 +28,39 @@ class NewCompareApplicationTests {
 //        mapper.delete(new UpdateWrapper<Compare>().eq("id","209"));
 //
 //    }
+    @Autowired
+    RestTemplate template;
+    @Test
+    void test(){
+        ResponseEntity<String> forEntity = template.getForEntity("http://139.9.203.100:9721/cadpare/status?workcode=awfawfawfw", String.class);
+        String body = forEntity.getBody();
+        System.out.println(body);
+        CompanyResult result = JSON.parseObject(body,CompanyResult.class);
+        System.out.println(result);
+//        System.out.println(decode);
+        if (body.contains("IDENTICAL")){
+            System.out.println("无差异");
+        }else if (body.contains("Drawing size mismatch")){
+            System.out.println("图片尺寸不一致");
+        } else if (result.getData().getDoneCount()!=null && result.getData().getDoneCount()==2){
+            System.out.println("有差异");
+        }else if(result.getErrcode()==401){
+            System.out.println("对比出错");
+        } else if (result.getData().getTotal()==null){
+            System.out.println("正在对比");
+        }
+    }
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
+    @Test
+    void test2(){
+        Set<String> members = redisTemplate.opsForSet().members("k1");
+        for (String member : members) {
+            System.out.println(member);
+        }
+        redisTemplate.opsForSet().remove("k1","123");
+    }
 
 }

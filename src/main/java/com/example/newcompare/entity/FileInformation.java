@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class FileInformation {
-    /**
-     * 文件分辨率
-     */
-    private String resolution;
+
 
     /**
      * 文件大小

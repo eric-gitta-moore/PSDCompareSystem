@@ -114,24 +114,25 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static List<FileInformation> getInformation(MultipartFile[] files) throws IOException {
         List<FileInformation> list = new ArrayList<>();
         for (MultipartFile file:files){
-            String path = storePath+UUID.randomUUID()+file.getName();
-            InputStream inputStream = file.getInputStream();
-
-            OutputStream outputStream = new FileOutputStream(path);
-            byte[] bytes = new byte[1024];
-            while (inputStream.read(bytes)>=0){
-                outputStream.write(bytes);
+            InputStream inputStream=null;
+            Long size = 0L;
+            try {
+                inputStream = file.getInputStream();
+                while (inputStream.read()!=-1){
+                    size++;
+                }
+            }catch (IOException ioException){
+                System.out.println("出现异常");
+            }finally {
+                inputStream.close();
             }
-            inputStream.close();
-            outputStream.close();
-            String size = fileSize(path);
-            BufferedImage read = ImageIO.read(new File(path));
-            FileInformation fileInformation = new FileInformation(size, read.getWidth() + "*" + read.getHeight());
+
+            FileInformation fileInformation = new FileInformation(size.toString());
             list.add(fileInformation);
-            new File(path).delete();
         }
         return list;
     }

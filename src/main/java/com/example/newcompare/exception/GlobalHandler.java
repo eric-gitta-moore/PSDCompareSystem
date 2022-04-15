@@ -24,4 +24,11 @@ public class GlobalHandler {
         return Result.fail("IO出错");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = QRException.class)
+    public Result handler(QRException e){
+        e.printStackTrace();
+        return Result.fail("创建订单出错");
+    }
+
 }

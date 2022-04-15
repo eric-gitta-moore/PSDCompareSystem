@@ -35,7 +35,7 @@ public class OrderLog implements Serializable {
     private Integer id;
 
     /**
-     * 支付状态('unpaid':未支付,'create':创建,'cancal':取消支付,'complete':完成)
+     * 对比状态 complete 已完成  incomplete 未完成
      */
     @TableField("status")
     private String status;
@@ -47,10 +47,10 @@ public class OrderLog implements Serializable {
     private BigDecimal fee;
 
     /**
-     * 商户订单ID
+     * 任务码
      */
-    @TableField("out_trade_id")
-    private String outTradeId;
+    @TableField("work_code")
+    private String workCode;
 
     /**
      * 对比组名称
@@ -111,22 +111,18 @@ public class OrderLog implements Serializable {
     @TableField("task_id")
     private Integer taskId;
 
+    /**
+     * 对比结果
+     */
+    private String result;
+
+    /**
+     * 对比后文件名
+     */
+    private String fileName;
+
     @TableField(exist = false)
     private List<File> files;
 
-    /*public OrderLog(String status, BigDecimal fee, String outTradeId, String title, String serialNumber, LocalDateTime createTime, String url, Integer deleted, Integer firstId, Integer secondId, String size, String resolution, Integer taskId) {
-        this.status = status;
-        this.fee = fee;
-        this.outTradeId = outTradeId;
-        this.title = title;
-        this.serialNumber = serialNumber;
-        this.createTime = createTime;
-        this.url = url;
-        this.deleted = deleted;
-        this.firstId = firstId;
-        this.secondId = secondId;
-        this.size = size;
-        this.resolution = resolution;
-        this.taskId = taskId;
-    }*/
+
 }

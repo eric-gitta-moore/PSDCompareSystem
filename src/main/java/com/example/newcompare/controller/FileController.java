@@ -76,7 +76,7 @@ public class FileController {
     @Autowired
     private OrderLogController orderLogController;
 
-    @ApiOperation("李超===>上传图片，文件＋taskID")
+   /* @ApiOperation("李超===>上传图片，文件＋taskID")
     @PostMapping("/uploadFile")
     public Result uploadFile(MultipartFile[] files, Integer taskId) throws IOException {
         if (files != null) {
@@ -104,7 +104,7 @@ public class FileController {
                 file.setFilecode(fileCode + random.nextInt(99));
                 file.setName(files[i].getName());
                 file.setTaskId(taskId);
-                file.setResolution(fileInformations.get(i).getResolution());
+//                file.setResolution(fileInformations.get(i).getResolution());
                 file.setSize(fileInformations.get(i).getSize());
                 file.setCreateTime(LocalDateTime.now());
 
@@ -159,9 +159,9 @@ public class FileController {
     }
 
 
-    /**
+    *//**
      * 获取一个或者多个文件的信息
-     */
+     *//*
     @ApiOperation("获取一个或者多个文件的信息")
     @GetMapping("/getFiles/{groupId}")
     public Result getFiles(@PathVariable("groupId") Integer groupId) {
@@ -192,7 +192,7 @@ public class FileController {
             map.put("url", "");
             return Result.success(200, "未支付或已取消或支付失败", map);
         }
-    }
+    }*/
 
 
     /**
