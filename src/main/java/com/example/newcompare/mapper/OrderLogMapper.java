@@ -19,7 +19,5 @@ import java.util.List;
 @Mapper
 public interface OrderLogMapper extends BaseMapper<OrderLog> {
 
-    int orderDelete(@Param("orderLogs") List<OrderLog> orderLogs);
-
     OrderLog getByWorkCode(@Param("workCode") String workCode);
 }

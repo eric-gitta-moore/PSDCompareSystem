@@ -20,8 +20,6 @@ public interface OrderLogService extends IService<OrderLog> {
 
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
-    int orderDelete(String[] Ids);
-
     OrderLog getByWorkCode(@Param("workCode") String workCode);
 
     void insertOrderLog(OrderLog orderLog);
