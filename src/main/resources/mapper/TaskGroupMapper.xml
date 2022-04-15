@@ -13,6 +13,7 @@
             <result column="status" property="status"/>
             <result column="orderDeleted" property="deleted"/>
             <result column="fee" property="fee"/>
+            <result column="work_code" property="workCode"/>
             <result column="title" property="title"/>
             <result column="serial_number" property="serialNumber"/>
             <result column="orderCreate_time" property="createTime"/>
@@ -30,6 +31,7 @@
                 <result column="name" property="name"/>
                 <result column="fileSize" property="size"/>
                 <result column="fileTask_id" property="taskId"/>
+                <result column="orderId" property="orderId"/>
                 <result column="fileCreate_time" property="createTime"/>
             </collection>
         </collection>
@@ -45,6 +47,7 @@
                d.`fee`,
                d.`first_id`,
                d.`orderId`,
+               d.`work_code`,
                d.`orderResolution`,
                d.`second_id`,
                d.`serial_number`,
@@ -67,6 +70,7 @@
             select b.`create_time` orderCreate_time,
                    b.`fee`,
                    b.`first_id`,
+                   b.`work_code`,
                    b.`id` orderId,
                    b.`resolution` orderResolution,
                    b.`second_id`,
@@ -108,6 +112,7 @@
                  d.`orderCreate_time`,
                  d.`fee`,
                  d.`first_id`,
+                 d.`work_code`,
                  d.`orderId`,
                  d.`orderResolution`,
                  d.`second_id`,
@@ -133,6 +138,7 @@
                                    b.`id` orderId,
                                    b.`resolution` orderResolution,
                                    b.`second_id`,
+                                   b.`work_code`,
                                    b.`serial_number`,
                                    b.`size` orderSize,
                                    b.`status`,
