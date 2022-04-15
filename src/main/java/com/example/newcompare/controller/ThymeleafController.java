@@ -25,8 +25,6 @@ import java.util.UUID;
 @RequestMapping("/thymeleaf")
 @Api(value = "ThymeleafController",tags = "thymeleaf")
 public class ThymeleafController {
-    @Autowired
-    OrderLogService service;
 
     @Autowired
     AlipayUtil alipayUtil;
@@ -62,7 +60,6 @@ public class ThymeleafController {
      */
     @RequestMapping("/payFinished")
     public String succeed(Model model, HttpServletRequest request) throws AlipayApiException {
-
         String out_trade_no = request.getParameter("out_trade_no");
         String total_amount = request.getParameter("total_amount");
         String msg = null;
@@ -71,7 +68,7 @@ public class ThymeleafController {
         boolean signVerified = AlipaySignature.rsaCheckV1(paramsMap, alipayUtil.getPublicKey(), paramsMap.get("charset"), paramsMap.get("sign_type")); //调用SDK验证签名
         if (signVerified) {//验签成功
 
-            if (!service.checkOrderAndUpdateDatabase(out_trade_no)) {
+            if (!rechargeService.checkOrderAndUpdateDatabase(out_trade_no)) {
                 msg = "支付失败";
             } else {
                 msg = "支付成功";

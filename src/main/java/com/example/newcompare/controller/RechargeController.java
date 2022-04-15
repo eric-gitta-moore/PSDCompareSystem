@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Api("recharge")
-@RestController
+@Controller
 @RequestMapping("/recharge")
 public class RechargeController {
     @Autowired
@@ -39,7 +40,7 @@ public class RechargeController {
     RechargeService rechargeService;
     @Autowired
     StringRedisTemplate redisTemplate;
-    @Resource
+    @Autowired
     OrderLogService service;
     /**
      * 获取跳转支付界面的二维码
@@ -56,24 +57,23 @@ public class RechargeController {
         recharge.setOutTradeNo(UUID.randomUUID().toString());
         recharge.setStatus("unpaid");
         int insert = rechargeService.insert(recharge);
+        System.out.println(recharge);
         if (insert==0){
             throw new QRException();
         }
-        String url = "http://114.55.0.204:8081/thymeleaf/index?id="+recharge.getId();
+//        String url = "http://114.55.0.204:8081/thymeleaf/index?id="+recharge.getId();
+        String url = "http://9ehimu.natappfree.cc/thymeleaf/index?id="+recharge.getId();
         BufferedImage qr = QRCodeUtil.getBufferedImage(url, size);
         ImageIO.write(qr,"jpg",response.getOutputStream());
 
-//        return Result.success()
     }
 
     @ApiOperation("朱涵===>发起请求支付")
     @GetMapping("/topay/{id}")
-    public String topay(@PathVariable String id, Model model) {
-        OrderLog orderLog = service.getOrderLog(id);
-        String form = service.useAlipayUtils(orderLog);
+    public String topay(@PathVariable String outTradeNo, Model model) {
+        Recharge recharge = rechargeService.getRecharge(outTradeNo);
+        String form = rechargeService.useAlipayUtils(recharge);
         model.addAttribute("form",form);
-        //填入redis
-        redisTemplate.opsForValue().set(id,"未支付",15, TimeUnit.MINUTES);
         return "pay";
     }
 

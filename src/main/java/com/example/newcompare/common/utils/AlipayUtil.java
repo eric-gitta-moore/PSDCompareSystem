@@ -9,6 +9,7 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.entity.Recharge;
 import com.example.newcompare.service.OrderLogService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
@@ -89,7 +92,7 @@ public class AlipayUtil {
         }
     }
 
-    public String pay(OrderLog orderLog) {
+    public String pay(Recharge recharge) {
 
         AlipayClient alipayClient = new DefaultAlipayClient(url, appid, privateKey, "json", "UTf-8", publicKey, "RSA2");
 
@@ -103,16 +106,15 @@ public class AlipayUtil {
 
 
         //	商户网站唯一订单号
-//        bizContent.put("out_trade_no", orderLog.getOutTradeId());
+        bizContent.put("out_trade_no", recharge.getOutTradeNo());
         //	订单总金额。
-        bizContent.put("total_amount", orderLog.getFee());
+        bizContent.put("total_amount", recharge.getFee());
         //订单标题
-        bizContent.put("subject", orderLog.getTitle());
+        bizContent.put("subject", recharge.getTitle());
         //销售产品码
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
         //设置绝对超时时间:15分钟
-        bizContent.put("timeout_express", "15m");
-//        bizContent.put("time_expire", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date().getTime() + 15*60*1000));
+        bizContent.put("time_expire", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date().getTime() + 15*60*1000));
 
         request.setBizContent(bizContent.toString());
 

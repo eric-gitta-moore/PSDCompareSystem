@@ -14,11 +14,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface OrderLogService extends IService<OrderLog> {
 
-    OrderLog getOrderLog(String outTradeId);
 
-    String useAlipayUtils(OrderLog orderLog);
 
-    boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
     OrderLog getByWorkCode(@Param("workCode") String workCode);
 

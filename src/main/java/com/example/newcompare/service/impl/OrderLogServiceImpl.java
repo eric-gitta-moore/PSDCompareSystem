@@ -23,46 +23,11 @@ import java.util.List;
  */
 @Service
 public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> implements OrderLogService {
-    @Autowired
-    private AlipayUtil alipayUtil;
+
 
     @Autowired
     private OrderLogMapper mapper;
 
-    @Override
-    public OrderLog getOrderLog(String outTradeId) {
-        return mapper.selectOne(new QueryWrapper<OrderLog>().eq("out_trade_id", outTradeId));
-    }
-
-
-    @Override
-    public String useAlipayUtils(OrderLog orderLog) {
-        return alipayUtil.pay(orderLog);
-    }
-
-    /**
-     * 查询订单支付状态并且更新数据库
-     *
-     * @param outTradeNo
-     * @return
-     */
-    @Override
-    public boolean checkOrderAndUpdateDatabase(String outTradeNo) {
-        //判断数据库里面的支付状态
-        OrderLog orderLog = this.getOrderLog(outTradeNo);
-        if (orderLog.getStatus().equals("unpaid")) {
-            //查单
-            String status = alipayUtil.queryTradeStatus(outTradeNo);
-            if (status.equals("TRADE_SUCCESS")) {
-                //支付宝那边支付成功
-                orderLog.setStatus("complete");
-                return mapper.updateById(orderLog) > 0;
-            }
-        } else {
-            return orderLog.getStatus().equals("complete");
-        }
-        return false;
-    }
 
     @Override
     public OrderLog getByWorkCode(String workCode) {
