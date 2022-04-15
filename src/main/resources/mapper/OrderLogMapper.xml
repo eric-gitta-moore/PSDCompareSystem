@@ -2,21 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newcompare.mapper.OrderLogMapper">
 
-    <update id="orderDelete" parameterType="java.util.List">
-        <trim prefix="update order_log">
-            <trim prefix="set" suffixOverrides=",">
-                <trim prefix="deleted =case" suffix="end,">
-                    <foreach collection="orderLogs" item="orderLog" index="index">
-                            when id=#{orderLog.id} then 1
-                    </foreach>
-                </trim>
-            </trim>
-        </trim>
-        <trim prefix="where">
-            <foreach collection="orderLogs" item="orderLog" index="index" separator="or">
-                id = #{orderLog.id}
+    <update id="orderDelete">
+        update order_log a
+            left join file b
+                on (a.first_id=b.id or a.second_id=b.id)
+        set a.deleted=1,b.deleted=1
+        where
+            <foreach collection="Ids" item="id" separator="or">
+                a.id = #{id}
             </foreach>
-        </trim>
     </update>
 
 

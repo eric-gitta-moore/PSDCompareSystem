@@ -3,11 +3,13 @@ package com.example.newcompare.controller;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.newcompare.common.utils.AlipayUtil;
 import com.example.newcompare.common.utils.ChangeToMapUtil;
 import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
+import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.service.OrderLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
