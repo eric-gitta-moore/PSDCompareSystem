@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newcompare.mapper.OrderLogMapper">
 
+    <update id="orderDelete">
+        update order_log a
+            left join file b
+                on (a.first_id=b.id or a.second_id=b.id)
+        set a.deleted=1,b.deleted=1
+        where
+            <foreach collection="Ids" item="id" separator="or">
+                a.id = #{id}
+            </foreach>
+    </update>
+
+
 
     <select id="getByWorkCode" resultType="com.example.newcompare.entity.OrderLog">
         SELECT * FROM order_log WHERE task_id = (SELECT task_group.id FROM task_group WHERE work_code = #{workCode})

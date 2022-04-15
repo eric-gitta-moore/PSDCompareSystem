@@ -26,13 +26,13 @@ public class FileDownloadUtil {
     /**
      * 下载的压缩包路径
      */
-    /*private static String dir = "D:/tmp/";*/
+//    private static String dir = "D:/tmp/";
     private static String dir = "/tmp/template";
 //    private static String dir = "D:\\tmp\\";
     /**
      * 解压后文件所在位置
      */
-    /*private static String desDirectory="D:/tmp";*/
+//    private static String desDirectory="D:/tmp";
     private static String desDirectory="/tmp/template";
 //    private static String desDirectory="D:\\tmp";
     /**
@@ -48,13 +48,12 @@ public class FileDownloadUtil {
     /**
      * 返回【0】文件路径，【1】文件大小,【2】文件分辨率
      * @param workcode
-     * @param id
      * @return
      * @throws Exception
      */
-    public static String[] url(String workcode,Integer id) throws Exception {
+    public static String[] url(String workcode) throws Exception {
         String zip = getZip(workcode);
-        FileInputStream inputStream_ = new FileInputStream(zip);
+//        FileInputStream inputStream_ = new FileInputStream(zip);
         String unzip = unzip(zip);
         //计算文件大小
         String size = FileUtil.fileSize(unzip);
@@ -66,7 +65,7 @@ public class FileDownloadUtil {
         inputStream.close();
         new File(unzip).delete();
         new File(zip).delete();
-        return new String[]{path,size,image.getWidth()+"*"+image.getHeight()};
+        return new String[]{path,size,image.getWidth()+"*"+image.getHeight(),"01"+unzip.split("01")[1]};
     }
 
 //    public static void main(String[] args) throws Exception {

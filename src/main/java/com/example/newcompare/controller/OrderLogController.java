@@ -6,6 +6,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.newcompare.common.utils.AlipayUtil;
 import com.example.newcompare.common.utils.ChangeToMapUtil;
+import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
@@ -53,7 +54,13 @@ public class OrderLogController {
     @DeleteMapping("/delete")
     @ApiOperation(value = "郑前===》批量删除，Ids: string数组的订单Id")
     public Result delete(@RequestParam("Ids") String[] Ids){
-        return service.remove(new LambdaQueryWrapper<OrderLog>().in(OrderLog::getId,Ids)) ? Result.success(200,"删除成功","") : Result.fail(400,"删除失败","");
+        int i = service.orderDelete(Ids);
+        //根据i的值避免重复操作返回错误信息
+        if(i>0) {
+            return Result.success("成功");
+        } else {
+            return Result.fail("失败");
+        }
     }
 
 

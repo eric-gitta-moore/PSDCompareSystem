@@ -67,4 +67,22 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
         int update = mapper.update(orderLog, wrapper);
         return update == 1;
     }
+
+
+
+    @Override
+    public int orderDelete(String[] Ids) {
+        List<OrderLog> orderLogs = null;
+        //防止Ids为空时造成异常
+        if (Ids.length > 0) {
+            orderLogs = mapper.selectBatchIds(Arrays.asList(Ids));
+        }
+        //当Ids对应的订单处于删除状态，则不执行SQL语句，反之执行
+        if(orderLogs!=null&&orderLogs.size()>0) {
+            return mapper.orderDelete(Ids);
+        }
+        else {
+            return 0;
+        }
+    }
 }
