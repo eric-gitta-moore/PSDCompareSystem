@@ -61,8 +61,7 @@ public class RechargeController {
         if (insert==0){
             throw new QRException();
         }
-//        String url = "http://114.55.0.204:8081/thymeleaf/index?id="+recharge.getId();
-        String url = "http://9ehimu.natappfree.cc/thymeleaf/index?id="+recharge.getId();
+        String url = "http://114.55.0.204:8081/thymeleaf/index?id="+recharge.getId();
         BufferedImage qr = QRCodeUtil.getBufferedImage(url, size);
         ImageIO.write(qr,"jpg",response.getOutputStream());
 
