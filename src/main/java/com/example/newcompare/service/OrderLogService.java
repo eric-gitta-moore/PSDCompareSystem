@@ -24,6 +24,8 @@ public interface OrderLogService extends IService<OrderLog> {
 
     void insertOrderLog(OrderLog orderLog);
 
+    int orderDelete(String[] Ids);
+
 
     OrderLog getDiffInformation(String out_trade_no);
 
