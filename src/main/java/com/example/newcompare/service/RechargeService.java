@@ -14,4 +14,10 @@ public interface RechargeService extends IService<Recharge> {
 
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
 
+
+    Recharge getDiffInformation(String out_trade_no);
+
+    boolean updateStatus(Recharge recharge);
+
+    boolean addUserMoney(Recharge recharge);
 }

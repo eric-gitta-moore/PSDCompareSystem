@@ -40,34 +40,6 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
     }
 
 
-    /**
-     * 获取对比订单信息
-     */
-    @Override
-    public OrderLog getDiffInformation(String id) {
-        /*LambdaQueryWrapper<OrderLog> wrapper = new LambdaQueryWrapper<>();*/
-        QueryWrapper<OrderLog> queryWrapper = new QueryWrapper<>();
-        /*QueryWrapper<OrderLog> w1=new QueryWrapper<>();*/
-        queryWrapper.eq("out_trade_id", id);
-        OrderLog orderLog = mapper.selectOne(queryWrapper);
-        System.out.println(orderLog);
-        return orderLog;
-    }
-
-
-    /**
-     * 修改订单支付状态
-     */
-
-    @Override
-    public boolean updateStatus(OrderLog orderLog) {
-        LambdaUpdateWrapper<OrderLog> wrapper = new LambdaUpdateWrapper<>();
-//        wrapper.eq(OrderLog::getOutTradeId, orderLog.getOutTradeId());
-        wrapper.set(OrderLog::getStatus, "finish");
-        int update = mapper.update(orderLog, wrapper);
-        return update == 1;
-    }
-
 
 
     @Override

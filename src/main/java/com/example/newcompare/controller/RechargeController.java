@@ -40,17 +40,17 @@ public class RechargeController {
     RechargeService rechargeService;
     @Autowired
     StringRedisTemplate redisTemplate;
-    @Autowired
-    OrderLogService service;
+
     /**
      * 获取跳转支付界面的二维码
-     * @param size 二维码大小
+     *
+     * @param size     二维码大小
      * @param response
      * @throws IOException
      */
     @ApiOperation("刘锦堂===>获取跳转支付界面的二维码，id：compare表id，size： 二维码大小，默认值250")
     @GetMapping("/getQRCode")
-    public void getQRCode(Integer size,String fee, HttpServletResponse response) throws IOException, QRException {
+    public void getQRCode(Integer size, String fee, HttpServletResponse response) throws IOException, QRException {
         Recharge recharge = new Recharge();
         recharge.setFee(fee);
         recharge.setTitle("充值");
@@ -58,12 +58,12 @@ public class RechargeController {
         recharge.setStatus("unpaid");
         int insert = rechargeService.insert(recharge);
         System.out.println(recharge);
-        if (insert==0){
+        if (insert == 0) {
             throw new QRException();
         }
-        String url = "http://114.55.0.204:8081/thymeleaf/index?id="+recharge.getId();
+        String url = "http://114.55.0.204:8081/thymeleaf/index?id=" + recharge.getId();
         BufferedImage qr = QRCodeUtil.getBufferedImage(url, size);
-        ImageIO.write(qr,"jpg",response.getOutputStream());
+        ImageIO.write(qr, "jpg", response.getOutputStream());
 
     }
 
@@ -72,7 +72,7 @@ public class RechargeController {
     public String topay(@PathVariable String outTradeNo, Model model) {
         Recharge recharge = rechargeService.getRecharge(outTradeNo);
         String form = rechargeService.useAlipayUtils(recharge);
-        model.addAttribute("form",form);
+        model.addAttribute("form", form);
         return "pay";
     }
 
@@ -90,15 +90,14 @@ public class RechargeController {
         boolean signVerified = AlipaySignature.rsaCheckV1(paramsMap, alipayUtil.getPublicKey() ,paramsMap.get("charset"), paramsMap.get("sign_type")); //调用SDK验证签名
         if(signVerified){
             // 验签成功后，按照支付结果异步通知中的描述，对支付结果中的业务内容进行二次校验，校验成功后在response中返回success并继续商户自身业务处理，校验失败返回failure
-            OrderLog out_trade_no = service.getDiffInformation(paramsMap.get("out_trade_no"));
-
-            if(alipayUtil.getAppid().equals(paramsMap.get("app_id"))){
+           Recharge out_trade_no = rechargeService.getDiffInformation(paramsMap.get("out_trade_no"));
+            if(!alipayUtil.getAppid().equals(paramsMap.get("app_id"))){
 
             }
-//            else if(paramsMap.get("out_trade_no").equals(out_trade_no.getOutTradeId())){
-//
-//            }
-            else if(paramsMap.get("total_amount").equals( out_trade_no.getFee().toString())){
+           else if(!paramsMap.get("out_trade_no").equals(out_trade_no.getOutTradeNo())){
+
+          }
+            else if(!paramsMap.get("total_amount").equals( out_trade_no.getFee().toString())){
 
             }else{
                 response.getWriter().print("fail");
@@ -108,7 +107,7 @@ public class RechargeController {
             if(paramsMap.get("trade_status").equals("TRADE_SUCCESS") || paramsMap.get("trade_status").equals("TRADE_FINISHED")){
 
 
-                if( service.updateStatus(out_trade_no)){
+                if( rechargeService.updateStatus(out_trade_no) & rechargeService.addUserMoney(out_trade_no)){
                     response.getWriter().print("success");
                 }else {
                     response.getWriter().print("fail");
@@ -121,4 +120,7 @@ public class RechargeController {
             response.getWriter().print("fail");
         }
     }
+
+
+
 }
