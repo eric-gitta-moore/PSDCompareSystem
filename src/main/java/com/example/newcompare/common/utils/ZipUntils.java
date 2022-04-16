@@ -1,6 +1,7 @@
 package com.example.newcompare.common.utils;
 
 import java.io.*;
+import java.lang.reflect.AccessibleObject;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ public class ZipUntils {
      */
     public static String getZip(String filePath) throws Exception {
         File file = new File(filePath);
-        System.out.println(file.getName());
         String outputFIleName = file.getName() + ".zip";
         ArrayList<File> fileList = new ArrayList<>();
         if (file.isDirectory()) {
@@ -31,7 +31,7 @@ public class ZipUntils {
         }
         FileInputStream fileInputStream = null;
         //?
-        CheckedOutputStream checkedOutputStream = new CheckedOutputStream(new FileOutputStream("src/main/resources/"+outputFIleName), new Adler32());
+        CheckedOutputStream checkedOutputStream = new CheckedOutputStream(new FileOutputStream(new StringBuilder(filePath).delete(7,10).toString()+outputFIleName), new Adler32());
         ZipOutputStream zipOutputStream = new ZipOutputStream(checkedOutputStream);
         for (File f : fileList) {
             if (f.isDirectory()) {
@@ -48,12 +48,7 @@ public class ZipUntils {
             fileInputStream.close();
 
         }
-        /*byte[] bytes = new byte[1024];
-        int read;
-        while ((read = fileInputStream.read(bytes)) != -1) {
-            zipOutputStream.write(bytes);
-        }*/
-       // Stream Closed
+
 
         zipOutputStream.close();
 
@@ -76,9 +71,7 @@ public class ZipUntils {
                 file.delete();
             } else {
                  for(File q1:files){
-                     System.out.println(q1.getName());
-                     boolean delete = q1.delete();
-                     System.out.println(delete);
+                   deleteDir(q1.getPath());
                  }
                 file.delete();
             }

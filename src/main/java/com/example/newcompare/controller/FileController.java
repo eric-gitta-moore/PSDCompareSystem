@@ -213,7 +213,7 @@ public class FileController {
 
             ServletOutputStream out = null;
             try {
-                in = new FileInputStream("src/main/resources/img.zip");
+                in = new FileInputStream("/hello/img.zip");
                 out = response.getOutputStream();
                 int len = 0;
                 byte[] buffer = new byte[1024];
@@ -234,8 +234,8 @@ public class FileController {
         }
 
 
-        ZipUntils.deleteDir("src/main/resources/img");
-        ZipUntils.dalete1("src/main/resources/img.zip");
+        ZipUntils.deleteDir("/hello/img");
+        ZipUntils.dalete1("/hello/img.zip");
 
 
 

@@ -47,7 +47,8 @@ public class OrderLogController {
     OrderLogService service;
 
 
-
+  @Autowired
+  AlipayUtil alipayUtil;
 
 
 
@@ -98,9 +99,6 @@ public class OrderLogController {
 //            return Result.fail(400,"对比成功，但保存url失败！",null);
 //        }
 //    }
-
-
-
 
 
 

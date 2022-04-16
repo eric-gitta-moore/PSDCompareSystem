@@ -94,24 +94,24 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     @Override
     public boolean backZip(List<OrderLog> list) throws Exception {
         //不要放在项目里，设置一个绝对路径常量
-        java.io.File file=new java.io.File("src/main/resources/img");//?
+        java.io.File file=new java.io.File("/hello/img");//?
         file.mkdirs();
 
         for(OrderLog orderLog:list){
-            if("finish".equals(orderLog.getStatus())){
+            if("complete".equals(orderLog.getStatus())){
                 String url = orderLog.getUrl();
                 if(url!=null && !"".equals(url)){
                     HttpURLConnection conn = null;
                     InputStream inputStream = null;
                     FileOutputStream e1=null;
                     try{
-                        URL url1 = new URL(url);
+                        URL url1 = new URL(" http://"+url);
                           conn = (HttpURLConnection)url1.openConnection();
                            conn.connect();
                         //得到输入流
                          inputStream = conn.getInputStream();
 
-                        e1=new FileOutputStream("src/main/resources/img/"+orderLog.getId()+".png");
+                        e1=new FileOutputStream("/hello/img/"+orderLog.getId()+".png");
 
                          byte[] bys=new byte[1024];
                          int len;
@@ -133,7 +133,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             }
         }
 
-        ZipUntils.getZip("src/main/resources/img");
+        ZipUntils.getZip("/hello/img");
 
         return true;
 

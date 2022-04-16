@@ -3,24 +3,29 @@ package com.example.newcompare.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.Result;
+import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
+import com.example.newcompare.service.FileService;
 import com.example.newcompare.service.TaskGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @Api(value = "taskGroup")
 @RequestMapping("/taskGroup")
 public class TaskGroupController {
+
+    @Autowired
+    FileService fileService;
 
     @Autowired
     TaskGroupService service;
@@ -76,5 +81,63 @@ public class TaskGroupController {
     @DeleteMapping("/delete")
     public Result deleteGroups(@RequestBody ArrayList<Integer> groupIds) {
         return service.remove(new LambdaQueryWrapper<TaskGroup>().in(TaskGroup::getId,groupIds)) ? Result.success(200,"删除成功","") : Result.fail(404,"删除失败","");
+
+
     }
+
+
+
+
+    /**
+     * @return 文件
+     */
+    @ApiOperation("肖恒宇====>多文件下载")
+    @GetMapping("/download")
+    public void fileDownload(Integer[] ids, HttpServletResponse response) throws Exception {
+        List<TaskGroup> allSendIdFromTask = service.getAllIdFromTask(ids);
+
+        List<OrderLog> aLlIdByTask = service.getALlIdByTask(allSendIdFromTask);
+
+        boolean iu = service.backZip(aLlIdByTask);
+
+        //  response.setContentType("application/octet-stream");
+
+        if (iu == true) {
+            //读，写
+            FileInputStream in = null;
+
+            ServletOutputStream out = null;
+            try {
+                in = new FileInputStream("/helli/img.zip");
+                out = response.getOutputStream();
+                int len = 0;
+                byte[] buffer = new byte[1024];
+                while ((len = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, len);
+                }
+            } catch (Exception o) {
+                o.printStackTrace();
+            } finally {
+
+                in.close();
+                out.close();
+
+            }
+
+            //* return Result.success();*//*
+
+        }
+
+
+        ZipUntils.deleteDir("/helli/img");
+        ZipUntils.dalete1("/helli/img.zip");
+
+
+
+        /*  return Result.fail("下载失败");*/
+    }
+
+
+
+
 }

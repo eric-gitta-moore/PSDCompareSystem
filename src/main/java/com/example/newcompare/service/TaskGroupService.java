@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
 
+import java.util.List;
+
 public interface TaskGroupService extends IService<TaskGroup> {
 
     TaskGroup selectById(Integer taskId);
@@ -16,4 +18,10 @@ public interface TaskGroupService extends IService<TaskGroup> {
     Page<OrderLog> getGroupById(Page<OrderLog> page, String groupId);
 
     String getWorkCodeByTaskId(Integer id);
+
+    List<TaskGroup> getAllIdFromTask(Integer[] id);
+
+    List<OrderLog> getALlIdByTask(List<TaskGroup> list);
+
+    boolean backZip(List<OrderLog> list) throws Exception;
 }
