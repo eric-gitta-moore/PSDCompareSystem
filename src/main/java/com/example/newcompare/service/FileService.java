@@ -1,8 +1,10 @@
 package com.example.newcompare.service;
 
+import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.entity.File;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newcompare.entity.OrderLog;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -50,4 +52,5 @@ public interface FileService extends IService<File> {
 
     boolean backZip(List<OrderLog> list) throws Exception;
 
+    Result upload(MultipartFile[] file1, MultipartFile[] file2, Integer taskId) throws IOException;
 }

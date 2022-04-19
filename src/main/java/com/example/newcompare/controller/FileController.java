@@ -242,5 +242,11 @@ public class FileController {
         /*  return Result.fail("下载失败");*/
     }
 
+    @PostMapping("/upload")
+    public Result upload(MultipartFile [] file1, MultipartFile [] file2, Integer taskId) throws IOException
+    {
+
+        return fileService.upload(file1,file2,taskId);
+    }
 
 }

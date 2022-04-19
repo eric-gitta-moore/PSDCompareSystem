@@ -245,7 +245,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 ResponseResult responseResult =
                         restTemplate.postForObject("http://139.9.203.100:9721/cadpare/upload", httpEntity, ResponseResult.class);
                 Integer errcode = responseResult.getErrcode();
-                if (errcode != 0) {
+                if (errcode == 0) {
                     return true;
                 }
             } catch (Exception e) {
@@ -275,7 +275,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             ResponseResult responseResult =
                     restTemplate.postForObject("http://139.9.203.100:9721/cadpare/start", httpEntity, ResponseResult.class);
             Integer errcode = responseResult.getErrcode();
-            if(errcode != 0)
+            if(errcode == 0)
             {
                 return true;
             }

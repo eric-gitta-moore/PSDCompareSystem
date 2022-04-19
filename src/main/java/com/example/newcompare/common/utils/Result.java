@@ -39,6 +39,7 @@ public class Result {
     }
 
 
+
     /**
      *
      * @param data 获取的数据
