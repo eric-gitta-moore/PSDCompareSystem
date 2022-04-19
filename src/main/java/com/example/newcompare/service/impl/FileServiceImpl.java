@@ -219,7 +219,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                         OrderLog orderLog =
                                 new OrderLog().setCreateTime(LocalDateTime.now()).
                                         setStatus("incomplete").setFee(b).setWorkCode(workCode).
-                                        setTitle("test").setSerialNumber(UUID.randomUUID().toString()).setDeleted(0).
+                                        setTitle("test").setSerialNumber(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+random.nextInt(99)).setDeleted(0).
                                         setFirstId(fileId1).setSecondId(fileId2).setSize(fileInformations1.get(i).getSize()).
                                         setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId);
                         orderLogService.insertOrderLog(orderLog);
