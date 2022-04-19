@@ -36,7 +36,7 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
 
     @Override
     public void insertOrderLog(OrderLog orderLog) {
-
+        mapper.insert(orderLog);
     }
 
 

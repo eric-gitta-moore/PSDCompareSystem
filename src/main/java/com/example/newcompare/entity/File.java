@@ -39,6 +39,7 @@ public class File implements Serializable {
     /**
      * 文件码
      */
+    @TableField("filecode")
     private String filecode;
 
 
@@ -52,6 +53,7 @@ public class File implements Serializable {
      * 文件名
 
      */
+    @TableField("name")
     private String name;
 
 
@@ -59,16 +61,19 @@ public class File implements Serializable {
     /**
      * 任务组id
      */
+    @TableField("task_id")
     private Integer taskId;
 
     /**
      * 文件大小
      */
+    @TableField("size")
     private String size;
 
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private LocalDateTime createTime;
 
     /**
