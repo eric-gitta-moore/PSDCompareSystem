@@ -167,8 +167,12 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             List<FileInformation> fileInformations2 = FileUtil.getInformation(file2);
             //用于存放订单信息
             List<OrderLog> orderLogList = new ArrayList<>();
+            User user = new User();
+            int num;
             for(int i = 0; i < file1.length && i < file2.length; i++)
             {
+
+
 
                 File file_1 = new File().setFilecode(formatter.format(new Date())+random.nextInt(99))
                         .setDeleted(0).setName(file1[i].getName()).setSize(fileInformations1.get(i).getSize()).setTaskId(taskId).setCreateTime(LocalDateTime.now());
@@ -186,33 +190,38 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 Boolean uploadFileStatus = uploadFile(file1[i], workCode, file_1.getFilecode());
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
-                //启动两张图片的对比任务
-                Boolean startCompareStatus = startCompare(workCode, file_1.getFilecode(), file_2.getFilecode());
-                if (uploadFileStatus && uploadFileStatus1 && startCompareStatus && userService.getBalance(1) >= 100)
+                synchronized (user)
                 {
-                    String url = "http://139.9.203.100:9721/cadpare/status?workcode="+workCode;
-                    BigDecimal b = new BigDecimal("100");
-                    OrderLog orderLog =
-                            new OrderLog().setCreateTime(LocalDateTime.now()).
-                                    setStatus("incomplete").setFee(b).setWorkCode(workCode).
-                                    setTitle("test").setSerialNumber(UUID.randomUUID().toString()).setDeleted(0).
-                                    setFirstId(fileId1).setSecondId(fileId2).setSize(fileInformations1.get(i).getSize()).
-                                    setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId).setUrl(url);
-                    orderLogService.insertOrderLog(orderLog);
-                    orderLogList.add(orderLog);
-                    Float balance = userService.getBalance(1);
-                    balance -= 100;
-                    User user = new User();
-                    user.setBalance(balance);
-                    userService.updataUser(user);
+                    if(userService.getBalance(1) < 100)
+                    {
+                        num = file1.length - orderLogList.size();
+                        return Result.fail(400,"账户余额不足，请及时充值, 启动对比成功数："+orderLogList.size()+"\t启动对比失败数："+num,orderLogList);
+                    }
+                    //启动两张图片的对比任务
+                    Boolean startCompareStatus = startCompare(workCode, file_1.getFilecode(), file_2.getFilecode());
+
+                    if (uploadFileStatus && uploadFileStatus1 && startCompareStatus && userService.getBalance(1) >= 100)
+                    {
+                        String url = "http://139.9.203.100:9721/cadpare/status?workcode="+workCode;
+                        BigDecimal b = new BigDecimal("100");
+                        OrderLog orderLog =
+                                new OrderLog().setCreateTime(LocalDateTime.now()).
+                                        setStatus("incomplete").setFee(b).setWorkCode(workCode).
+                                        setTitle("test").setSerialNumber(UUID.randomUUID().toString()).setDeleted(0).
+                                        setFirstId(fileId1).setSecondId(fileId2).setSize(fileInformations1.get(i).getSize()).
+                                        setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId).setUrl(url);
+                        orderLogService.insertOrderLog(orderLog);
+                        orderLogList.add(orderLog);
+                        Float balance = userService.getBalance(1);
+                        balance -= 100;
+                        user.setBalance(balance);
+                        userService.updataUser(user);
+                    }
                 }
-                if(userService.getBalance(1) <= 100)
-                {
-                    return Result.fail(400,"账户余额不足，请及时充值",null);
-                }
+
             }
             //计算对比失败组数
-            int num = file1.length - orderLogList.size();
+            num = file1.length - orderLogList.size();
             return Result.success(200,"上传成功，对比成功数:"+orderLogList.size()+"对比失败数："+num,orderLogList);
         }
         return Result.fail(400,"文件上传失败，请重试！",null);
