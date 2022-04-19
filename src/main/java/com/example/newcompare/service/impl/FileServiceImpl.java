@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.newcompare.service.OrderLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -150,7 +151,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             }
         }
 
-        ZipUntils.getZip("/"+uuid+"/img");
+        ZipUntils.getZip("/hello/img");
 
         return true;
 
@@ -161,6 +162,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
 
     @Override
     public Result upload(MultipartFile[] file1, MultipartFile[] file2, Integer taskId) throws IOException {
@@ -198,7 +202,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 Boolean uploadFileStatus = uploadFile(file1[i], workCode, file_1.getFilecode());
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
-                synchronized (user)
+                synchronized (user.getUserId())
                 {
                     if(userService.getBalance(1) < 100)
                     {
@@ -217,9 +221,10 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                                         setStatus("incomplete").setFee(b).setWorkCode(workCode).
                                         setTitle("test").setSerialNumber(UUID.randomUUID().toString()).setDeleted(0).
                                         setFirstId(fileId1).setSecondId(fileId2).setSize(fileInformations1.get(i).getSize()).
-                                        setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId).setUrl(url);
+                                        setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId);
                         orderLogService.insertOrderLog(orderLog);
                         orderLogList.add(orderLog);
+                        redisTemplate.opsForSet().remove("compare",orderLog.getWorkCode());
                         Float balance = userService.getBalance(1);
                         balance -= 100;
                         user.setBalance(balance);

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.User;
+import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.service.OrderLogService;
 import com.example.newcompare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class QueryUtil {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    OrderLogMapper orderLogMapper;
 
     /**
      * 查询对比结果
@@ -53,7 +57,14 @@ public class QueryUtil {
             orderLogService.update(new UpdateWrapper<OrderLog>().eq("work_code",workCode).set("result",s).set("status","complete"));
             if(s.equals("有差异") || s.equals("有差异")){
                 String[] url = FileDownloadUtil.url(workCode);
-                orderLogService.update(new UpdateWrapper<OrderLog>().eq("work_code",workCode).set("resolution",url[2]).set("size",url[1]).set("url",url[0]).set("file_name",url[3]));
+                int count = orderLogMapper.getCount(url[3]);
+                if (count>=1){
+                    url[3] = url[3].split("\\.")[0]+count+"."+url[3].split("\\.")[1];
+                    orderLogService.update(new UpdateWrapper<OrderLog>().eq("work_code",workCode).set("resolution",url[2]).set("size",url[1]).set("url",url[0]).set("file_name",url[3]));
+                } else {
+                    orderLogService.update(new UpdateWrapper<OrderLog>().eq("work_code",workCode).set("resolution",url[2]).set("size",url[1]).set("url",url[0]).set("file_name",url[3]));
+                }
+
             }else {
                 //对比不成功退款到余额
                 User user = userService.getById("1");

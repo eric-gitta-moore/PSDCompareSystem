@@ -114,7 +114,6 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
-    @Deprecated
     public static List<FileInformation> getInformation(MultipartFile[] files) throws IOException {
         List<FileInformation> list = new ArrayList<>();
         for (MultipartFile file:files){

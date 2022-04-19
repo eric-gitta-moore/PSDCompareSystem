@@ -15,6 +15,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 @SpringBootTest
@@ -71,9 +73,14 @@ class NewCompareApplicationTests {
     @Test
     void test3(){
 
-        final OrderLog work_code = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code", "123124124124"));
+//        final OrderLog work_code = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code", "123124124124"));
+//
+//        System.out.println(work_code);
 
-        System.out.println(work_code);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        System.out.println(formatter.format(new Date()));
+
+
     }
 
 }
