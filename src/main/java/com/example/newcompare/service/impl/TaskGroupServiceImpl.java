@@ -2,6 +2,7 @@ package com.example.newcompare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
@@ -19,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup> implements TaskGroupService {
@@ -90,8 +92,10 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
      */
     @Override
     public boolean backZip(List<OrderLog> list) throws Exception {
-
-        java.io.File file=new java.io.File("/helli/img");//?
+        //不要放在项目里，设置一个绝对路径常量
+        UUID uuid = UUID.randomUUID();
+        ThreadLocalUtil.saveUser(uuid.toString());
+        java.io.File file=new java.io.File("/"+uuid+"/img");//?
         file.mkdirs();
 
         for(OrderLog orderLog:list){
@@ -108,7 +112,7 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
                         //得到输入流
                         inputStream = conn.getInputStream();
 
-                        e1=new FileOutputStream("/helli/img/"+orderLog.getId()+".png");
+                        e1=new FileOutputStream("/"+uuid+"/img/"+orderLog.getId()+".png");
 
                         byte[] bys=new byte[1024];
                         int len;
@@ -130,7 +134,7 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
             }
         }
 
-        ZipUntils.getZip("/helli/img");
+        ZipUntils.getZip("/"+uuid+"/img");
 
         return true;
 

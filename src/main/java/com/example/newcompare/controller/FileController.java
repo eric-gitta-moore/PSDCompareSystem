@@ -1,8 +1,7 @@
 package com.example.newcompare.controller;
 
 
-import com.example.newcompare.common.utils.FileUtil;
-import com.example.newcompare.common.utils.Result;
+import com.example.newcompare.common.utils.*;
 import com.example.newcompare.entity.*;
 import com.example.newcompare.service.FileService;
 import com.example.newcompare.service.OrderLogService;
@@ -17,7 +16,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.example.newcompare.common.utils.Result;
-import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.FileService;
 
@@ -213,7 +211,7 @@ public class FileController {
 
             ServletOutputStream out = null;
             try {
-                in = new FileInputStream("/hello/img.zip");
+                in = new FileInputStream("/"+ ThreadLocalUtil.getUuid() +"/img.zip");
                 out = response.getOutputStream();
                 int len = 0;
                 byte[] buffer = new byte[1024];
@@ -234,8 +232,8 @@ public class FileController {
         }
 
 
-        ZipUntils.deleteDir("/hello/img");
-        ZipUntils.dalete1("/hello/img.zip");
+        ZipUntils.deleteDir("/"+ThreadLocalUtil.getUuid());
+
 
 
 

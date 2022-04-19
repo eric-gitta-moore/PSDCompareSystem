@@ -3,6 +3,7 @@ package com.example.newcompare.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.Result;
+import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
@@ -108,7 +109,7 @@ public class TaskGroupController {
 
             ServletOutputStream out = null;
             try {
-                in = new FileInputStream("/helli/img.zip");
+                in = new FileInputStream("/"+ThreadLocalUtil.getUuid() +"/img.zip");
                 out = response.getOutputStream();
                 int len = 0;
                 byte[] buffer = new byte[1024];
@@ -129,8 +130,7 @@ public class TaskGroupController {
         }
 
 
-        ZipUntils.deleteDir("/helli/img");
-        ZipUntils.dalete1("/helli/img.zip");
+        ZipUntils.deleteDir("/"+ ThreadLocalUtil.getUuid());
 
 
 
