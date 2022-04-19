@@ -31,7 +31,7 @@ public class ZipUntils {
         }
         FileInputStream fileInputStream = null;
         //?
-        CheckedOutputStream checkedOutputStream = new CheckedOutputStream(new FileOutputStream(new StringBuilder(filePath).delete(7,10).toString()+outputFIleName), new Adler32());
+        CheckedOutputStream checkedOutputStream = new CheckedOutputStream(new FileOutputStream(filePath+".zip"), new Adler32());
         ZipOutputStream zipOutputStream = new ZipOutputStream(checkedOutputStream);
         for (File f : fileList) {
             if (f.isDirectory()) {

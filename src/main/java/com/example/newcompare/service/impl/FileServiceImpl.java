@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.Result;
+import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.File;
 import com.example.newcompare.entity.OrderLog;
@@ -24,11 +25,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * <p>
@@ -40,6 +39,8 @@ import java.util.Map;
  */
 @Service
 public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements FileService {
+
+
 
     @Autowired
     private FileMapper fileMapper;
@@ -94,7 +95,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     @Override
     public boolean backZip(List<OrderLog> list) throws Exception {
         //不要放在项目里，设置一个绝对路径常量
-        java.io.File file=new java.io.File("/hello/img");//?
+        UUID uuid = UUID.randomUUID();
+        ThreadLocalUtil.saveUser(uuid.toString());
+        java.io.File file=new java.io.File("/"+uuid+"/img");//?
         file.mkdirs();
 
         for(OrderLog orderLog:list){
@@ -111,7 +114,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                         //得到输入流
                          inputStream = conn.getInputStream();
 
-                        e1=new FileOutputStream("/hello/img/"+orderLog.getId()+".png");
+                        e1=new FileOutputStream("/"+uuid+"/img/"+orderLog.getId()+".png");
 
                          byte[] bys=new byte[1024];
                          int len;
@@ -133,7 +136,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             }
         }
 
-        ZipUntils.getZip("/hello/img");
+        ZipUntils.getZip("/"+uuid+"/img");
 
         return true;
 
