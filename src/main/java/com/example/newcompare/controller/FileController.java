@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import com.example.newcompare.entity.File;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -199,10 +199,10 @@ public class FileController {
     @ApiOperation("肖恒宇====>多文件下载")
     @GetMapping("/download")
     public void fileDownload(Integer[] id, HttpServletResponse response) throws Exception {
-
+        String path = "/tmp/template/"+UUID.randomUUID();
         List<OrderLog> allSendId = fileService.getAllSendId(id);
 
-        boolean iu = fileService.backZip(allSendId);
+        boolean iu = fileService.backZip(allSendId,path);
         //  response.setContentType("application/octet-stream");
 
         if (iu == true) {
@@ -211,7 +211,7 @@ public class FileController {
 
             ServletOutputStream out = null;
             try {
-                in = new FileInputStream("/"+ ThreadLocalUtil.getUuid() +"/img.zip");
+                in = new FileInputStream(path+".zip");
                 out = response.getOutputStream();
                 int len = 0;
                 byte[] buffer = new byte[1024];
@@ -232,7 +232,9 @@ public class FileController {
         }
 
 
-        ZipUntils.deleteDir("/"+ThreadLocalUtil.getUuid());
+        ZipUntils.deleteDir(path);
+        new File(path+".zip").delete();
+
 
 
 

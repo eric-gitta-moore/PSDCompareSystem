@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.interfaces.Compare;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.service.OrderLogService;
 import com.qiniu.util.Json;
@@ -77,8 +78,10 @@ class NewCompareApplicationTests {
 //
 //        System.out.println(work_code);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        System.out.println(formatter.format(new Date()));
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+//        System.out.println(formatter.format(new Date()));
+
+        System.out.println(ThreadLocalUtil.getUuid());
 
 
     }

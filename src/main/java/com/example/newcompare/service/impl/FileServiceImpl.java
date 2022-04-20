@@ -108,11 +108,11 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
      * @return 数据结果
      */
     @Override
-    public boolean backZip(List<OrderLog> list) throws Exception {
+    public boolean backZip(List<OrderLog> list,String path) throws Exception {
         //不要放在项目里，设置一个绝对路径常量
         UUID uuid = UUID.randomUUID();
         ThreadLocalUtil.saveUser(uuid.toString());
-        java.io.File file=new java.io.File("/"+uuid+"/img");//?
+        java.io.File file=new java.io.File(path);//?
         file.mkdirs();
 
         for(OrderLog orderLog:list){
@@ -129,7 +129,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                         //得到输入流
                          inputStream = conn.getInputStream();
 
-                        e1=new FileOutputStream("/"+uuid+"/img/"+orderLog.getId()+".png");
+                        e1=new FileOutputStream(path+"/"+orderLog.getFileName()+".png");
 
                          byte[] bys=new byte[1024];
                          int len;
@@ -151,7 +151,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             }
         }
 
-        ZipUntils.getZip("/hello/img");
+        ZipUntils.getZip(path);
 
         return true;
 
