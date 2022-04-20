@@ -2,14 +2,11 @@ package com.example.newcompare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.FileUtil;
 import com.example.newcompare.common.utils.Result;
-import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.*;
 import com.example.newcompare.mapper.FileMapper;
-import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.service.FileService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newcompare.service.UserService;
@@ -109,9 +106,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
      */
     @Override
     public boolean backZip(List<OrderLog> list,String path) throws Exception {
-        //不要放在项目里，设置一个绝对路径常量
-        UUID uuid = UUID.randomUUID();
-        ThreadLocalUtil.saveUser(uuid.toString());
+
         java.io.File file=new java.io.File(path);//?
         file.mkdirs();
 
@@ -129,7 +124,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                         //得到输入流
                          inputStream = conn.getInputStream();
 
-                        e1=new FileOutputStream(path+"/"+orderLog.getFileName()+".png");
+                        e1=new FileOutputStream(path+"/"+orderLog.getFileName());
 
                          byte[] bys=new byte[1024];
                          int len;

@@ -41,69 +41,22 @@ import java.util.concurrent.TimeUnit;
 @ResponseBody
 public class OrderLogController {
 
-
-
     @Resource
     OrderLogService service;
 
-
-  @Autowired
-  AlipayUtil alipayUtil;
-
-
+    @Autowired
+    AlipayUtil alipayUtil;
 
     @DeleteMapping("/delete")
     @ApiOperation(value = "郑前===》批量删除，Ids: string数组的订单Id")
-    public Result delete(@RequestParam("Ids") String[] Ids){
+    public Result delete(@RequestParam("Ids") String[] Ids) {
         int i = service.orderDelete(Ids);
         //根据i的值避免重复操作返回错误信息
-        if(i>0) {
+        if (i > 0) {
             return Result.success("成功");
         } else {
             return Result.fail("失败");
         }
     }
-
-
-
-//    @ApiOperation("徐启峰====>修改订单的状态")
-//    @PutMapping("/changeState")
-//    public Result changeState(String workCode) throws Exception {
-//        int responseCode = CompareQueryUtil.querycomparestatus(workCode);
-//        OrderLog orderLog = service.getByWorkCode(workCode);
-//        if(orderLog==null||orderLog.getDeleted()==1) {
-//            return Result.fail(400,"订单不存在,无法修改订单状态！",null);
-//        }
-//        if(responseCode==400){
-//            //修改对比状态为失败
-//            orderLog.setStatus("fail");
-//            boolean b = service.updateById(orderLog);
-//            if (b) {
-//                return Result.fail(400,"文件对比失败！成功修改订单状态为失败",null);
-//            } else {
-//                return Result.fail(400,"文件对比失败！未成功修改订单状态为失败",null);
-//            }
-//        }
-//        //修改对比状态为成功
-//        orderLog.setStatus("complete");
-//        //向公司服务器发送请求获取文件的大小，分辨率，路径并保存。
-//        Integer id = orderLog.getId();
-//        String[] url = FileDownloadUtil.url(workCode, id);
-//        orderLog.setUrl(url[0]);
-//        orderLog.setSize(url[1]);
-//        orderLog.setResolution(url[2]);
-//        boolean b = service.updateById(orderLog);
-//        if (b) {
-//            return Result.success(200,"对比成功,url保存成功！",null);
-//        } else {
-//            return Result.fail(400,"对比成功，但保存url失败！",null);
-//        }
-//    }
-
-
-
-
-
-
 
 }

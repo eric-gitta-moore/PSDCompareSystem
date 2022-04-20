@@ -1,12 +1,6 @@
 package com.example.newcompare;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.interfaces.Compare;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.newcompare.common.utils.ThreadLocalUtil;
-import com.example.newcompare.entity.OrderLog;
+
 import com.example.newcompare.service.OrderLogService;
 import com.qiniu.util.Json;
 import org.junit.jupiter.api.Test;
@@ -81,7 +75,6 @@ class NewCompareApplicationTests {
 //        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 //        System.out.println(formatter.format(new Date()));
 
-        System.out.println(ThreadLocalUtil.getUuid());
 
 
     }

@@ -23,5 +23,5 @@ public interface TaskGroupService extends IService<TaskGroup> {
 
     List<OrderLog> getALlIdByTask(List<TaskGroup> list);
 
-    boolean backZip(List<OrderLog> list) throws Exception;
+    boolean backZip(List<OrderLog> list,String path) throws Exception;
 }

@@ -58,9 +58,17 @@ public class QueryUtil {
             if(s.equals("有差异") || s.equals("有差异")){
                 String[] url = FileDownloadUtil.url(workCode);
                 int count = orderLogMapper.getCount(url[3]);
+                System.out.println(233);
                 if (count>=1){
-                    url[3] = url[3].split("\\.")[0]+count+"."+url[3].split("\\.")[1];
-                    orderLogService.update(new UpdateWrapper<OrderLog>().eq("work_code",workCode).set("resolution",url[2]).set("size",url[1]).set("url",url[0]).set("file_name",url[3]));
+                    System.out.println(123);
+                    String[] split = url[3].split("\\.");
+                    split[split.length-2]+=count+"";
+                    StringBuilder name=new StringBuilder();
+                    for (String s1 : split) {
+                        name.append(s1).append(".");
+                    }
+                    name.deleteCharAt(name.length()-1);
+                    orderLogService.update(new UpdateWrapper<OrderLog>().eq("work_code",workCode).set("resolution",url[2]).set("size",url[1]).set("url",url[0]).set("file_name",name.toString()));
                 } else {
                     orderLogService.update(new UpdateWrapper<OrderLog>().eq("work_code",workCode).set("resolution",url[2]).set("size",url[1]).set("url",url[0]).set("file_name",url[3]));
                 }

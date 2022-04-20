@@ -3,7 +3,6 @@ package com.example.newcompare.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.Result;
-import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -98,8 +98,8 @@ public class TaskGroupController {
         List<TaskGroup> allSendIdFromTask = service.getAllIdFromTask(ids);
 
         List<OrderLog> aLlIdByTask = service.getALlIdByTask(allSendIdFromTask);
-
-        boolean iu = service.backZip(aLlIdByTask);
+        String path = "/tmp/template/"+UUID.randomUUID();
+        boolean iu = service.backZip(aLlIdByTask,path);
 
         //  response.setContentType("application/octet-stream");
 
@@ -109,7 +109,7 @@ public class TaskGroupController {
 
             ServletOutputStream out = null;
             try {
-                in = new FileInputStream("/"+ThreadLocalUtil.getUuid() +"/img.zip");
+                in = new FileInputStream(path+".zip");
                 out = response.getOutputStream();
                 int len = 0;
                 byte[] buffer = new byte[1024];
@@ -130,7 +130,8 @@ public class TaskGroupController {
         }
 
 
-        ZipUntils.deleteDir("/"+ ThreadLocalUtil.getUuid());
+        ZipUntils.deleteDir(path);
+        new File(path+".zip").delete();
 
 
 
