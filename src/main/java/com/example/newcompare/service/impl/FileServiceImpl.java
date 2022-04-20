@@ -219,7 +219,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                                         setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId);
                         orderLogService.insertOrderLog(orderLog);
                         orderLogList.add(orderLog);
-                        redisTemplate.opsForSet().remove("compare",orderLog.getWorkCode());
+                        redisTemplate.opsForSet().remove("order",orderLog.getWorkCode());
                         Float balance = userService.getBalance(1);
                         balance -= 100;
                         user.setBalance(balance);
