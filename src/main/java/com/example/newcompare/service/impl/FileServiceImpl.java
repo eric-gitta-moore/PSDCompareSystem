@@ -111,7 +111,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         file.mkdirs();
 
         for(OrderLog orderLog:list){
-            if("complete".equals(orderLog.getStatus())){
+            if("complete".equals(orderLog.getStatus()) && ("有差异".equals(orderLog.getResult()) || "无差异".equals(orderLog.getResult()))){
                 String url = orderLog.getUrl();
                 if(url!=null && !"".equals(url)){
                     HttpURLConnection conn = null;

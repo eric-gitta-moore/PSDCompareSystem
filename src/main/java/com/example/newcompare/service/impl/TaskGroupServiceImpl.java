@@ -64,13 +64,13 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
         List<OrderLog> q1=new ArrayList<>();
         QueryWrapper<OrderLog> wrapper=new QueryWrapper<>();
         for(TaskGroup taskGroup:list){
-            wrapper.eq("task_id",taskGroup.getId());
             List<OrderLog> orderLogs = orderLogMapper.selectList(wrapper.eq("task_id",taskGroup.getId()));
             for (OrderLog orderLog : orderLogs) {
-                q1.add(orderLog);
+                if("complete".equals(orderLog.getStatus()) && ("有差异".equals(orderLog.getResult()) || "无差异".equals(orderLog.getResult()))){
+                    q1.add(orderLog);
+                }
+
             }
-
-
         }
 
         return q1;
