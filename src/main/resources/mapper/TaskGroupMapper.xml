@@ -158,7 +158,7 @@
                                      LEFT JOIN FILE c ON (b.first_id = c.id OR b.second_id = c.id)) AS d
                            ON a.`id` = d.`orderTask_id`
         WHERE a.`id` = #{groupId}
-          and d.`orderDeleted` = 0
+          and d.`orderDeleted` = 0 or d.`orderDeleted` = null
         ORDER BY d.`orderCreate_time` ASC
     </select>
 
