@@ -101,7 +101,7 @@
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
             (a.`create_time` between '${param3}' and '${param4}') and
         </if>
-        d.`orderDeleted`=0 and 1=1
+        (d.`orderDeleted`=0 or d.`orderDeleted`=null) and 1=1
         order by a.`create_time` ${param5}
     </select>
 
