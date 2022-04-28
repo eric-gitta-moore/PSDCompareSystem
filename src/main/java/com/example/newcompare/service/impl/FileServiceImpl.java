@@ -175,12 +175,10 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             List<FileInformation> fileInformations2 = FileUtil.getInformation(file2);
             //用于存放订单信息
             List<OrderLog> orderLogList = new ArrayList<>();
-            User user = new User();
+            User user = userService.getUserById(1);
             int num;
             for(int i = 0; i < file1.length && i < file2.length; i++)
             {
-
-
 
                 File file_1 = new File().setFilecode(formatter.format(new Date())+random.nextInt(99))
                         .setDeleted(0).setName(file1[i].getName()).setSize(fileInformations1.get(i).getSize()).setTaskId(taskId).setCreateTime(LocalDateTime.now());
@@ -198,7 +196,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 Boolean uploadFileStatus = uploadFile(file1[i], workCode, file_1.getFilecode());
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
-                synchronized (user)
+                //根据用户ID获取锁
+                synchronized (user.getUserId().toString().intern())
                 {
                     if(userService.getBalance(1) < 100)
                     {
@@ -230,7 +229,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             }
             //计算对比失败组数
             num = file1.length - orderLogList.size();
-            return Result.success(200,"上传成功，对比成功数:"+orderLogList.size()+"对比失败数："+num,orderLogList);
+            return Result.success(200,"上传成功，启动对比成功数:"+orderLogList.size()+"启动对比失败数："+num,orderLogList);
         }
         return Result.fail(400,"文件上传失败，请重试！",null);
     }
