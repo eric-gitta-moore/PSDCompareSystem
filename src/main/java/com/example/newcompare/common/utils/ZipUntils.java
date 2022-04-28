@@ -22,7 +22,7 @@ public class ZipUntils {
      */
     public static String getZip(String filePath) throws Exception {
         File file = new File(filePath);
-        String outputFIleName = file.getName() + ".zip";
+        String outputFIleName = filePath + ".zip";
         ArrayList<File> fileList = new ArrayList<>();
         if (file.isDirectory()) {
             fileList.addAll(Arrays.asList(file.listFiles()));

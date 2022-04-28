@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.newcompare.service.OrderLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -107,15 +108,13 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
      * @return 数据结果
      */
     @Override
-    public boolean backZip(List<OrderLog> list) throws Exception {
-        //不要放在项目里，设置一个绝对路径常量
-        UUID uuid = UUID.randomUUID();
-        ThreadLocalUtil.saveUser(uuid.toString());
-        java.io.File file=new java.io.File("/"+uuid+"/img");//?
+    public boolean backZip(List<OrderLog> list,String path) throws Exception {
+
+        java.io.File file=new java.io.File(path);//?
         file.mkdirs();
 
         for(OrderLog orderLog:list){
-            if("complete".equals(orderLog.getStatus())){
+            if("complete".equals(orderLog.getStatus()) && ("有差异".equals(orderLog.getResult()) || "无差异".equals(orderLog.getResult()))){
                 String url = orderLog.getUrl();
                 if(url!=null && !"".equals(url)){
                     HttpURLConnection conn = null;
@@ -128,7 +127,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                         //得到输入流
                          inputStream = conn.getInputStream();
 
-                        e1=new FileOutputStream("/"+uuid+"/img/"+orderLog.getId()+".png");
+                        e1=new FileOutputStream(path+"/"+orderLog.getFileName());
 
                          byte[] bys=new byte[1024];
                          int len;
@@ -150,7 +149,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             }
         }
 
-        ZipUntils.getZip("/"+uuid+"/img");
+        ZipUntils.getZip(path);
 
         return true;
 
@@ -161,6 +160,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
 
     @Override
     public Result upload(MultipartFile[] file1, MultipartFile[] file2, Integer taskId) throws IOException {
@@ -179,6 +181,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             int num;
             for(int i = 0; i < file1.length && i < file2.length; i++)
             {
+
+
 
                 File file_1 = new File().setFilecode(formatter.format(new Date())+random.nextInt(99))
                         .setDeleted(0).setName(file1[i].getName()).setSize(fileInformations1.get(i).getSize()).setTaskId(taskId).setCreateTime(LocalDateTime.now());
@@ -214,11 +218,12 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                         OrderLog orderLog =
                                 new OrderLog().setCreateTime(LocalDateTime.now()).
                                         setStatus("incomplete").setFee(b).setWorkCode(workCode).
-                                        setTitle("test").setSerialNumber(UUID.randomUUID().toString()).setDeleted(0).
+                                        setTitle("test").setSerialNumber(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+random.nextInt(99)).setDeleted(0).
                                         setFirstId(fileId1).setSecondId(fileId2).setSize(fileInformations1.get(i).getSize()).
-                                        setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId).setUrl(url);
+                                        setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId);
                         orderLogService.insertOrderLog(orderLog);
                         orderLogList.add(orderLog);
+                        redisTemplate.opsForSet().remove("order",orderLog.getWorkCode());
                         Float balance = userService.getBalance(1);
                         balance -= 100;
                         user.setBalance(balance);

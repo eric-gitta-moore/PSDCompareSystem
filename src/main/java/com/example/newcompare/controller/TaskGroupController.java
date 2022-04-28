@@ -3,7 +3,6 @@ package com.example.newcompare.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.Result;
-import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -46,25 +46,35 @@ public class TaskGroupController {
     @PostMapping("/getGroups")
     @ApiOperation(value = "郑前===》获取历史记录,keywords: 任务组名字or订单流水号or订单id" +
             "maxPage: 每页显示最大数量，" +
-            "startPage: 开始页码,startTime和endTime: 要查询的时间段")
+            "startPage: 开始页码,startTime和endTime: 要查询的时间段"+
+            "sort:排序方式，默认升序排列")
     public Result getGroups(@RequestBody Map<String, String> map) {
         //最大显示数量默认是10
         int maxPage = 10;
         //起始页码默认为是1
         int startPage = 1;
+        //排序方式默认升序
+        String defaultSort ="asc";
+
         String mPage = map.get("maxPage");
         String sPage = map.get("startPage");
         String keyWords = map.get("keyWords");
         String startTime = map.get("startTime");
         String endTime = map.get("endTime");
+        String sort=map.get("sort");
+
         if (sPage != null) {
             startPage = Integer.parseInt(sPage);
         }
         if (mPage != null) {
             maxPage = Integer.parseInt(mPage);
         }
+        if (sort != null) {
+            defaultSort = sort;
+        }
+        
         Page<TaskGroup> Page = new Page(startPage, maxPage);
-        return Result.success(service.getGroups(Page, keyWords, startTime, endTime));
+        return Result.success(service.getGroups(Page, keyWords, startTime, endTime, defaultSort));
     }
 
     @GetMapping("/getGroupById")
@@ -98,8 +108,8 @@ public class TaskGroupController {
         List<TaskGroup> allSendIdFromTask = service.getAllIdFromTask(ids);
 
         List<OrderLog> aLlIdByTask = service.getALlIdByTask(allSendIdFromTask);
-
-        boolean iu = service.backZip(aLlIdByTask);
+        String path = "/tmp/template/"+UUID.randomUUID();
+        boolean iu = service.backZip(aLlIdByTask,path);
 
         //  response.setContentType("application/octet-stream");
 
@@ -109,7 +119,7 @@ public class TaskGroupController {
 
             ServletOutputStream out = null;
             try {
-                in = new FileInputStream("/"+ThreadLocalUtil.getUuid() +"/img.zip");
+                in = new FileInputStream(path+".zip");
                 out = response.getOutputStream();
                 int len = 0;
                 byte[] buffer = new byte[1024];
@@ -130,7 +140,8 @@ public class TaskGroupController {
         }
 
 
-        ZipUntils.deleteDir("/"+ ThreadLocalUtil.getUuid());
+        ZipUntils.deleteDir(path);
+        new File(path+".zip").delete();
 
 
 

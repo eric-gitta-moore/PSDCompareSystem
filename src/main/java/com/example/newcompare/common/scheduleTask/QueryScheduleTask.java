@@ -24,11 +24,16 @@ public class QueryScheduleTask {
      */
     @Scheduled(cron = "0/8 * * * * ?")
     private void doTask() throws Exception {
+
         Set<String> orders = template.opsForSet().members("order");
         for (String order : orders) {
-            boolean query = queryUtil.query(order);
-            if (query){
-                template.opsForSet().remove("order",order);
+            synchronized (order){
+                if (template.opsForSet().isMember("order", order)) {
+                    boolean query = queryUtil.query(order);
+                    if (query) {
+                        template.opsForSet().remove("order", order);
+                    }
+                }
             }
         }
     }

@@ -1,11 +1,6 @@
 package com.example.newcompare;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.interfaces.Compare;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.newcompare.entity.OrderLog;
+
 import com.example.newcompare.service.OrderLogService;
 import com.qiniu.util.Json;
 import org.junit.jupiter.api.Test;
@@ -15,6 +10,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 @SpringBootTest
@@ -71,9 +68,15 @@ class NewCompareApplicationTests {
     @Test
     void test3(){
 
-        final OrderLog work_code = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code", "123124124124"));
+//        final OrderLog work_code = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code", "123124124124"));
+//
+//        System.out.println(work_code);
 
-        System.out.println(work_code);
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+//        System.out.println(formatter.format(new Date()));
+
+
+
     }
 
 }

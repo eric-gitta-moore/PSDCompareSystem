@@ -2,13 +2,11 @@ package com.example.newcompare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.mapper.TaskGroupMapper;
-import com.example.newcompare.service.OrderLogService;
 import com.example.newcompare.service.TaskGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,8 +38,8 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
     }
 
     @Override
-    public Page<TaskGroup> getGroups(Page<TaskGroup> Page, String keyWords, String startTime, String endTime) {
-        return mapper.getGroups(Page, keyWords, startTime, endTime);
+    public Page<TaskGroup> getGroups(Page<TaskGroup> Page, String keyWords, String startTime, String endTime, String defaultSort) {
+        return mapper.getGroups(Page, keyWords, startTime, endTime, defaultSort);
     }
 
     @Override
@@ -66,10 +64,13 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
         List<OrderLog> q1=new ArrayList<>();
         QueryWrapper<OrderLog> wrapper=new QueryWrapper<>();
         for(TaskGroup taskGroup:list){
-            wrapper.eq("task_id",taskGroup.getId());
-            OrderLog orderLog = orderLogMapper.selectOne(wrapper);
-            q1.add(orderLog);
+            List<OrderLog> orderLogs = orderLogMapper.selectList(wrapper.eq("task_id",taskGroup.getId()));
+            for (OrderLog orderLog : orderLogs) {
+                if("complete".equals(orderLog.getStatus()) && ("有差异".equals(orderLog.getResult()) || "无差异".equals(orderLog.getResult()))){
+                    q1.add(orderLog);
+                }
 
+            }
         }
 
         return q1;
@@ -91,11 +92,9 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
      * @return 数据结果
      */
     @Override
-    public boolean backZip(List<OrderLog> list) throws Exception {
-        //不要放在项目里，设置一个绝对路径常量
-        UUID uuid = UUID.randomUUID();
-        ThreadLocalUtil.saveUser(uuid.toString());
-        java.io.File file=new java.io.File("/"+uuid+"/img");//?
+    public boolean backZip(List<OrderLog> list,String path) throws Exception {
+
+        java.io.File file=new java.io.File(path);//?
         file.mkdirs();
 
         for(OrderLog orderLog:list){
@@ -112,7 +111,7 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
                         //得到输入流
                         inputStream = conn.getInputStream();
 
-                        e1=new FileOutputStream("/"+uuid+"/img/"+orderLog.getId()+".png");
+                        e1=new FileOutputStream(path+"/"+orderLog.getFileName());
 
                         byte[] bys=new byte[1024];
                         int len;
@@ -134,7 +133,7 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
             }
         }
 
-        ZipUntils.getZip("/"+uuid+"/img");
+        ZipUntils.getZip(path);
 
         return true;
 

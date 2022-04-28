@@ -50,7 +50,7 @@ public interface FileService extends IService<File> {
     List<OrderLog> getAllSendId(Integer[] id);
 
 
-    boolean backZip(List<OrderLog> list) throws Exception;
+    boolean backZip(List<OrderLog> list,String path) throws Exception;
 
     Result upload(MultipartFile[] file1, MultipartFile[] file2, Integer taskId) throws IOException;
 }

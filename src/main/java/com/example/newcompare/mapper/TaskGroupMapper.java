@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface TaskGroupMapper extends BaseMapper<TaskGroup> {
 
-    Page<TaskGroup> getGroups(@Param("Page") Page<TaskGroup> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
+    Page<TaskGroup> getGroups(@Param("Page") Page<TaskGroup> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("defaultSort") String defaultSort);
 
     Page<OrderLog> getGroup(@Param("Page") Page<OrderLog> Page, @Param("groupId") String groupId);
 
