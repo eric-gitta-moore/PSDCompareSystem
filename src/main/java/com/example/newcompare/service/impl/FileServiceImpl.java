@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.*;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -51,7 +52,7 @@ import java.util.ArrayList;
  */
 @Service
 public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements FileService {
-
+    private static ConcurrentHashMap<Integer,Integer> concurrentHashMap = new ConcurrentHashMap<>();
 
 
     @Autowired
@@ -197,7 +198,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 Boolean uploadFileStatus = uploadFile(file1[i], workCode, file_1.getFilecode());
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
-                synchronized (user.getUserId())
+                Integer integer = concurrentHashMap.putIfAbsent(user.getUserId(), user.getUserId());
+                synchronized (integer)
                 {
                     if(userService.getBalance(1) < 100)
                     {
@@ -215,8 +217,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                                 new OrderLog().setCreateTime(LocalDateTime.now()).
                                         setStatus("incomplete").setFee(b).setWorkCode(workCode).
                                         setTitle("test").setSerialNumber(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+random.nextInt(99)).setDeleted(0).
-                                        setFirstId(fileId1).setSecondId(fileId2).setSize(fileInformations1.get(i).getSize()).
-                                        setResolution(fileInformations2.get(i).getSize()).setTaskId(taskId);
+                                        setFirstId(fileId1).setSecondId(fileId2).setTaskId(taskId);
                         orderLogService.insertOrderLog(orderLog);
                         orderLogList.add(orderLog);
                         redisTemplate.opsForSet().remove("order",orderLog.getWorkCode());
