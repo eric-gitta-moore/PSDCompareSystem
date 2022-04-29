@@ -101,8 +101,8 @@
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
             (a.`create_time` between '${param3}' and '${param4}') and
         </if>
-        d.`orderDeleted`=0 and 1=1
-        order by a.`create_time` asc
+        (d.`orderDeleted`=0 or d.`orderDeleted`is null)
+        order by a.`create_time` ${param5}
     </select>
 
     <select id="getGroup" resultMap="groupMap">
@@ -158,7 +158,7 @@
                                      LEFT JOIN FILE c ON (b.first_id = c.id OR b.second_id = c.id)) AS d
                            ON a.`id` = d.`orderTask_id`
         WHERE a.`id` = #{groupId}
-          and d.`orderDeleted` = 0
+          and (d.`orderDeleted` = 0 or d.`orderDeleted` is null)
         ORDER BY d.`orderCreate_time` ASC
     </select>
 

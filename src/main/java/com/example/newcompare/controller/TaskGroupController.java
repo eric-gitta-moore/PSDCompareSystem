@@ -46,25 +46,35 @@ public class TaskGroupController {
     @PostMapping("/getGroups")
     @ApiOperation(value = "郑前===》获取历史记录,keywords: 任务组名字or订单流水号or订单id" +
             "maxPage: 每页显示最大数量，" +
-            "startPage: 开始页码,startTime和endTime: 要查询的时间段")
+            "startPage: 开始页码,startTime和endTime: 要查询的时间段"+
+            "sort:排序方式，默认升序排列")
     public Result getGroups(@RequestBody Map<String, String> map) {
         //最大显示数量默认是10
         int maxPage = 10;
         //起始页码默认为是1
         int startPage = 1;
+        //排序方式默认升序
+        String defaultSort ="asc";
+
         String mPage = map.get("maxPage");
         String sPage = map.get("startPage");
         String keyWords = map.get("keyWords");
         String startTime = map.get("startTime");
         String endTime = map.get("endTime");
+        String sort=map.get("sort");
+
         if (sPage != null) {
             startPage = Integer.parseInt(sPage);
         }
         if (mPage != null) {
             maxPage = Integer.parseInt(mPage);
         }
+        if (sort != null) {
+            defaultSort = sort;
+        }
+        
         Page<TaskGroup> Page = new Page(startPage, maxPage);
-        return Result.success(service.getGroups(Page, keyWords, startTime, endTime));
+        return Result.success(service.getGroups(Page, keyWords, startTime, endTime, defaultSort));
     }
 
     @GetMapping("/getGroupById")
