@@ -200,7 +200,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 Boolean uploadFileStatus = uploadFile(file1[i], workCode, file_1.getFilecode());
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
-                synchronized (user.getUserId())
+                Integer integer = concurrentHashMap.putIfAbsent(user.getUserId(), user.getUserId());
+                synchronized (integer)
                 {
                     if(userService.getBalance(1) < 100)
                     {
