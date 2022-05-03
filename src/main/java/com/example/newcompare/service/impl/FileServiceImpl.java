@@ -175,7 +175,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             List<FileInformation> fileInformations2 = FileUtil.getInformation(file2);
             //用于存放订单信息
             List<OrderLog> orderLogList = new ArrayList<>();
-            User user = new User();
+            User user = userService.getById(1);
             int num;
             for(int i = 0; i < file1.length && i < file2.length; i++)
             {
@@ -199,7 +199,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
                 Integer integer = concurrentHashMap.putIfAbsent(user.getUserId(), user.getUserId());
-                synchronized (integer)
+                synchronized (user.getUserId())
                 {
                     if(userService.getBalance(1) < 100)
                     {
@@ -245,35 +245,36 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
      * @throws IOException
      */
     public Boolean uploadFile(MultipartFile file, String workCode, String fileCode) throws IOException {
-            //在项目路径下创建临时文件夹
-            java.io.File localFile = new java.io.File("localFile");
-            if (!localFile.exists()) {
-                localFile.createNewFile();
-            }
-            try {
-                file.transferTo(localFile);
-                FileSystemResource fileSystemResource = new FileSystemResource(localFile);
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
-                MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
-                request.add("file", fileSystemResource);
-                request.add("workcode", workCode);
-                request.add("filecode", fileCode);
-                HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(request, httpHeaders);
-                ResponseResult responseResult =
-                        restTemplate.postForObject("http://139.9.203.100:9721/cadpare/upload", httpEntity, ResponseResult.class);
-                Integer errcode = responseResult.getErrcode();
-                if (errcode == 0) {
-                    return true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            } finally {
-                localFile.delete();
-            }
-            return false;
+        //在项目路径下创建临时文件夹
+        java.io.File file1 = new java.io.File("cache");
+        java.io.File localFile = new java.io.File(file1.getAbsolutePath().replace(file1.getName(),"") + "localfile");
+        if (!localFile.exists()) {
+            localFile.createNewFile();
         }
+        try {
+            file.transferTo(localFile);
+            FileSystemResource fileSystemResource = new FileSystemResource(localFile);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+            MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
+            request.add("file", fileSystemResource);
+            request.add("workcode", workCode);
+            request.add("filecode", fileCode);
+            HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(request, httpHeaders);
+            ResponseResult responseResult =
+                    restTemplate.postForObject("http://139.9.203.100:9721/cadpare/upload", httpEntity, ResponseResult.class);
+            Integer errcode = responseResult.getErrcode();
+            if (errcode == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            localFile.delete();
+        }
+        return false;
+    }
 
     /**
      * 启动对比方法
