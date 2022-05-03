@@ -201,7 +201,8 @@ private static ConcurrentHashMap<Integer,Integer> concurrentHashMap = new Concur
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
                 Integer integer = concurrentHashMap.putIfAbsent(user.getUserId(), user.getUserId());
-                synchronized (user.getUserId())
+                integet= integer==null?user.getUserId:integer;
+                synchronized (integer)
                 {
                     if(userService.getBalance(1) < 100)
                     {
