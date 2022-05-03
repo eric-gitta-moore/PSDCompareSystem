@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
@@ -66,7 +67,9 @@ class NewCompareApplicationTests {
     @Autowired
     OrderLogService orderLogService;
     @Test
-    void test3(){
+    void test3() throws IOException {
+        java.io.File localFile = new java.io.File("/localFile");
+        localFile.mkdir();
 
 //        final OrderLog work_code = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code", "123124124124"));
 //

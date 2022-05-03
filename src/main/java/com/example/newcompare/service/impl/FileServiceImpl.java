@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.FileUtil;
 import com.example.newcompare.common.utils.Result;
-import com.example.newcompare.common.utils.ThreadLocalUtil;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.*;
 import com.example.newcompare.mapper.FileMapper;
@@ -259,7 +258,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
                 MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
-                request.add("file", fileSystemResource);
+                request.add("file",fileSystemResource);
                 request.add("workcode", workCode);
                 request.add("filecode", fileCode);
                 HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(request, httpHeaders);
