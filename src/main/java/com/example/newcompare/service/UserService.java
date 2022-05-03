@@ -9,4 +9,6 @@ public interface UserService extends IService<User> {
     Float getBalance(Integer id);
 
     void updataUser(User user);
+
+    User getUserById(Integer id);
 }
