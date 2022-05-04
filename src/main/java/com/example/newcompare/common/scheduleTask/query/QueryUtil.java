@@ -76,7 +76,9 @@ public class QueryUtil {
 
             }else {
                 //对比不成功退款到余额
-                synchronized (FileServiceImpl.concurrentHashMap.get(userService.getById("1").getUserId())){
+                Integer integer = FileServiceImpl.concurrentHashMap.get(userService.getById("1").getUserId());
+                integer = integer == null? userService.getById("1").getUserId() : integer;
+                synchronized (integer){
                     User user = userService.getById("1");
                     OrderLog orderLog = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code",workCode));
                     user.setBalance(user.getBalance()+Float.parseFloat(orderLog.getFee().toString()));
