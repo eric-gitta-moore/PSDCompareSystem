@@ -43,8 +43,8 @@ public class ThymeleafController {
      */
     @ApiOperation(value = "跳转收银台界面， outTradeId: 订单编号")
     @RequestMapping("/index")
-    public String index(String id,Model model){
-        Recharge recharge = rechargeService.getById(id);
+    public String index(Integer id,Model model){
+        Recharge recharge = rechargeService.getRechargeById(id);
         model.addAttribute("total_amount",recharge.getFee());
         model.addAttribute("out_trade_no", recharge.getOutTradeNo());
         model.addAttribute("id", id);

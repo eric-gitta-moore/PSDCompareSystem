@@ -7,5 +7,9 @@
         select * from recharge where out_trade_no=#{oid}
     </select>
 
+    <select id="getById" resultType="com.example.newcompare.entity.Recharge">
+        select * from recharge where id=#{id}
+    </select>
+
 
 </mapper>

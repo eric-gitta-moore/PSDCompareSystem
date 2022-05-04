@@ -9,5 +9,5 @@ import org.apache.ibatis.annotations.Param;
 public interface RechargeMapper extends BaseMapper<Recharge> {
 
     Recharge queryRecharge(@Param("oid") String outTradeId);
-
+    Recharge getById(@Param("id") Integer id);
 }
