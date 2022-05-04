@@ -43,8 +43,8 @@ public class ThymeleafController {
      */
     @ApiOperation(value = "跳转收银台界面， outTradeId: 订单编号")
     @RequestMapping("/index")
-    public String index(String id,Model model){
-        Recharge recharge = rechargeService.getById(id);
+    public String index(Integer id,Model model){
+        Recharge recharge = rechargeService.getRechargeById(id);
         model.addAttribute("total_amount",recharge.getFee());
         model.addAttribute("out_trade_no", recharge.getOutTradeNo());
         model.addAttribute("id", id);
@@ -58,8 +58,8 @@ public class ThymeleafController {
      * @return
      * @throws AlipayApiException
      */
-    @RequestMapping("/payFinished")
-    public String succeed(Model model, HttpServletRequest request) throws AlipayApiException {
+    @RequestMapping("/succeed")
+    public String payFinished(Model model, HttpServletRequest request) throws AlipayApiException {
         String out_trade_no = request.getParameter("out_trade_no");
         String total_amount = request.getParameter("total_amount");
         String msg = null;
