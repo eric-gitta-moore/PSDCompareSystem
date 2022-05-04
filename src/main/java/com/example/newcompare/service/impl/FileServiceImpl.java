@@ -223,7 +223,7 @@ public static ConcurrentHashMap<Integer,Integer> concurrentHashMap = new Concurr
                                         setFirstId(fileId1).setSecondId(fileId2).setTaskId(taskId);
                         orderLogService.insertOrderLog(orderLog);
                         orderLogList.add(orderLog);
-                        redisTemplate.opsForSet().remove("order",orderLog.getWorkCode());
+                        redisTemplate.opsForSet().add("order",orderLog.getWorkCode());
                         Float balance = userService.getBalance(1);
                         balance -= 100;
                         user.setBalance(balance);
