@@ -65,7 +65,7 @@ public class FileDownloadUtil {
         inputStream.close();
         new File(unzip).delete();
         new File(zip).delete();
-        return new String[]{path,size,image.getWidth()+"*"+image.getHeight(),"01"+unzip.split("01")[1]};
+        return new String[]{path,size,image.getWidth()+"*"+image.getHeight(),unzip.split("/tmp/template")[1]};
     }
 
 //    public static void main(String[] args) throws Exception {
