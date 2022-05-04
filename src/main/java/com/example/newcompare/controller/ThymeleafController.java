@@ -58,8 +58,8 @@ public class ThymeleafController {
      * @return
      * @throws AlipayApiException
      */
-    @RequestMapping("/payFinished")
-    public String succeed(Model model, HttpServletRequest request) throws AlipayApiException {
+    @RequestMapping("/succeed")
+    public String payFinished(Model model, HttpServletRequest request) throws AlipayApiException {
         String out_trade_no = request.getParameter("out_trade_no");
         String total_amount = request.getParameter("total_amount");
         String msg = null;
