@@ -13,7 +13,7 @@ public interface RechargeService extends IService<Recharge> {
     String useAlipayUtils(Recharge recharge);
 
     boolean checkOrderAndUpdateDatabase(String outTradeNo);
-
+    Recharge getRechargeById(Integer id);
 
     Recharge getDiffInformation(String out_trade_no);
 

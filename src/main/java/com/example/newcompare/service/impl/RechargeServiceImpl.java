@@ -71,6 +71,12 @@ public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> i
         return false;
     }
 
+    @Override
+    public Recharge getRechargeById(Integer id) {
+        Recharge recharge = mapper.getById(id);
+        return recharge;
+    }
+
 
     /**
      * 获取对比订单信息

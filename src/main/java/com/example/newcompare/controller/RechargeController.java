@@ -68,7 +68,7 @@ public class RechargeController {
     }
 
     @ApiOperation("朱涵===>发起请求支付")
-    @GetMapping("/topay/{id}")
+    @GetMapping("/topay/{outTradeNo}")
     public String topay(@PathVariable String outTradeNo, Model model) {
         Recharge recharge = rechargeService.getRecharge(outTradeNo);
         String form = rechargeService.useAlipayUtils(recharge);
