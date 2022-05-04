@@ -2,11 +2,13 @@ package com.example.newcompare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.newcompare.common.utils.FileDownloadUtil;
 import com.example.newcompare.common.utils.FileUtil;
 import com.example.newcompare.common.utils.Result;
 import com.example.newcompare.common.utils.ZipUntils;
 import com.example.newcompare.entity.*;
 import com.example.newcompare.mapper.FileMapper;
+import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.service.FileService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newcompare.service.UserService;
@@ -52,7 +54,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements FileService {
-    private static ConcurrentHashMap<Integer,Integer> concurrentHashMap = new ConcurrentHashMap<>();
+private static ConcurrentHashMap<Integer,Integer> concurrentHashMap = new ConcurrentHashMap<>();
 
 
     @Autowired
@@ -175,7 +177,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             List<FileInformation> fileInformations2 = FileUtil.getInformation(file2);
             //用于存放订单信息
             List<OrderLog> orderLogList = new ArrayList<>();
-            User user = new User();
+            User user = userService.getById(1);
             int num;
             for(int i = 0; i < file1.length && i < file2.length; i++)
             {
@@ -199,6 +201,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 Boolean uploadFileStatus1 = uploadFile(file2[i], workCode, file_2.getFilecode());
 
                 Integer integer = concurrentHashMap.putIfAbsent(user.getUserId(), user.getUserId());
+                integer= integer==null?user.getUserId():integer;
                 synchronized (integer)
                 {
                     if(userService.getBalance(1) < 100)
@@ -231,7 +234,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
             }
             //计算对比失败组数
             num = file1.length - orderLogList.size();
-            return Result.success(200,"上传成功，对比成功数:"+orderLogList.size()+"对比失败数："+num,orderLogList);
+            return Result.success(200,"上传成功，启动对比成功数:"+orderLogList.size()+"启动对比失败数："+num,orderLogList);
         }
         return Result.fail(400,"文件上传失败，请重试！",null);
     }
@@ -245,35 +248,36 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
      * @throws IOException
      */
     public Boolean uploadFile(MultipartFile file, String workCode, String fileCode) throws IOException {
-            //在项目路径下创建临时文件夹
-            java.io.File localFile = new java.io.File("localFile");
-            if (!localFile.exists()) {
-                localFile.createNewFile();
-            }
-            try {
-                file.transferTo(localFile);
-                FileSystemResource fileSystemResource = new FileSystemResource(localFile);
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
-                MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
-                request.add("file", fileSystemResource);
-                request.add("workcode", workCode);
-                request.add("filecode", fileCode);
-                HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(request, httpHeaders);
-                ResponseResult responseResult =
-                        restTemplate.postForObject("http://139.9.203.100:9721/cadpare/upload", httpEntity, ResponseResult.class);
-                Integer errcode = responseResult.getErrcode();
-                if (errcode == 0) {
-                    return true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            } finally {
-                localFile.delete();
-            }
-            return false;
+        //在项目路径下创建临时文件夹
+        java.io.File file1 = new java.io.File("cache");
+        java.io.File localFile = new java.io.File(file1.getAbsolutePath().replace(file1.getName(),"") + "localfile");
+        if (!localFile.exists()) {
+            localFile.createNewFile();
         }
+        try {
+            file.transferTo(localFile);
+            FileSystemResource fileSystemResource = new FileSystemResource(localFile);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+            MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
+            request.add("file",fileSystemResource);
+            request.add("workcode", workCode);
+            request.add("filecode", fileCode);
+            HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(request, httpHeaders);
+            ResponseResult responseResult =
+                    restTemplate.postForObject("http://139.9.203.100:9721/cadpare/upload", httpEntity, ResponseResult.class);
+            Integer errcode = responseResult.getErrcode();
+            if (errcode == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            localFile.delete();
+        }
+        return false;
+    }
 
     /**
      * 启动对比方法

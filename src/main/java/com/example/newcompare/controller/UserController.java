@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 
 @Api(tags = "user")
 @RestController
@@ -25,7 +26,10 @@ public class UserController {
     public Result getuser(){
         User user = userService.getOne(null);
         if(user==null)
-            return Result.fail(400,"获取用户余额失败！",null);
-        return Result.success(200,"获取用户余额成功！",user.getBalance());
+            return Result.fail(400,"获取用户余额失败！",new HashMap<String,String>());
+
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("balance", String.valueOf(user.getBalance()));
+        return Result.success(200,"获取用户余额成功！",hashMap);
     }
 }
