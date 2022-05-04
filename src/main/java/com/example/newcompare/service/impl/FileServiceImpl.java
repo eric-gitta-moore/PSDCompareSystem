@@ -54,7 +54,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements FileService {
-private static ConcurrentHashMap<Integer,Integer> concurrentHashMap = new ConcurrentHashMap<>();
+public static ConcurrentHashMap<Integer,Integer> concurrentHashMap = new ConcurrentHashMap<>();
 
 
     @Autowired

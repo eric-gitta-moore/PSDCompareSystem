@@ -9,6 +9,7 @@ import com.example.newcompare.entity.User;
 import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.service.OrderLogService;
 import com.example.newcompare.service.UserService;
+import com.example.newcompare.service.impl.FileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -75,13 +76,18 @@ public class QueryUtil {
 
             }else {
                 //对比不成功退款到余额
-                User user = userService.getById("1");
-                OrderLog orderLog = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code",workCode));
-                user.setBalance(user.getBalance()+Float.parseFloat(orderLog.getFee().toString()));
-                userService.update(user,null);
+                synchronized (FileServiceImpl.concurrentHashMap.get(userService.getById("1").getUserId())){
+                    User user = userService.getById("1");
+                    OrderLog orderLog = orderLogService.getOne(new QueryWrapper<OrderLog>().eq("work_code",workCode));
+                    user.setBalance(user.getBalance()+Float.parseFloat(orderLog.getFee().toString()));
+                    userService.update(user,null);
+                }
             }
-            return true;
+
         }
-        return false;
+        if(s==null){
+            return false;
+        }
+        return true;
     }
 }
