@@ -45,7 +45,7 @@ public class QueryUtil {
             s = "无差异";
         }else if (body.contains("Drawing size mismatch")){
             s = "图片尺寸不一致";
-        } else if (result.getData().getDoneCount()!=null && result.getData().getDoneCount()==2){
+        } else if (result.getData().getDoneCount()!=null && result.getData().getDoneCount()==1){
             s = "有差异";
         }else if(result.getErrcode()==401){
             s = "对比出错";
