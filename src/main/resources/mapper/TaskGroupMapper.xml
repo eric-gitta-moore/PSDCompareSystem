@@ -38,7 +38,7 @@
     </resultMap>
 
 
-    <select id="getTotal" resultType="com.example.newcompare.entity.TaskGroup">
+    <select id="getTotal" resultType="string">
         select *from
         task_group a
         left join order_log b
@@ -51,7 +51,7 @@
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
             (a.`create_time` between '${param2}' and '${param3}') and
         </if>
-            1=1
+        (a.`deleted`=0 or a.`deleted`is null)
     </select>
 
     <select id="getGroups" resultMap="groupMap">
