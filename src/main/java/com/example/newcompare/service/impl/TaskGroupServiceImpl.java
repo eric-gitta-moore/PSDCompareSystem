@@ -43,8 +43,8 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
     }
 
     @Override
-    public List<TaskGroup> getTotal() {
-        return mapper.selectList(null);
+    public List<TaskGroup> getTotal(String keyWords, String startTime, String endTime) {
+        return mapper.getTotal(keyWords, startTime, endTime);
     }
 
     @Override
