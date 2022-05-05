@@ -84,11 +84,16 @@ public class TaskGroupController {
         for(int i=start;i-start<maxPage&&i<total;i++){
             list.add(groups.get(i));
         }
-        HashMap<String, String> map1 = new HashMap<>();
+        for (TaskGroup taskGroup : list) {
+            if (taskGroup.getOrders().get(0).getId()==null){
+                taskGroup.setOrders(null);
+            }
+        }
+        HashMap<String, Object> map1 = new HashMap<>();
         map1.put("total",total.toString());
         map1.put("pages",pages.toString());
-        map1.put("currentPage",startPage+"");
-        map1.put("records",list.toString());
+        map1.put("currentPage",startPage);
+        map1.put("records",list);
 
         return Result.success(map1);
     }
