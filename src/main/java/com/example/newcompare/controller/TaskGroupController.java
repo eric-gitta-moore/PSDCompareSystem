@@ -1,5 +1,6 @@
 package com.example.newcompare.controller;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newcompare.common.utils.Result;
@@ -8,6 +9,7 @@ import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.service.FileService;
 import com.example.newcompare.service.TaskGroupService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +74,9 @@ public class TaskGroupController {
         if (sort != null) {
             defaultSort = sort;
         }
-        Page<TaskGroup> Page = new Page<>(startPage, maxPage,  service.getTotal(keyWords, startTime, endTime).size(),false);
-        return Result.success(service.getGroups(Page, keyWords, startTime, endTime, defaultSort));
+//        Page<TaskGroup> Page = new Page<>(startPage, maxPage);
+//        PageInfo<TaskGroup> pageInfo ;
+        return Result.success(service.getGroups(maxPage, keyWords, startTime, endTime, defaultSort));
     }
 
     @GetMapping("/getGroupById")
