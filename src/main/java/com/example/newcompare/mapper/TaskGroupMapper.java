@@ -14,7 +14,7 @@ public interface TaskGroupMapper extends BaseMapper<TaskGroup> {
 
     List<TaskGroup> getTotal(@Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
-    List<TaskGroup> getGroups(Integer maxpage, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("defaultSort") String defaultSort);
+    Page<TaskGroup> getGroups(@Param("Page") Page<TaskGroup> Page, @Param("keyWords") String keyWords, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("defaultSort") String defaultSort);
 
     Page<OrderLog> getGroup(@Param("Page") Page<OrderLog> Page, @Param("groupId") String groupId);
 

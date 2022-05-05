@@ -17,7 +17,7 @@ public interface TaskGroupService extends IService<TaskGroup> {
 
     List<TaskGroup> getTotal( String keyWords, String startTime, String endTime);
 
-    List<TaskGroup> getGroups(int maxpage, String keyWords, String startTime, String endTime, String defaultSort);
+    Page<TaskGroup> getGroups(Page<TaskGroup> Page, String keyWords, String startTime, String endTime, String defaultSort);
 
     Page<OrderLog> getGroupById(Page<OrderLog> page, String groupId);
 
