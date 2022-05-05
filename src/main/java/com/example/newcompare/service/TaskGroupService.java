@@ -13,6 +13,8 @@ public interface TaskGroupService extends IService<TaskGroup> {
 
     Integer create(TaskGroup taskGroup);
 
+    List<TaskGroup> getTotal();
+
     Page<TaskGroup> getGroups(Page<TaskGroup> Page, String keyWords, String startTime, String endTime, String defaultSort);
 
     Page<OrderLog> getGroupById(Page<OrderLog> page, String groupId);

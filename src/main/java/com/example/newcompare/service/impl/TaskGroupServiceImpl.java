@@ -43,6 +43,11 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
     }
 
     @Override
+    public List<TaskGroup> getTotal() {
+        return mapper.selectList(null);
+    }
+
+    @Override
     public Page<OrderLog> getGroupById(Page<OrderLog> Page, String groupId) {
         return mapper.getGroup(Page, groupId);
     }

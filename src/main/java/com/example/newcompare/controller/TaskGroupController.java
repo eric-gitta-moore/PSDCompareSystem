@@ -72,8 +72,7 @@ public class TaskGroupController {
         if (sort != null) {
             defaultSort = sort;
         }
-        
-        Page<TaskGroup> Page = new Page(startPage, maxPage);
+        Page<TaskGroup> Page = new Page<>(startPage, maxPage,service.getTotal().size(),false);
         return Result.success(service.getGroups(Page, keyWords, startTime, endTime, defaultSort));
     }
 
