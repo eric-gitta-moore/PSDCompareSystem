@@ -19,7 +19,7 @@
             <result column="orderCreate_time" property="createTime"/>
             <result column="result" property="result"></result>
             <result column="file_name" property="fileName"></result>
-<!--            <result column="url" property="url"></result>-->
+            <result column="url" property="url"></result>
             <result column="first_id" property="firstId"/>
             <result column="second_id" property="secondId"/>
             <result column="orderSize" property="size"/>
@@ -56,7 +56,7 @@
 
     <select id="getGroups" resultMap="groupMap">
         select
-               a.`id` groupId,
+               a.`id` as groupId  ,
                a.`name`,
                a.`create_time` groupCreate_time,
                d.`orderCreate_time`,
