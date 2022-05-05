@@ -73,7 +73,27 @@ public class TaskGroupController {
             defaultSort = sort;
         }
         Page<TaskGroup> Page = new Page<>(startPage, maxPage,  service.getTotal(keyWords, startTime, endTime).size(),false);
-        return Result.success(service.getGroups(Page, keyWords, startTime, endTime, defaultSort));
+        Page<TaskGroup> groups = service.getGroups(Page, keyWords, startTime, endTime, defaultSort);
+        long total= groups.getTotal();
+        long pages=total%maxPage==0?total/maxPage:total/maxPage+1;
+        int start = (startPage-1)*(maxPage);
+        List<TaskGroup> list = new ArrayList<>(maxPage);
+        for(int i=0;i<groups.getRecords().size();i++){
+            list.add(groups.getRecords().get(i));
+        }
+        for (TaskGroup taskGroup : list) {
+            if (taskGroup.getOrders().get(0).getId()==null){
+                taskGroup.setOrders(null);
+            }
+        }
+        HashMap<String, Object> map1 = new HashMap<>();
+        map1.put("total",total);
+        map1.put("pages",pages);
+        map1.put("current",startPage);
+        map1.put("records",list);
+        map1.put("size",maxPage);
+
+        return Result.success(map1);
     }
 
     @GetMapping("/getGroupById")
