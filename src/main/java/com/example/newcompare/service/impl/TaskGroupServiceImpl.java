@@ -8,6 +8,7 @@ import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.mapper.OrderLogMapper;
 import com.example.newcompare.mapper.TaskGroupMapper;
 import com.example.newcompare.service.TaskGroupService;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,9 +40,8 @@ public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup
     }
 
     @Override
-    public PageInfo<TaskGroup> getGroups(int maxpage, String keyWords, String startTime, String endTime, String defaultSort) {
-        PageInfo pageInfo = new PageInfo(mapper.getGroups( maxpage,keyWords, startTime, endTime, defaultSort), maxpage);
-        return pageInfo;
+    public List<TaskGroup> getGroups(int maxpage, String keyWords, String startTime, String endTime, String defaultSort) {
+        return mapper.getGroups(maxpage, keyWords, startTime, endTime, defaultSort);
     }
 
     @Override

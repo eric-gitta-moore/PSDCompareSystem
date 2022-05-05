@@ -9,6 +9,7 @@ import com.example.newcompare.entity.OrderLog;
 import com.example.newcompare.entity.TaskGroup;
 import com.example.newcompare.service.FileService;
 import com.example.newcompare.service.TaskGroupService;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -74,9 +75,22 @@ public class TaskGroupController {
         if (sort != null) {
             defaultSort = sort;
         }
-//        Page<TaskGroup> Page = new Page<>(startPage, maxPage);
-//        PageInfo<TaskGroup> pageInfo ;
-        return Result.success(service.getGroups(maxPage, keyWords, startTime, endTime, defaultSort));
+        PageHelper.startPage(startPage,maxPage);
+        List<TaskGroup> groups = service.getGroups(maxPage, keyWords, startTime, endTime, defaultSort);
+        Integer total=groups.size();
+        Integer pages=total%maxPage==0?total/maxPage:total/maxPage+1;
+        int start = (startPage-1)*(maxPage);
+        List<TaskGroup> list = new ArrayList<>(maxPage);
+        for(int i=start;i-start<maxPage&&i<total;i++){
+            list.add(groups.get(i));
+        }
+        HashMap<String, String> map1 = new HashMap<>();
+        map1.put("total",total.toString());
+        map1.put("pages",pages.toString());
+        map1.put("currentPage",startPage+"");
+        map1.put("records",list.toString());
+
+        return Result.success(map1);
     }
 
     @GetMapping("/getGroupById")
