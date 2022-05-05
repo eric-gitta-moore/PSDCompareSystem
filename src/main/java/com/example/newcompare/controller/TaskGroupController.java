@@ -92,8 +92,9 @@ public class TaskGroupController {
         HashMap<String, Object> map1 = new HashMap<>();
         map1.put("total",total.toString());
         map1.put("pages",pages.toString());
-        map1.put("currentPage",startPage);
+        map1.put("current",startPage);
         map1.put("records",list);
+        map1.put("size",maxPage);
 
         return Result.success(map1);
     }
