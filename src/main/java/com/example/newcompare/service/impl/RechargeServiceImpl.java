@@ -118,7 +118,7 @@ public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> i
 //        UpdateWrapper<User> wrapper=new UpdateWrapper<>();
 //        wrapper.eq("user_id",recharge.getId());
 //        wrapper.set("balance", Float.parseFloat(recharge.getFee()) + byId.getBalance());//1
-        byId.setBalance(Float.parseFloat(byId.getBalance()+recharge.getFee()));
+        byId.setBalance(byId.getBalance()+Float.parseFloat(recharge.getFee()));
         int update = userMapper.updateById(byId);
 
         return update==1;
