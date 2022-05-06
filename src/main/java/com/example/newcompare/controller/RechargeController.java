@@ -107,7 +107,7 @@ public class RechargeController {
             if(paramsMap.get("trade_status").equals("TRADE_SUCCESS") || paramsMap.get("trade_status").equals("TRADE_FINISHED")){
 
 
-                if( rechargeService.updateStatus(out_trade_no) & rechargeService.addUserMoney(out_trade_no)){
+                if( rechargeService.updateStatus(out_trade_no) && rechargeService.addUserMoney(out_trade_no)){
                     response.getWriter().print("success");
                 }else {
                     response.getWriter().print("fail");

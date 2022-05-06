@@ -113,13 +113,13 @@ public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> i
 
     @Override
     public boolean addUserMoney(Recharge recharge) {
-        User byId = userService.getById(recharge.getId());
+        User byId = userService.getById(1);
 
-        UpdateWrapper<User> wrapper=new UpdateWrapper<>();
-        wrapper.eq("user_id",recharge.getId());
-        wrapper.set("balance", Float.parseFloat(recharge.getFee()) + byId.getBalance());//1
-
-        int update = userMapper.update(byId, wrapper);
+//        UpdateWrapper<User> wrapper=new UpdateWrapper<>();
+//        wrapper.eq("user_id",recharge.getId());
+//        wrapper.set("balance", Float.parseFloat(recharge.getFee()) + byId.getBalance());//1
+        byId.setBalance(Float.parseFloat(byId.getBalance()+recharge.getFee()));
+        int update = userMapper.updateById(byId);
 
         return update==1;
     }
